@@ -1,16 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.image.*?>
-<?import javafx.scene.text.*?>
-<?import javafx.scene.control.*?>
-<?import java.lang.*?>
-<?import javafx.scene.layout.*?>
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.Pane?>
 
-
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller">
    <children>
-      <Button layoutX="244.0" layoutY="301.0" mnemonicParsing="false" prefHeight="53.0" prefWidth="114.0" text="Button" />
+      <JFXButton layoutX="583.0" layoutY="528.0" mnemonicParsing="false" onAction="#startGameBtn" prefHeight="53.0" prefWidth="114.0" text="開始遊戲" />
       <ImageView fitHeight="173.0" fitWidth="387.0" layoutX="108.0" layoutY="94.0" pickOnBounds="true" preserveRatio="true" />
-      <Button layoutX="495.0" layoutY="36.0" mnemonicParsing="false" text="Button" />
+      <JFXButton layoutX="1183.0" layoutY="46.0" mnemonicParsing="false" text="設定" />
    </children>
 </Pane>
