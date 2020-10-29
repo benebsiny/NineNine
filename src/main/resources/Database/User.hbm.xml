@@ -5,12 +5,12 @@
 <hibernate-mapping>
     <class name="Database.User" table="user">
         <id name="id" type="int">
-            <column name="id" sql-type="int" />
+            <column name="id" sql-type="int"/>
             <generator class="identity"/>
         </id>
 
-        <property name="name" type="string" not-null="true">
-            <column name="name" length="20" not-null="true"/>
+        <property name="name" type="string" unique="true" not-null="true">
+            <column name="name" length="20" unique="true" not-null="true"/>
         </property>
 
         <property name="password" type="string" not-null="true">
