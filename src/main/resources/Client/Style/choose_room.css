@@ -1,0 +1,37 @@
+.heart {
+    -fx-background-image: url("../Img/Heart.png");
+    -fx-background-size: 20;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: 20px 14px;
+    -fx-font-size: 20px;
+    -fx-text-fill: red;
+}
+
+.diamond {
+    -fx-background-image: url("../Img/Diamond.png");
+    -fx-background-size: 20;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: 20px 14px;
+    -fx-font-size: 20px;
+    -fx-text-fill: red;
+}
+
+.spade {
+    -fx-background-image: url("../Img/Spade.png");
+    -fx-background-size: 20;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: 20px 14px;
+    -fx-font-size: 20px;
+}
+
+.club {
+    -fx-background-image: url("../Img/Club.png");
+    -fx-background-size: 20;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: 20px 14px;
+    -fx-font-size: 20px;
+}
+
+.pointer:hover {
+    -fx-cursor: hand;
+}
