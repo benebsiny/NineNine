@@ -10,8 +10,8 @@ public class Main extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource("99_home.fxml"));
-        Scene scene = new Scene(root, 600, 400);
+        Parent root = FXMLLoader.load(getClass().getResource("View/home.fxml"));
+        Scene scene = new Scene(root, 900, 600);
         stage.setScene(scene);
         stage.show();
     }

@@ -1,0 +1,6 @@
+.setting-btn {
+    -fx-background-image: url("../Img/setting-icon.png");
+    -fx-background-size: 36 36;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+}
