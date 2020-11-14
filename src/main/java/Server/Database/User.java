@@ -29,11 +29,11 @@ public class User {
     }
 
     /**
-     * This method is Used to login, if logged successfully, User.getLoginUser() will return the logged user.
+     * This method is used to login, if logged successfully, User.getLoginUser() will return the logged user.
      */
     public void login() {
         try {
-            User[] users = User.read();
+            User[] users = User.getAll();
             User loginUser = Arrays.stream(users)
                     .filter(user -> user.name.equals(this.name) && user.password.equals(this.password))
                     .findFirst()
@@ -59,6 +59,9 @@ public class User {
         }
     }
 
+    /**
+     * Create a user
+     */
     private synchronized void create() {
         Session session = HibernateUtil.getSessionFactory().openSession(); // Open Session
         Transaction tx = session.beginTransaction(); // Start a session
@@ -68,7 +71,12 @@ public class User {
         HibernateUtil.shutdown();
     }
 
-    private static User[] read() {
+    /**
+     * Get all users
+     *
+     * @return - Users
+     */
+    private static User[] getAll() {
         Session session = HibernateUtil.getSessionFactory().openSession();
 
         Criteria criteria = session.createCriteria(User.class);
