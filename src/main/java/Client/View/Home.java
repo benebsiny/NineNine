@@ -38,6 +38,6 @@ public class Home {
     }
 
     public void goToChooseRoom(ActionEvent actionEvent) {
-        Main.switchScene("choose_room");
+        Main.switchScene("ChooseRoom");
     }
 }

@@ -1,5 +1,6 @@
 package Client.View;
 
+import Client.Main;
 import com.jfoenix.controls.JFXButton;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -70,5 +71,13 @@ public class ChooseRoom {
         label.setGraphic(null); // Remove image
 //        labels[nextPosition].getStyleClass().remove("pointer");
         findNextPosition();
+    }
+
+    public void goBack(ActionEvent actionEvent) {
+        Main.switchScene("Home");
+    }
+
+    public void enterRoom(ActionEvent actionEvent) {
+        Main.switchScene("WaitingUser");
     }
 }
