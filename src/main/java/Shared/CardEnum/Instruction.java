@@ -1,4 +1,4 @@
-package Client.CardEnum;
+package Shared.CardEnum;
 
 public enum Instruction {
     PLAY, DRAW, SHUFFLE

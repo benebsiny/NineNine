@@ -40,4 +40,8 @@ public class Home {
     public void goToChooseRoom(ActionEvent actionEvent) {
         Main.switchScene("ChooseRoom");
     }
+
+    public void goToLoginPage(ActionEvent actionEvent) {
+        Main.switchScene("SignIn");
+    }
 }

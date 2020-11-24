@@ -1,4 +1,4 @@
-package Client.CardEnum;
+package Shared.CardEnum;
 
 public enum Card {
     HA(1, Suit.HEART), H2(2, Suit.HEART), H3(3, Suit.HEART), H4(4, Suit.HEART),

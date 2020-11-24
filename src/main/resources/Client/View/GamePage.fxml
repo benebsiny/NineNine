@@ -1,19 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
 <?import com.jfoenix.controls.JFXButton?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
 
-
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0"
-      prefWidth="900.0" xmlns="http://javafx.com/javafx/8">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Client.View.GamePage">
    <children>
-      <JFXButton layoutX="96.0" layoutY="259.0" mnemonicParsing="false" prefHeight="99.0" prefWidth="72.0" text="Button" />
-      <JFXButton layoutX="180.0" layoutY="259.0" mnemonicParsing="false" prefHeight="99.0" prefWidth="72.0" text="Button" />
-      <JFXButton layoutX="347.0" layoutY="259.0" mnemonicParsing="false" prefHeight="99.0" prefWidth="72.0" text="Button" />
-      <JFXButton layoutX="431.0" layoutY="259.0" mnemonicParsing="false" prefHeight="99.0" prefWidth="72.0" text="Button" />
-      <JFXButton layoutX="264.0" layoutY="259.0" mnemonicParsing="false" prefHeight="99.0" prefWidth="72.0" text="Button" />
-      <Pane layoutX="192.0" layoutY="89.0" prefHeight="135.0" prefWidth="216.0" />
-      <Label layoutX="277.0" layoutY="39.0" text="Label" />
+      <Label layoutX="382.0" layoutY="292.0" text="Number">
+         <font>
+            <Font size="32.0" />
+         </font></Label>
+      <Label layoutX="756.0" layoutY="41.0" text="Timer">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
+      <JFXButton layoutX="95.0" layoutY="394.0" mnemonicParsing="false" prefHeight="168.0" prefWidth="120.0" text="Button" />
+      <JFXButton layoutX="235.0" layoutY="394.0" mnemonicParsing="false" prefHeight="168.0" prefWidth="120.0" text="Button" />
+      <JFXButton layoutX="385.0" layoutY="394.0" mnemonicParsing="false" prefHeight="168.0" prefWidth="120.0" text="Button" />
+      <JFXButton layoutX="546.0" layoutY="394.0" mnemonicParsing="false" prefHeight="168.0" prefWidth="120.0" text="Button" />
+      <JFXButton layoutX="696.0" layoutY="394.0" mnemonicParsing="false" prefHeight="168.0" prefWidth="120.0" text="Button" />
+      <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="48.0" layoutY="146.0" pickOnBounds="true" preserveRatio="true" rotate="90.0">
+         <image>
+            <Image url="@../Img/playing-user.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="353.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true" rotate="180.0">
+         <image>
+            <Image url="@../Img/playing-user.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="679.0" layoutY="146.0" pickOnBounds="true" preserveRatio="true" rotate="270.0">
+         <image>
+            <Image url="@../Img/playing-user.png" />
+         </image>
+      </ImageView>
    </children>
 </Pane>

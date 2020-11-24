@@ -1,5 +1,5 @@
 .heart {
-    -fx-background-image: url("../Img/Heart.png");
+    -fx-background-image: url("../Img/Suit/Heart.png");
     -fx-background-size: 20;
     -fx-background-repeat: no-repeat;
     -fx-background-position: 20px 14px;
@@ -8,7 +8,7 @@
 }
 
 .diamond {
-    -fx-background-image: url("../Img/Diamond.png");
+    -fx-background-image: url("../Img/Suit/Diamond.png");
     -fx-background-size: 20;
     -fx-background-repeat: no-repeat;
     -fx-background-position: 20px 14px;
@@ -17,7 +17,7 @@
 }
 
 .spade {
-    -fx-background-image: url("../Img/Spade.png");
+    -fx-background-image: url("../Img/Suit/Spade.png");
     -fx-background-size: 20;
     -fx-background-repeat: no-repeat;
     -fx-background-position: 20px 14px;
@@ -25,7 +25,7 @@
 }
 
 .club {
-    -fx-background-image: url("../Img/Club.png");
+    -fx-background-image: url("../Img/Suit/Club.png");
     -fx-background-size: 20;
     -fx-background-repeat: no-repeat;
     -fx-background-position: 20px 14px;

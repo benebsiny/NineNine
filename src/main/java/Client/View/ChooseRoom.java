@@ -34,7 +34,7 @@ public class ChooseRoom {
         if (allPicked) return; // When all picked, do nothing
 
         JFXButton picked = (JFXButton) actionEvent.getSource();
-        Image image = new Image(getClass().getResourceAsStream(String.format("../Card/%s.png", picked.getId())));
+        Image image = new Image(getClass().getResourceAsStream(String.format("../Img/Card/%s.png", picked.getId())));
         ImageView imageView = new ImageView(image);
         imageView.setFitHeight(210);
         imageView.setFitWidth(150);

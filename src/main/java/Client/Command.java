@@ -1,6 +1,6 @@
 package Client;
 
-import Client.CardEnum.*;
+import Shared.CardEnum.*;
 
 import java.io.Serializable;
 
