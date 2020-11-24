@@ -2,13 +2,16 @@ package Shared;
 
 import Shared.CardEnum.Card;
 import Shared.CardEnum.Instruction;
+import Shared.CardEnum.Status;
 
 import java.io.Serializable;
 
 public class PlayCommand implements Serializable {
+    private static final long serialVersionUID = 1L;
     private String turn;
     private Instruction instruction;
     private Card card;
+    private Status status = Status.KEEP;
 
     public String getTurn() {
         return turn;
@@ -32,5 +35,13 @@ public class PlayCommand implements Serializable {
 
     public void setCard(Card card) {
         this.card = card;
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
     }
 }

@@ -7,10 +7,12 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.net.Socket;
 
 public class Main extends Application {
 
     private static Stage stage;
+    private static Socket socket;
 
     @Override
     public void start(Stage stage) throws IOException {
@@ -41,4 +43,16 @@ public class Main extends Application {
         }
     }
 
+    /**
+     * Get the socket which connect to server
+     *
+     * @return - Socket connected to server
+     */
+    public static Socket getServer() {
+        return null;
+    }
+
+    public static void setServer(Socket socket) {
+        Main.socket = socket;
+    }
 }
