@@ -13,14 +13,14 @@
             <Font size="36.0" />
          </font>
       </Text>
-      <JFXButton buttonType="RAISED" layoutX="403.0" layoutY="400.0" prefHeight="52.0" prefWidth="104.0" style="-fx-background-color: DodgerBlue;" text="Sign In" textFill="WHITE">
+      <JFXButton buttonType="RAISED" layoutX="403.0" layoutY="400.0" prefHeight="52.0" prefWidth="104.0" style="-fx-background-color: DodgerBlue;" text="登入" textFill="WHITE">
          <font>
             <Font size="18.0" />
          </font></JFXButton>
       <JFXTextField fx:id="UserName" layoutX="321.0" layoutY="232.0" prefHeight="19.0" prefWidth="299.0" promptText="User Name" />
       <JFXTextField fx:id="Password" layoutX="320.0" layoutY="305.0" prefHeight="19.0" prefWidth="299.0" promptText="Password" />
        <JFXButton layoutX="38.0" layoutY="29.0" onAction="#goBack" prefHeight="40.0" prefWidth="40.0" styleClass="back-button" stylesheets="@../Style/General.css" />
-      <JFXButton buttonType="RAISED" layoutX="403.0" layoutY="481.0" onAction="#register" prefHeight="52.0" prefWidth="104.0" style="-fx-background-color: LightCoral;" text="Register" textFill="WHITE">
+      <JFXButton buttonType="RAISED" layoutX="403.0" layoutY="481.0" onAction="#register" prefHeight="52.0" prefWidth="104.0" style="-fx-background-color: LightCoral;" text="註冊" textFill="WHITE">
          <font>
             <Font size="18.0" />
          </font>
