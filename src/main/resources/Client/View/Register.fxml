@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXPasswordField?>
 <?import com.jfoenix.controls.JFXTextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
@@ -8,18 +9,19 @@
 
 <AnchorPane prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Client.View.Register">
    <children>
+      <JFXButton layoutX="36.0" layoutY="35.0" onAction="#goBack" prefHeight="40.0" prefWidth="40.0" styleClass="back-button" stylesheets="@../Style/General.css" />
       <Text layoutX="295.0" layoutY="110.0" strokeType="OUTSIDE" strokeWidth="0.0" text="註冊" textAlignment="CENTER" wrappingWidth="301.0">
          <font>
             <Font size="36.0" />
          </font>
       </Text>
-      <JFXTextField fx:id="UserName" layoutX="314.0" layoutY="204.0" prefHeight="19.0" prefWidth="299.0" promptText="User Name" />
-      <JFXTextField fx:id="Password" layoutX="314.0" layoutY="280.0" prefHeight="19.0" prefWidth="299.0" promptText="Password" />
-      <JFXButton buttonType="RAISED" layoutX="394.0" layoutY="404.0" onAction="#comfirm" prefHeight="52.0" prefWidth="104.0" style="-fx-background-color: DarkOrchid;" text="確認" textFill="WHITE">
+      <JFXTextField fx:id="usernameField" layoutX="314.0" layoutY="187.0" prefHeight="19.0" prefWidth="299.0" promptText="使用者名稱" />
+      <JFXPasswordField fx:id="passwordField" layoutX="314.0" layoutY="253.0" prefHeight="19.0" prefWidth="299.0" promptText="密碼" />
+      <JFXPasswordField fx:id="passwordAgainField" layoutX="314.0" layoutY="316.0" prefHeight="19.0" prefWidth="299.0" promptText="再次輸入密碼" />
+      <JFXButton buttonType="RAISED" layoutX="394.0" layoutY="425.0" onAction="#confirm" prefHeight="31.0" prefWidth="104.0" style="-fx-background-color: DarkOrchid;" text="確認" textFill="WHITE">
          <font>
             <Font size="18.0" />
          </font>
       </JFXButton>
-      <JFXButton layoutX="36.0" layoutY="35.0" onAction="#goBack" prefHeight="40.0" prefWidth="40.0" styleClass="back-button" stylesheets="@../Style/General.css" />
    </children>
 </AnchorPane>

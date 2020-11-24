@@ -19,4 +19,6 @@ dependencies {
     compile group: 'mysql', name: 'mysql-connector-java', version: '8.0.22'
 }
 
+compileJava.options.encoding = 'UTF-8'
+
 mainClassName = getProperty('mode') + '.Main'

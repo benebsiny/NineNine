@@ -1,13 +1,11 @@
 package Server;
 
 import Shared.PlayCommand;
-import Shared.Register;
+import Shared.RegisterCommand;
 
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -35,7 +33,7 @@ public class Main {
                 if(temp instanceof PlayCommand) {
 
                 }
-                else if(temp instanceof Register){
+                else if(temp instanceof RegisterCommand){
 
                 }
 

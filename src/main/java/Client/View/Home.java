@@ -37,6 +37,10 @@ public class Home {
         timeline.play();
     }
 
+    public void goToCreateRoom(ActionEvent actionEvent) {
+        Main.switchScene("CreateRoom");
+    }
+
     public void goToChooseRoom(ActionEvent actionEvent) {
         Main.switchScene("ChooseRoom");
     }
