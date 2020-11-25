@@ -23,6 +23,7 @@ public class ChooseRoomController {
     public JFXButton enterRoomButton;
 
     Label[] pickedArray;
+    String[] pickedCard;
     int nextPosition = 0;
     boolean allPicked = false;
 
@@ -30,6 +31,7 @@ public class ChooseRoomController {
     @FXML
     void initialize() {
         pickedArray = new Label[]{firstPicked, secondPicked, thirdPicked};
+        pickedCard = new String[3];
         enterRoomButton.setDisable(true);
     }
 
@@ -44,8 +46,9 @@ public class ChooseRoomController {
         imageView.setFitHeight(210);
         imageView.setFitWidth(150);
 
+
+        pickedCard[nextPosition] = picked.getId();
         pickedArray[nextPosition].setGraphic(imageView); // Set graphic on the label
-//        labels[nextPosition].getStyleClass().add("pointer");
 
         findNextPosition();
     }
@@ -59,6 +62,7 @@ public class ChooseRoomController {
                 nextPosition = i;
                 allPicked = false;
                 enterRoomButton.setDisable(true);
+                pickedCard[i] = null;
                 return;
             }
         }
@@ -74,7 +78,6 @@ public class ChooseRoomController {
     public void removeCard(MouseEvent mouseEvent) {
         Label label = (Label) mouseEvent.getSource(); // Get the clicked label
         label.setGraphic(null); // Remove image
-//        labels[nextPosition].getStyleClass().remove("pointer");
         findNextPosition();
     }
 
@@ -84,9 +87,9 @@ public class ChooseRoomController {
 
     public void enterRoom(ActionEvent actionEvent) {
 
-        Card firstCard = Card.valueOf(firstPicked.getId());
-        Card secondCard = Card.valueOf(secondPicked.getId());
-        Card thirdCard = Card.valueOf(thirdPicked.getId());
+        Card firstCard = Card.valueOf(pickedCard[0]);
+        Card secondCard = Card.valueOf(pickedCard[1]);
+        Card thirdCard = Card.valueOf(pickedCard[2]);
 
         try {
             String[] players = RoomConn.chooseRoom(firstCard, secondCard, thirdCard);
@@ -104,6 +107,5 @@ public class ChooseRoomController {
             e.printStackTrace();
         } catch (ClassNotFoundException ignored) {
         }
-
     }
 }
