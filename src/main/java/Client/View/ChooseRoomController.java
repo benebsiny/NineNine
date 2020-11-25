@@ -1,6 +1,9 @@
 package Client.View;
 
+import Client.Connection.RoomConn;
 import Client.Main;
+import Client.Status.PlayerStatus;
+import Shared.CardEnum.Card;
 import com.jfoenix.controls.JFXButton;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -8,6 +11,8 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+
+import java.io.IOException;
 
 public class ChooseRoomController {
 
@@ -17,14 +22,14 @@ public class ChooseRoomController {
     public Label thirdPicked;
     public JFXButton enterRoomButton;
 
-    Label[] labels;
+    Label[] pickedArray;
     int nextPosition = 0;
     boolean allPicked = false;
 
 
     @FXML
     void initialize() {
-        labels = new Label[]{firstPicked, secondPicked, thirdPicked};
+        pickedArray = new Label[]{firstPicked, secondPicked, thirdPicked};
         enterRoomButton.setDisable(true);
     }
 
@@ -39,7 +44,7 @@ public class ChooseRoomController {
         imageView.setFitHeight(210);
         imageView.setFitWidth(150);
 
-        labels[nextPosition].setGraphic(imageView); // Set graphic on the label
+        pickedArray[nextPosition].setGraphic(imageView); // Set graphic on the label
 //        labels[nextPosition].getStyleClass().add("pointer");
 
         findNextPosition();
@@ -49,8 +54,8 @@ public class ChooseRoomController {
      * Find next position that picked card will locate at there.
      */
     void findNextPosition() {
-        for (int i = 0; i < labels.length; i++) {
-            if (labels[i].getGraphic() == null) {
+        for (int i = 0; i < pickedArray.length; i++) {
+            if (pickedArray[i].getGraphic() == null) {
                 nextPosition = i;
                 allPicked = false;
                 enterRoomButton.setDisable(true);
@@ -78,6 +83,27 @@ public class ChooseRoomController {
     }
 
     public void enterRoom(ActionEvent actionEvent) {
-        Main.switchScene("WaitingUser");
+
+        Card firstCard = Card.valueOf(firstPicked.getId());
+        Card secondCard = Card.valueOf(secondPicked.getId());
+        Card thirdCard = Card.valueOf(thirdPicked.getId());
+
+        try {
+            String[] players = RoomConn.chooseRoom(firstCard, secondCard, thirdCard);
+
+            // Room found
+            if (players != null) {
+                PlayerStatus.setPlayers(players); // Set status
+                Main.switchScene("WaitingUser"); // Go to waiting user
+
+            } else { // Room not found
+                // TODO Show error message
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException ignored) {
+        }
+
     }
 }

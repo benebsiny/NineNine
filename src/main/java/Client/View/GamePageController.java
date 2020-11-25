@@ -1,7 +1,7 @@
 package Client.View;
 
 import Client.Main;
-import Client.Status.Player;
+import Client.Status.PlayerStatus;
 import Shared.CardEnum.Instruction;
 import Shared.CardEnum.Status;
 import Shared.PlayCommand;
@@ -105,7 +105,7 @@ class GamePageConnection implements Runnable {
 
     private final GamePageController GUI;
     private final Socket server;
-    private final String[] players = Player.getPlayers();
+    private final String[] players = PlayerStatus.getPlayers();
     private int turnId = 0;
 
     GamePageConnection(GamePageController gamePage) {
