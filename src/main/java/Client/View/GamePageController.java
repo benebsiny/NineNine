@@ -13,6 +13,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
+import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 
 import java.io.IOException;
@@ -21,12 +22,14 @@ public class GamePageController {
 
     public ImageView playCardImage;
     public Circle shineCircle;
+    public Rectangle countdownBar;
 
     FillTransition ft;
 
     @FXML
     void initialize() {
 
+        countdownBar.setVisible(false);
         shineCircle.setVisible(false);
         playCardImage.setVisible(false);
 
@@ -131,6 +134,20 @@ public class GamePageController {
         shineCircle.setVisible(true);
     }
 
+
+    /**
+     * Show the countdown bar
+     */
+    public void countdown() {
+        countdownBar.setWidth(900);
+        countdownBar.setVisible(true);
+        Timeline timeline = new Timeline();
+        KeyValue kv = new KeyValue(countdownBar.widthProperty(), 0);
+        KeyFrame kf = new KeyFrame(Duration.seconds(20), kv);
+        timeline.getKeyFrames().add(kf);
+        timeline.play();
+    }
+
     /**
      * Get the order of the player by username
      *
@@ -198,8 +215,14 @@ class NextPlayerHandler implements Runnable {
 
         int turnId = GUI.getTurnByName(command.getNextPlayerUsername());
 
-        if (turnId != 3) { // It's no me to play the card
+        // It's not my turn
+        if (turnId != 3) {
             Platform.runLater(() -> GUI.otherPlayerThinking(turnId));
+        }
+
+        // It's my turn!!
+        else {
+            Platform.runLater(()-> GUI.countdown());
         }
     }
 }

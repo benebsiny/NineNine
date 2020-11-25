@@ -7,6 +7,7 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.shape.Circle?>
+<?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Client.View.GamePageController">
@@ -15,11 +16,6 @@
          <font>
             <Font size="32.0" />
          </font></Label>
-      <Label layoutX="756.0" layoutY="41.0" text="Timer">
-         <font>
-            <Font size="18.0" />
-         </font>
-      </Label>
       <JFXButton layoutX="95.0" layoutY="394.0" mnemonicParsing="false" prefHeight="168.0" prefWidth="120.0" text="Button" />
       <JFXButton layoutX="235.0" layoutY="394.0" mnemonicParsing="false" prefHeight="168.0" prefWidth="120.0" text="Button" />
       <JFXButton layoutX="385.0" layoutY="394.0" mnemonicParsing="false" prefHeight="168.0" prefWidth="120.0" text="Button" />
@@ -49,5 +45,6 @@
             <BoxBlur height="50.0" iterations="3" width="50.0" />
          </effect>
       </Circle>
+      <Rectangle fx:id="countdownBar" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="900.0" />
    </children>
 </Pane>
