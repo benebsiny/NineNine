@@ -1,9 +1,8 @@
 package Client.View;
 
-import Client.Main;
+import Client.Connection.GamePageConn;
 import Client.Status.PlayerStatus;
-import Shared.CardEnum.Instruction;
-import Shared.CardEnum.Status;
+import Shared.NextPlayerCommand;
 import Shared.PlayCommand;
 import javafx.animation.*;
 import javafx.application.Platform;
@@ -14,8 +13,6 @@ import javafx.scene.shape.Line;
 import javafx.util.Duration;
 
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.net.Socket;
 
 public class GamePageController {
 
@@ -99,47 +96,100 @@ public class GamePageController {
         time.getKeyFrames().add(new KeyFrame(Duration.millis(2000), fadeOut));
         time.play();
     }
+
+    /**
+     * Show the animation that other is playing
+     *
+     * @param turnId - Which player to play the card
+     */
+    public void otherPlayerThinking(int turnId) {
+        // TODO Show the animation that other is playing
+    }
+
+    /**
+     * Get the order of the player by username
+     *
+     * @param username - The current player's username
+     * @return - Order of the player (Turn ID)
+     */
+    public int getTurnByName(String username) {
+
+        String[] players = PlayerStatus.getPlayers();
+
+        // Who's play the card??
+        for (int i = 0; i < 4; i++) {
+            if (username.equals(players[i])) {
+                return i;
+            }
+        }
+        return -1;
+    }
 }
 
 class GamePageConnection implements Runnable {
 
     private final GamePageController GUI;
-    private final Socket server;
-    private final String[] players = PlayerStatus.getPlayers();
-    private int turnId = 0;
 
     GamePageConnection(GamePageController gamePage) {
         this.GUI = gamePage;
-        server = Main.getServer();
     }
 
     @Override
     public void run() {
-        ObjectInputStream out;
 
         try {
-            out = new ObjectInputStream(server.getInputStream());
-            PlayCommand playCommand = (PlayCommand) out.readObject();
+            Object receivedObject = GamePageConn.receive();
 
-            if (playCommand.getStatus() == Status.KEEP) { // Keep playing game
-
-                // Get number turn of the next turn of the user
-                for (int i = 0; i < 4; i++) {
-                    if (playCommand.getTurn().equals(players[i])) {
-                        turnId = i;
-                        break;
-                    }
-                }
-
-                // Other user play a card, show it on the GUI
-                if (playCommand.getInstruction() == Instruction.PLAY) {
-                    Platform.runLater(() -> {
-                        GUI.playCard(turnId);
-                    });
-                }
+            // Other player play the card
+            if (receivedObject instanceof PlayCommand) {
+                new Thread(new PlayCommandHandler(GUI, (PlayCommand) receivedObject)).start();
             }
+
+            // It's other player's turn
+            else if (receivedObject instanceof NextPlayerCommand) {
+                new Thread(new NextPlayerHandler(GUI, (NextPlayerCommand) receivedObject)).start();
+            }
+
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
+    }
+}
+
+
+class NextPlayerHandler implements Runnable {
+
+    GamePageController GUI;
+    NextPlayerCommand command;
+
+    public NextPlayerHandler(GamePageController GUI, NextPlayerCommand command) {
+        this.GUI = GUI;
+        this.command = command;
+    }
+
+    @Override
+    public void run() {
+
+        int turnId = GUI.getTurnByName(command.getNextPlayerUsername());
+        // TODO Show the user who's thinking
+    }
+}
+
+class PlayCommandHandler implements Runnable {
+
+    PlayCommand command;
+    GamePageController GUI;
+
+    PlayCommandHandler(GamePageController GUI, PlayCommand command) {
+        this.command = command;
+    }
+
+    @Override
+    public void run() {
+
+        int turnId = GUI.getTurnByName(command.getUsername());
+
+        // Show playing card animation
+        Platform.runLater(() -> GUI.playCard(turnId));
     }
 }
