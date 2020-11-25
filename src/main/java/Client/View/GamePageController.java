@@ -2,6 +2,7 @@ package Client.View;
 
 import Client.Connection.GamePageConn;
 import Client.Status.PlayerStatus;
+import Shared.CardEnum.Card;
 import Shared.NextPlayerCommand;
 import Shared.PlayCommand;
 import javafx.animation.*;
@@ -9,6 +10,7 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -23,6 +25,9 @@ public class GamePageController {
     public ImageView playCardImage;
     public Circle shineCircle;
     public Rectangle countdownBar;
+    public Label valueLabel;
+
+    volatile int value = 0;
 
     FillTransition ft;
 
@@ -33,6 +38,8 @@ public class GamePageController {
         shineCircle.setVisible(false);
         playCardImage.setVisible(false);
 
+//        playCard(1, Card.D2, 20);
+
         Thread connection = new Thread(new GamePageConnection(this));
         connection.start();
     }
@@ -41,9 +48,11 @@ public class GamePageController {
     /**
      * Play the animation that play the card
      *
-     * @param turnId - Which player to play the card
+     * @param turnId - Which player to play the card.
+     * @param card   - The card the player played
+     * @param nextValue  - The next value of the sea
      */
-    public void playCard(int turnId) {
+    public void playCard(int turnId, Card card, int nextValue) {
         Line line = new Line();
 
         if (turnId == 0) { // Left player
@@ -105,6 +114,14 @@ public class GamePageController {
         time.getKeyFrames().add(new KeyFrame(Duration.millis(1), moving));
         time.getKeyFrames().add(new KeyFrame(Duration.millis(1200), zoomOut));
         time.getKeyFrames().add(new KeyFrame(Duration.millis(2000), fadeOut));
+
+
+        int diff = nextValue - this.value;
+        for (int i = 1; i <= 8; i++) {
+            int finalI = i;
+            time.getKeyFrames().add(new KeyFrame(Duration.millis(2000 + 150 * i),
+                    event -> valueLabel.setText(String.valueOf(nextValue + diff / 8 * finalI))));
+        }
         time.play();
     }
 
@@ -200,6 +217,29 @@ class GamePageConnection implements Runnable {
     }
 }
 
+class PlayCommandHandler implements Runnable {
+
+    PlayCommand command;
+    GamePageController GUI;
+
+    PlayCommandHandler(GamePageController GUI, PlayCommand command) {
+        this.GUI = GUI;
+        this.command = command;
+    }
+
+    @Override
+    public void run() {
+
+        if (GUI.ft != null) GUI.ft.stop(); // Stop the shining effect
+
+        // Show playing card animation for others
+        int turnId = GUI.getTurnByName(command.getUsername());
+        if (turnId != 3) {
+            Platform.runLater(() -> GUI.playCard(turnId, Card.D2, 20));
+        }
+    }
+}
+
 class NextPlayerHandler implements Runnable {
 
     GamePageController GUI;
@@ -222,30 +262,7 @@ class NextPlayerHandler implements Runnable {
 
         // It's my turn!!
         else {
-            Platform.runLater(()-> GUI.countdown());
-        }
-    }
-}
-
-class PlayCommandHandler implements Runnable {
-
-    PlayCommand command;
-    GamePageController GUI;
-
-    PlayCommandHandler(GamePageController GUI, PlayCommand command) {
-        this.GUI = GUI;
-        this.command = command;
-    }
-
-    @Override
-    public void run() {
-
-        if (GUI.ft != null) GUI.ft.stop(); // Stop the shining effect
-
-        // Show playing card animation for others
-        int turnId = GUI.getTurnByName(command.getUsername());
-        if (turnId != 3) {
-            Platform.runLater(() -> GUI.playCard(turnId));
+            Platform.runLater(() -> GUI.countdown());
         }
     }
 }
