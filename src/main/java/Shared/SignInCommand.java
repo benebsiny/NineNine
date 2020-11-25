@@ -1,6 +1,8 @@
 package Shared;
 
-public class SignInCommand {
+import java.io.Serializable;
+
+public class SignInCommand implements Serializable {
     private User user; // The user who is going to register
 
     public SignInCommand(User user) {

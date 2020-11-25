@@ -1,9 +1,11 @@
 package Server.Database;
 
+import Shared.User;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.exception.ConstraintViolationException;
+
 
 import java.util.Arrays;
 import java.util.List;
@@ -16,6 +18,7 @@ public class UserDB {
 
     private static UserDB loginUser = null;
 
+
     public static UserDB getLoginUser() {
         return loginUser;
     }
@@ -25,13 +28,14 @@ public class UserDB {
         this.password = password;
     }
 
-    public UserDB() {
-    }
+    public UserDB() { }
+
 
     /**
      * This method is used to login, if logged successfully, User.getLoginUser() will return the logged user.
      */
-    public void login() {
+
+    public boolean login() {
         try {
             UserDB[] users = UserDB.getAll();
             UserDB loginUser = Arrays.stream(users)
@@ -41,22 +45,29 @@ public class UserDB {
             UserDB.loginUser = loginUser;
         } catch (NoSuchElementException exception) {
             System.err.println("Wrong User or password");
+            return false;
         } catch (Exception exception) {
             exception.printStackTrace();
         }
+        return true;
     }
+
+
 
     /**
      * Sign a user
      */
-    public void signUp() {
+    public boolean signUp() {
         try {
             this.create();
         } catch (ConstraintViolationException exception) {
             System.err.println("Duplicate Name");
+            return false;
         } catch (Exception exception) {
             exception.printStackTrace();
+            return false;
         }
+        return true;
     }
 
     /**

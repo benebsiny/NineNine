@@ -48,8 +48,9 @@ public class Main extends Application {
      *
      * @return - Socket connected to server
      */
-    public static Socket getServer() {
-        return null;
+    public static Socket getServer() throws IOException {
+        socket = new Socket("127.0.0.1", 8888);
+        return socket;
     }
 
     public static void setServer(Socket socket) {

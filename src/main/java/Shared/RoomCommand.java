@@ -2,7 +2,9 @@ package Shared;
 
 import Shared.CardEnum.Card;
 
-public class RoomCommand {
+import java.io.Serializable;
+
+public class RoomCommand implements Serializable {
     private RoomAction action;
     private Card[] chosenCards;
 
