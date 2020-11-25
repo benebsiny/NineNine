@@ -7,8 +7,6 @@ import Shared.CardEnum.Status;
 import Shared.PlayCommand;
 import javafx.animation.*;
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.image.ImageView;
@@ -19,7 +17,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.net.Socket;
 
-public class GamePage {
+public class GamePageController {
 
     public ImageView playCardImage;
 
@@ -105,12 +103,12 @@ public class GamePage {
 
 class GamePageConnection implements Runnable {
 
-    private final GamePage GUI;
+    private final GamePageController GUI;
     private final Socket server;
     private final String[] players = Player.getPlayers();
     private int turnId = 0;
 
-    GamePageConnection(GamePage gamePage) {
+    GamePageConnection(GamePageController gamePage) {
         this.GUI = gamePage;
         server = Main.getServer();
     }

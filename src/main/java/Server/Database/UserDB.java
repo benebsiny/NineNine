@@ -9,23 +9,23 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-public class User {
+public class UserDB {
     private int id;
     private String name;
     private String password;
 
-    private static User loginUser = null;
+    private static UserDB loginUser = null;
 
-    public static User getLoginUser() {
+    public static UserDB getLoginUser() {
         return loginUser;
     }
 
-    public User(String name, String password) {
+    public UserDB(String name, String password) {
         this.name = name;
         this.password = password;
     }
 
-    public User() {
+    public UserDB() {
     }
 
     /**
@@ -33,12 +33,12 @@ public class User {
      */
     public void login() {
         try {
-            User[] users = User.getAll();
-            User loginUser = Arrays.stream(users)
+            UserDB[] users = UserDB.getAll();
+            UserDB loginUser = Arrays.stream(users)
                     .filter(user -> user.name.equals(this.name) && user.password.equals(this.password))
                     .findFirst()
                     .get();
-            User.loginUser = loginUser;
+            UserDB.loginUser = loginUser;
         } catch (NoSuchElementException exception) {
             System.err.println("Wrong User or password");
         } catch (Exception exception) {
@@ -76,13 +76,13 @@ public class User {
      *
      * @return - Users
      */
-    private static User[] getAll() {
+    private static UserDB[] getAll() {
         Session session = HibernateUtil.getSessionFactory().openSession();
 
-        Criteria criteria = session.createCriteria(User.class);
+        Criteria criteria = session.createCriteria(UserDB.class);
 
-        List<User> users = criteria.list();
-        User[] userArray = new User[users.size()];
+        List<UserDB> users = criteria.list();
+        UserDB[] userArray = new UserDB[users.size()];
         for (int i = 0; i < users.size(); i++) {
             userArray[i] = users.get(i);
         }

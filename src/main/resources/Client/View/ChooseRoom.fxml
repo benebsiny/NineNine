@@ -5,7 +5,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Client.View.ChooseRoom">
+<AnchorPane prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Client.View.ChooseRoomController">
    <children>
       <Label fx:id="firstPicked" alignment="CENTER" layoutX="133.0" layoutY="15.0" onMouseClicked="#removeCard" prefHeight="210.0" prefWidth="150.0" textAlignment="CENTER" />
       <Label fx:id="secondPicked" alignment="CENTER" layoutX="368.0" layoutY="15.0" onMouseClicked="#removeCard" prefHeight="210.0" prefWidth="150.0" textAlignment="CENTER" />

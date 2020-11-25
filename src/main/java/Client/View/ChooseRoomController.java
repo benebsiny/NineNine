@@ -9,7 +9,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 
-public class ChooseRoom {
+public class ChooseRoomController {
 
     @FXML
     public Label firstPicked;

@@ -1,26 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXPasswordField?>
 <?import com.jfoenix.controls.JFXTextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Client.View.SignIn">
+<AnchorPane prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Client.View.SignInController">
    <children>
       <Text layoutX="310.0" layoutY="104.0" strokeType="OUTSIDE" strokeWidth="0.0" text="登入介面" textAlignment="CENTER" wrappingWidth="301.0">
          <font>
             <Font size="36.0" />
          </font>
       </Text>
-      <JFXButton buttonType="RAISED" layoutX="403.0" layoutY="400.0" prefHeight="52.0" prefWidth="104.0" style="-fx-background-color: DodgerBlue;" text="登入" textFill="WHITE">
+      <JFXButton buttonType="RAISED" layoutX="403.0" layoutY="420.0" onAction="#signIn" prefHeight="32.0" prefWidth="104.0" style="-fx-background-color: #20B2AA;" text="登入" textFill="WHITE">
          <font>
             <Font size="18.0" />
          </font></JFXButton>
-      <JFXTextField fx:id="UserName" layoutX="321.0" layoutY="232.0" prefHeight="19.0" prefWidth="299.0" promptText="User Name" />
-      <JFXTextField fx:id="Password" layoutX="320.0" layoutY="305.0" prefHeight="19.0" prefWidth="299.0" promptText="Password" />
+      <JFXTextField fx:id="usernameField" layoutX="321.0" layoutY="232.0" prefHeight="19.0" prefWidth="299.0" promptText="使用者" />
+      <JFXPasswordField fx:id="passwordField" layoutX="320.0" layoutY="305.0" prefHeight="19.0" prefWidth="299.0" promptText="密碼" />
        <JFXButton layoutX="38.0" layoutY="29.0" onAction="#goBack" prefHeight="40.0" prefWidth="40.0" styleClass="back-button" stylesheets="@../Style/General.css" />
-      <JFXButton buttonType="RAISED" layoutX="403.0" layoutY="481.0" onAction="#register" prefHeight="52.0" prefWidth="104.0" style="-fx-background-color: LightCoral;" text="註冊" textFill="WHITE">
+      <JFXButton buttonType="RAISED" layoutX="403.0" layoutY="484.0" onAction="#goToRegisterPage" prefHeight="23.0" prefWidth="104.0" style="-fx-background-color: #C21B1C;" text="註冊" textFill="WHITE">
          <font>
             <Font size="18.0" />
          </font>

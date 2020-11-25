@@ -1,10 +1,9 @@
 package Shared;
 
-public class RegisterCommand {
-
+public class SignInCommand {
     private User user; // The user who is going to register
 
-    public RegisterCommand(User user) {
+    public SignInCommand(User user) {
         this.user = new User(user.getUsername(), user.getPassword());
     }
 

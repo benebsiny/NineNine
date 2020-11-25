@@ -3,7 +3,7 @@
         PUBLIC "-//Hibernate/Hibernate Mapping DTD//EN"
         "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
-    <class name="Server.Database.User" table="user">
+    <class name="Server.Database.UserDB" table="user">
         <id name="id" type="int">
             <column name="id" sql-type="int"/>
             <generator class="identity"/>

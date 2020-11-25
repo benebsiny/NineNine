@@ -10,7 +10,7 @@ import javafx.fxml.FXML;
 import javafx.scene.layout.Pane;
 import javafx.util.Duration;
 
-public class Home {
+public class HomeController {
     @FXML
     public Pane homePane;
 

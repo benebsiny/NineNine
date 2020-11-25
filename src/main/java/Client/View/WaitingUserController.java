@@ -7,7 +7,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 
-public class WaitingUser {
+public class WaitingUserController {
 
     public JFXListView<String> userList;
 
