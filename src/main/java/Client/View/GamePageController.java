@@ -6,9 +6,12 @@ import Shared.NextPlayerCommand;
 import Shared.PlayCommand;
 import javafx.animation.*;
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.image.ImageView;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.util.Duration;
 
@@ -17,11 +20,16 @@ import java.io.IOException;
 public class GamePageController {
 
     public ImageView playCardImage;
+    public Circle shineCircle;
+
+    FillTransition ft;
 
     @FXML
     void initialize() {
 
+        shineCircle.setVisible(false);
         playCardImage.setVisible(false);
+
         Thread connection = new Thread(new GamePageConnection(this));
         connection.start();
     }
@@ -51,7 +59,7 @@ public class GamePageController {
         line.setEndX(450);
         line.setEndY(300);
 
-        EventHandler moving = event -> {
+        EventHandler<ActionEvent> moving = event -> {
             // Moving path
             PathTransition pathTransition = new PathTransition();
             pathTransition.setNode(playCardImage);
@@ -71,7 +79,7 @@ public class GamePageController {
             scaleTransition.play();
         };
 
-        EventHandler zoomOut = event -> {
+        EventHandler<ActionEvent> zoomOut = event -> {
             // Scale
             ScaleTransition scaleTransition = new ScaleTransition(Duration.millis(50), playCardImage);
             scaleTransition.setFromX(1.2);
@@ -81,7 +89,7 @@ public class GamePageController {
             scaleTransition.play();
         };
 
-        EventHandler fadeOut = event -> {
+        EventHandler<ActionEvent> fadeOut = event -> {
             FadeTransition fadeTransition = new FadeTransition(Duration.millis(500), playCardImage);
             fadeTransition.setFromValue(1);
             fadeTransition.setToValue(0);
@@ -103,7 +111,24 @@ public class GamePageController {
      * @param turnId - Which player to play the card
      */
     public void otherPlayerThinking(int turnId) {
-        // TODO Show the animation that other is playing
+
+        if (turnId == 0) {
+            shineCircle.setCenterX(150);
+            shineCircle.setCenterY(225);
+        } else if (turnId == 1) {
+            shineCircle.setCenterX(450);
+            shineCircle.setCenterY(100);
+        } else if (turnId == 2) {
+            shineCircle.setCenterX(750);
+            shineCircle.setCenterY(225);
+        }
+
+        ft = new FillTransition(Duration.seconds(2), shineCircle, Color.BLACK, Color.valueOf("#ffcb21"));
+        ft.setCycleCount(Animation.INDEFINITE);
+        ft.setAutoReverse(true);
+        ft.play();
+
+        shineCircle.setVisible(true);
     }
 
     /**
@@ -137,25 +162,26 @@ class GamePageConnection implements Runnable {
     @Override
     public void run() {
 
-        try {
-            Object receivedObject = GamePageConn.receive();
+        while (true) {
+            try {
+                Object receivedObject = GamePageConn.receive();
 
-            // Other player play the card
-            if (receivedObject instanceof PlayCommand) {
-                new Thread(new PlayCommandHandler(GUI, (PlayCommand) receivedObject)).start();
+                // Other player play the card
+                if (receivedObject instanceof PlayCommand) {
+                    new Thread(new PlayCommandHandler(GUI, (PlayCommand) receivedObject)).start();
+                }
+
+                // It's other player's turn
+                else if (receivedObject instanceof NextPlayerCommand) {
+                    new Thread(new NextPlayerHandler(GUI, (NextPlayerCommand) receivedObject)).start();
+                }
+
+            } catch (IOException | ClassNotFoundException e) {
+                e.printStackTrace();
             }
-
-            // It's other player's turn
-            else if (receivedObject instanceof NextPlayerCommand) {
-                new Thread(new NextPlayerHandler(GUI, (NextPlayerCommand) receivedObject)).start();
-            }
-
-        } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
         }
     }
 }
-
 
 class NextPlayerHandler implements Runnable {
 
@@ -171,7 +197,10 @@ class NextPlayerHandler implements Runnable {
     public void run() {
 
         int turnId = GUI.getTurnByName(command.getNextPlayerUsername());
-        // TODO Show the user who's thinking
+
+        if (turnId != 3) { // It's no me to play the card
+            Platform.runLater(() -> GUI.otherPlayerThinking(turnId));
+        }
     }
 }
 
@@ -181,15 +210,19 @@ class PlayCommandHandler implements Runnable {
     GamePageController GUI;
 
     PlayCommandHandler(GamePageController GUI, PlayCommand command) {
+        this.GUI = GUI;
         this.command = command;
     }
 
     @Override
     public void run() {
 
-        int turnId = GUI.getTurnByName(command.getUsername());
+        if (GUI.ft != null) GUI.ft.stop(); // Stop the shining effect
 
-        // Show playing card animation
-        Platform.runLater(() -> GUI.playCard(turnId));
+        // Show playing card animation for others
+        int turnId = GUI.getTurnByName(command.getUsername());
+        if (turnId != 3) {
+            Platform.runLater(() -> GUI.playCard(turnId));
+        }
     }
 }
