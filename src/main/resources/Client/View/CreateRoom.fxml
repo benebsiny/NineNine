@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Client.View.CreateRoomController">
+   <children>
+      <Label fx:id="firstPicked" alignment="CENTER" layoutX="133.0" layoutY="15.0" onMouseClicked="#removeCard" prefHeight="210.0" prefWidth="150.0" textAlignment="CENTER" />
+      <Label fx:id="secondPicked" alignment="CENTER" layoutX="368.0" layoutY="15.0" onMouseClicked="#removeCard" prefHeight="210.0" prefWidth="150.0" textAlignment="CENTER" />
+      <Label fx:id="thirdPicked" alignment="CENTER" layoutX="594.0" layoutY="15.0" onMouseClicked="#removeCard" prefHeight="210.0" prefWidth="150.0" textAlignment="CENTER" />
+      <JFXButton fx:id="HA" buttonType="RAISED" layoutX="242.0" layoutY="248.0" mnemonicParsing="false" onAction="#pickCard" prefHeight="50.0" prefWidth="82.0" styleClass="heart" stylesheets="@../Style/ChooseRoom.css" text="A">
+         <padding>
+            <Insets left="20.0" />
+         </padding>
+      </JFXButton>
+      <JFXButton fx:id="D5" buttonType="RAISED" layoutX="402.0" layoutY="248.0" mnemonicParsing="false" onAction="#pickCard" prefHeight="50.0" prefWidth="82.0" styleClass="diamond" stylesheets="@../Style/ChooseRoom.css" text="5">
+         <padding>
+            <Insets left="20.0" />
+         </padding>
+      </JFXButton>
+      <JFXButton fx:id="C9" buttonType="RAISED" layoutX="553.0" layoutY="248.0" mnemonicParsing="false" onAction="#pickCard" prefHeight="50.0" prefWidth="82.0" styleClass="club" stylesheets="@../Style/ChooseRoom.css" text="9">
+         <padding>
+            <Insets left="20.0" />
+         </padding>
+      </JFXButton>
+      <JFXButton fx:id="C7" buttonType="RAISED" layoutX="242.0" layoutY="337.0" mnemonicParsing="false" onAction="#pickCard" prefHeight="50.0" prefWidth="82.0" styleClass="club" stylesheets="@../Style/ChooseRoom.css" text="7">
+         <padding>
+            <Insets left="20.0" />
+         </padding>
+      </JFXButton>
+      <JFXButton fx:id="HK" buttonType="RAISED" layoutX="402.0" layoutY="337.0" mnemonicParsing="false" onAction="#pickCard" prefHeight="50.0" prefWidth="82.0" styleClass="heart" stylesheets="@../Style/ChooseRoom.css" text="K">
+         <padding>
+            <Insets left="20.0" />
+         </padding>
+      </JFXButton>
+      <JFXButton fx:id="S4" buttonType="RAISED" layoutX="553.0" layoutY="337.0" mnemonicParsing="false" onAction="#pickCard" prefHeight="50.0" prefWidth="82.0" styleClass="spade" stylesheets="@../Style/ChooseRoom.css" text="4">
+         <padding>
+            <Insets left="20.0" />
+         </padding>
+      </JFXButton>
+      <JFXButton fx:id="D3" buttonType="RAISED" layoutX="242.0" layoutY="424.0" mnemonicParsing="false" onAction="#pickCard" prefHeight="50.0" prefWidth="82.0" styleClass="diamond" stylesheets="@../Style/ChooseRoom.css" text="3">
+         <padding>
+            <Insets left="20.0" />
+         </padding>
+      </JFXButton>
+      <JFXButton fx:id="SJ" buttonType="RAISED" layoutX="402.0" layoutY="430.0" mnemonicParsing="false" onAction="#pickCard" prefHeight="50.0" prefWidth="82.0" styleClass="spade" stylesheets="@../Style/ChooseRoom.css" text="J">
+         <padding>
+            <Insets left="20.0" />
+         </padding>
+      </JFXButton>
+      <JFXButton fx:id="DQ" buttonType="RAISED" layoutX="553.0" layoutY="430.0" mnemonicParsing="false" onAction="#pickCard" prefHeight="50.0" prefWidth="82.0" styleClass="diamond" stylesheets="@../Style/ChooseRoom.css" text="Q">
+         <padding>
+            <Insets left="20.0" />
+         </padding>
+      </JFXButton>
+      <JFXButton fx:id="createRoomButton" buttonType="RAISED" layoutX="386.0" layoutY="505.0" mnemonicParsing="false" onAction="#enterRoom" prefHeight="53.0" prefWidth="114.0" style="-fx-background-color: #D32F2F; -fx-text-fill: white; -fx-font-size: 18px;" text="創建房間" />
+      <JFXButton layoutX="38.0" layoutY="29.0" onAction="#goBack" prefHeight="40.0" prefWidth="40.0" styleClass="back-button" stylesheets="@../Style/General.css" />
+   </children>
+</AnchorPane>
