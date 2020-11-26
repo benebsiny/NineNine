@@ -30,6 +30,6 @@ public class RoomStatusCommand implements Serializable {
     }
 
     public enum RoomStatus {
-        FOUND, NOT_FOUND, REPEATED, FULL
+        FOUND, NOT_FOUND, REPEATED, FULL, CREATE
     }
 }

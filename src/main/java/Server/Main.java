@@ -7,6 +7,8 @@ import Shared.CardEnum.Card;
 import Shared.Command.Player.RegisterCommand;
 import Shared.Command.Player.SignInCommand;
 import Shared.Command.Room.EnterRoomCommand;
+import Shared.Command.Room.LeaveRoomCommand;
+import Shared.Command.Room.RoomDisbandCommand;
 import Shared.Command.Room.RoomStatusCommand;
 import Shared.Data.User;
 
@@ -102,11 +104,11 @@ public class Main {
                         }
                         else { //成功創房
                             Room newRoom = new Room(chosenCards);
-                            newRoom.setUsername(getClientUsername(client));
+                            newRoom.addPlayer(getClientUsername(client));
                             roomList.add(newRoom);
 
-                            roomStatusCommand.setRoomStatus(RoomStatusCommand.RoomStatus.FOUND);
-                            roomStatusCommand.setPlayers(newRoom.getUsersname());
+                            roomStatusCommand.setRoomStatus(RoomStatusCommand.RoomStatus.CREATE);
+                            roomStatusCommand.setPlayers(newRoom.getPlayersName());
                         }
                         out.writeObject(roomStatusCommand);
                     }
@@ -114,14 +116,14 @@ public class Main {
                         if(RoomFunction.checkRoomPattern(chosenCards)){ //如果進入房間存在
                             for (Room room : roomList) {
                                 if(Arrays.equals(room.getChosenCards(), chosenCards)){
-                                    if(room.getChosenCards().length==4){
+                                    if(room.getPlayersName().length==4){
                                         roomStatusCommand.setRoomStatus(RoomStatusCommand.RoomStatus.FULL);
                                     }
                                     else {
 
-                                        room.setUsername(getClientUsername(client));
+                                        room.addPlayer(getClientUsername(client));
                                         roomStatusCommand.setRoomStatus(RoomStatusCommand.RoomStatus.FOUND);
-                                        roomStatusCommand.setPlayers(room.getUsersname());
+                                        roomStatusCommand.setPlayers(room.getPlayersName());
 
                                     }
                                     out.writeObject(roomStatusCommand);
@@ -135,8 +137,27 @@ public class Main {
                             out.writeObject(roomStatusCommand);
                         }
                     }
+                }
+                else if(input instanceof LeaveRoomCommand){
+                    String leavePlayerName = ((LeaveRoomCommand) input).getPlayer();
+                    for (Room room : roomList) {
+                        if(Arrays.binarySearch(room.getPlayersName(),leavePlayerName)==0){ //房間主人離開
+
+                            Set<Map.Entry<String, Socket>> entrySet = clientMap.entrySet();
+                            for (Map.Entry<String, Socket> stringSocketEntry : entrySet) {
+
+                            }
+
+                            RoomDisbandCommand roomDisbandCommand = new RoomDisbandCommand();
+                            roomList.remove(room);
+                            out.writeObject(roomDisbandCommand);
+                            break;
+                        }
+                        else if(Arrays.binarySearch(room.getPlayersName(),leavePlayerName)>0){
 
 
+                        }
+                    }
                 }
 
 
@@ -163,7 +184,7 @@ public class Main {
         try {
             ExecutorService executorService = Executors.newFixedThreadPool(100);
             ServerSocket server = new ServerSocket(8888);
-            for(int i = 0; i < 5; i ++) {
+            for(int i = 0; i < 100; i ++) {
                 Socket socket = server.accept();
                 executorService.execute(new ExecuteClientThread(socket));
             }

@@ -3,7 +3,7 @@ package Server.Room;
 import Shared.CardEnum.Card;
 
 public class Room {
-    private String[] usersname;
+    private String[] playersName;
     private Card[] chosenCards;
 
     public Room(Card[] chosenCards) {
@@ -12,12 +12,12 @@ public class Room {
         this.chosenCards = cloneCards;
     }
 
-    public String[] getUsersname() {
-        return usersname;
+    public String[] getPlayersName() {
+        return playersName;
     }
 
-    public void setUsername(String username) {
-        usersname[usersname.length - 1] = username;
+    public void addPlayer(String player) {
+        this.playersName[playersName.length - 1] = player;
     }
 
     public Card[] getChosenCards() {
