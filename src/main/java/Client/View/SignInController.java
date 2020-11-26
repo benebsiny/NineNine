@@ -25,6 +25,7 @@ public class SignInController {
         RequiredFieldValidator rfv = new RequiredFieldValidator("欄位不得為空");
         usernameField.getValidators().add(rfv);
         passwordField.getValidators().add(rfv);
+        errMsg.setVisible(false);
     }
 
     public void goBack(ActionEvent actionEvent) {
@@ -37,7 +38,7 @@ public class SignInController {
 
     public void signIn(ActionEvent actionEvent) {
         if (usernameField.validate() && passwordField.validate()) {
-            new Thread(new SignInHandler(this));
+            new Thread(new SignInHandler(this)).start();
         }
     }
 }
@@ -57,7 +58,7 @@ class SignInHandler implements Runnable{
             // Sign in success
             if (signInSuccess) {
                 UserStatus.setSignInUser(GUI.usernameField.getText());
-                Main.switchScene("Home");
+                Platform.runLater(()-> Main.switchScene("Home"));
             }
             // Sign in fail
             else {
