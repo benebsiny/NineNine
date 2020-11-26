@@ -19,7 +19,6 @@ public class Main extends Application {
         Main.stage = stage;
 
         Parent root = FXMLLoader.load(getClass().getResource("View/Home.fxml"));
-        //Parent root = FXMLLoader.load(getClass().getResource("View/GamePage.fxml"));
         Scene scene = new Scene(root, 900, 600);
         stage.setScene(scene);
         stage.show();
