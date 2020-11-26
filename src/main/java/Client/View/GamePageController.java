@@ -11,6 +11,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -38,8 +39,6 @@ public class GamePageController {
         shineCircle.setVisible(false);
         playCardImage.setVisible(false);
 
-//        playCard(1, Card.D2, 20);
-
         Thread connection = new Thread(new GamePageConnection(this));
         connection.start();
     }
@@ -48,11 +47,16 @@ public class GamePageController {
     /**
      * Play the animation that play the card
      *
-     * @param turnId - Which player to play the card.
-     * @param card   - The card the player played
-     * @param nextValue  - The next value of the sea
+     * @param turnId    - Which player to play the card.
+     * @param card      - The card the player played
+     * @param nextValue - The next value of the sea
      */
     public void playCard(int turnId, Card card, int nextValue) {
+
+        // Set card image
+        playCardImage.setImage(new Image(String.format("/Client/Img/Card/%s.png", card.toString())));
+
+        // Set card start position
         Line line = new Line();
 
         if (turnId == 0) { // Left player
@@ -68,9 +72,11 @@ public class GamePageController {
             line.setStartY(250);
         }
 
+        // Set card end position
         line.setEndX(450);
         line.setEndY(300);
 
+        // The animation for the card
         EventHandler<ActionEvent> moving = event -> {
             // Moving path
             PathTransition pathTransition = new PathTransition();
@@ -84,44 +90,56 @@ public class GamePageController {
             ScaleTransition scaleTransition = new ScaleTransition(Duration.millis(500), playCardImage);
             scaleTransition.setFromX(0);
             scaleTransition.setFromY(0);
-            scaleTransition.setToX(1.2);
-            scaleTransition.setToY(1.2);
+            scaleTransition.setToX(1.4);
+            scaleTransition.setToY(1.4);
 
             pathTransition.play();
             scaleTransition.play();
         };
 
+        // Scale
         EventHandler<ActionEvent> zoomOut = event -> {
-            // Scale
+
             ScaleTransition scaleTransition = new ScaleTransition(Duration.millis(50), playCardImage);
-            scaleTransition.setFromX(1.2);
-            scaleTransition.setFromY(1.2);
+            scaleTransition.setFromX(1.4);
+            scaleTransition.setFromY(1.4);
             scaleTransition.setToX(1);
             scaleTransition.setToY(1);
             scaleTransition.play();
         };
 
+        // Fade out
         EventHandler<ActionEvent> fadeOut = event -> {
-            FadeTransition fadeTransition = new FadeTransition(Duration.millis(500), playCardImage);
+            FadeTransition fadeTransition = new FadeTransition(Duration.millis(300), playCardImage);
             fadeTransition.setFromValue(1);
             fadeTransition.setToValue(0);
             fadeTransition.play();
         };
 
-        Timeline time = new Timeline();
 
+        Timeline time = new Timeline();
         time.getKeyFrames().add(new KeyFrame(Duration.millis(0), event -> playCardImage.setVisible(true)));
         time.getKeyFrames().add(new KeyFrame(Duration.millis(1), moving));
-        time.getKeyFrames().add(new KeyFrame(Duration.millis(1200), zoomOut));
-        time.getKeyFrames().add(new KeyFrame(Duration.millis(2000), fadeOut));
+        time.getKeyFrames().add(new KeyFrame(Duration.millis(700), zoomOut));
+        time.getKeyFrames().add(new KeyFrame(Duration.millis(1700), fadeOut));
 
 
+        // The value calculating
         int diff = nextValue - this.value;
-        for (int i = 1; i <= 8; i++) {
-            int finalI = i;
-            time.getKeyFrames().add(new KeyFrame(Duration.millis(2000 + 150 * i),
-                    event -> valueLabel.setText(String.valueOf(nextValue + diff / 8 * finalI))));
+        if (diff > 0) {
+            for (int i = 1; i <= diff; i++) {
+                int finalI = i;
+                time.getKeyFrames().add(new KeyFrame(Duration.millis(2200 + 50 * i),
+                        event -> valueLabel.setText(String.format("%02d", this.value + finalI))));
+            }
+        } else if (diff < 0) {
+            for (int i = 1; i <= -diff; i++) {
+                int finalI = i;
+                time.getKeyFrames().add(new KeyFrame(Duration.millis(2200 + 50 * i),
+                        event -> valueLabel.setText(String.format("%02d", this.value - finalI))));
+            }
         }
+
         time.play();
     }
 

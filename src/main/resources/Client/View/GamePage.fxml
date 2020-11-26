@@ -12,9 +12,9 @@
 
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Client.View.GamePageController">
    <children>
-      <Label fx:id="valueLabel" layoutX="382.0" layoutY="292.0" text="Number">
+      <Label fx:id="valueLabel" alignment="CENTER" layoutX="422.0" layoutY="252.0" text="00" textAlignment="JUSTIFY">
          <font>
-            <Font size="32.0" />
+            <Font size="48.0" />
          </font></Label>
       <JFXButton layoutX="95.0" layoutY="394.0" mnemonicParsing="false" prefHeight="168.0" prefWidth="120.0" text="Button" />
       <JFXButton layoutX="235.0" layoutY="394.0" mnemonicParsing="false" prefHeight="168.0" prefWidth="120.0" text="Button" />
