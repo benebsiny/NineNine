@@ -1,0 +1,31 @@
+package Shared;
+
+public class RoomStatusCommand {
+
+    private String[] players;
+    private RoomStatus roomStatus;
+
+    public String[] getPlayers() {
+        String[] clonePlayers = new String[players.length];
+        System.arraycopy(players, 0, clonePlayers, 0, players.length);
+        return clonePlayers;
+    }
+
+    public void setPlayers(String[] players) {
+        String[] clonePlayers = new String[players.length];
+        System.arraycopy(players, 0, clonePlayers, 0, players.length);
+        this.players = clonePlayers;
+    }
+
+    public RoomStatus getRoomStatus() {
+        return roomStatus;
+    }
+
+    public void setRoomStatus(RoomStatus roomStatus) {
+        this.roomStatus = roomStatus;
+    }
+
+    public enum RoomStatus {
+        FOUND, NOT_FOUND, REPEATED, FULL
+    }
+}
