@@ -1,11 +1,15 @@
 package Client.View;
 
+import Client.Connection.WaitingUserConn;
 import Client.Main;
+import Client.Status.PlayerStatus;
+import Shared.RoomPlayerCommand;
+import Shared.StartGameCommand;
 import com.jfoenix.controls.JFXListView;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+
+import java.io.IOException;
 
 public class WaitingUserController {
 
@@ -13,10 +17,49 @@ public class WaitingUserController {
 
     @FXML
     void initialize() {
-//        userList.getItems().add("Benny");
+        // Keep connection at backend
+        new Thread(new WaitingUserHandler(this)).start();
     }
 
     public void goBack(ActionEvent actionEvent) {
         Main.switchScene("ChooseRoom");
+    }
+
+}
+
+class WaitingUserHandler implements Runnable {
+
+    WaitingUserController GUI;
+
+    public WaitingUserHandler(WaitingUserController GUI) {
+        this.GUI = GUI;
+    }
+
+    @Override
+    public void run() {
+        while (true) {
+            try {
+                Object receiveObject = WaitingUserConn.waiting();
+
+                // Play comes in or leave
+                if (receiveObject instanceof RoomPlayerCommand) {
+                    String[] players = ((RoomPlayerCommand) receiveObject).getPlayer();
+                    for (String player : players) {
+                        GUI.userList.getItems().add(player);
+                    }
+                    PlayerStatus.setPlayers(players);
+                }
+                // Game start
+                else if (receiveObject instanceof StartGameCommand) {
+                    Main.switchScene("GamePage");
+                }
+
+            } catch (IOException e) {
+                // TODO Show connection error message
+                e.printStackTrace();
+            } catch (ClassNotFoundException ignored) {
+            }
+        }
+
     }
 }

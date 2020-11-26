@@ -22,8 +22,8 @@ public enum Card {
     CK(13, Suit.CLUB);
 
 
-    private int rank;
-    private Suit suit;
+    private final int rank;
+    private final Suit suit;
 
     Card(int rank, Suit suit) {
         this.rank = rank;
@@ -34,15 +34,8 @@ public enum Card {
         return rank;
     }
 
-    public void setRank(int rank) {
-        this.rank = rank;
-    }
-
     public Suit getSuit() {
         return suit;
     }
 
-    public void setSuit(Suit suit) {
-        this.suit = suit;
-    }
 }

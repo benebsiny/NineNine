@@ -4,11 +4,11 @@ import Shared.CardEnum.Card;
 
 import java.io.Serializable;
 
-public class RoomCommand implements Serializable {
+public class EnterRoomCommand implements Serializable {
     private RoomAction action;
     private Card[] chosenCards;
 
-    public RoomCommand(RoomAction action, Card[] chosenCards) {
+    public EnterRoomCommand(RoomAction action, Card[] chosenCards) {
         this.action = action;
 
         // Copy card array

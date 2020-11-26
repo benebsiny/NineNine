@@ -4,6 +4,7 @@ import Client.Connection.RoomConn;
 import Client.Main;
 import Client.Status.PlayerStatus;
 import Shared.CardEnum.Card;
+import Shared.RoomStatusCommand;
 import com.jfoenix.controls.JFXButton;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -92,11 +93,11 @@ public class ChooseRoomController {
         Card thirdCard = Card.valueOf(pickedCard[2]);
 
         try {
-            String[] players = RoomConn.chooseRoom(firstCard, secondCard, thirdCard);
+            RoomStatusCommand command = RoomConn.chooseRoom(firstCard, secondCard, thirdCard);
 
             // Room found
-            if (players != null) {
-                PlayerStatus.setPlayers(players); // Set status
+            if (command.getRoomStatus() == RoomStatusCommand.RoomStatus.FOUND) {
+                PlayerStatus.setPlayers(command.getPlayers()); // Set status
                 Main.switchScene("WaitingUser"); // Go to waiting user
 
             } else { // Room not found

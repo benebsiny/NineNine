@@ -1,6 +1,10 @@
 package Client.View;
 
+import Client.Connection.RoomConn;
 import Client.Main;
+import Client.Status.PlayerStatus;
+import Shared.CardEnum.Card;
+import Shared.RoomStatusCommand;
 import com.jfoenix.controls.JFXButton;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -8,6 +12,8 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+
+import java.io.IOException;
 
 public class CreateRoomController {
 
@@ -17,6 +23,7 @@ public class CreateRoomController {
     public JFXButton createRoomButton;
 
     Label[] labels;
+    String[] pickedCard;
     int nextPosition = 0;
     boolean allPicked = false;
 
@@ -24,6 +31,7 @@ public class CreateRoomController {
     @FXML
     void initialize() {
         labels = new Label[]{firstPicked, secondPicked, thirdPicked};
+        pickedCard = new String[3];
         createRoomButton.setDisable(true);
     }
 
@@ -37,6 +45,7 @@ public class CreateRoomController {
         imageView.setFitHeight(210);
         imageView.setFitWidth(150);
 
+        pickedCard[nextPosition] = picked.getId();
         labels[nextPosition].setGraphic(imageView); // Set graphic on the label
 //        labels[nextPosition].getStyleClass().add("pointer");
 
@@ -52,6 +61,7 @@ public class CreateRoomController {
                 nextPosition = i;
                 allPicked = false;
                 createRoomButton.setDisable(true);
+                pickedCard[i] = null;
                 return;
             }
         }
@@ -76,6 +86,26 @@ public class CreateRoomController {
     }
 
     public void enterRoom(ActionEvent actionEvent) {
-        Main.switchScene("WaitingUser");
+
+        Card firstCard = Card.valueOf(pickedCard[0]);
+        Card secondCard = Card.valueOf(pickedCard[1]);
+        Card thirdCard = Card.valueOf(pickedCard[2]);
+
+        try {
+            RoomStatusCommand command = RoomConn.chooseRoom(firstCard, secondCard, thirdCard);
+
+            // Room found
+            if (command.getRoomStatus() == RoomStatusCommand.RoomStatus.FOUND) {
+                PlayerStatus.setPlayers(command.getPlayers()); // Set status
+                Main.switchScene("WaitingUser"); // Go to waiting user
+
+            } else { // Room not found
+                // TODO Show error message
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException ignored) {
+        }
     }
 }
