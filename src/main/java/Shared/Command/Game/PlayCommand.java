@@ -1,4 +1,4 @@
-package Shared;
+package Shared.Command.Game;
 
 import Shared.CardEnum.Card;
 
@@ -6,16 +6,16 @@ import java.io.Serializable;
 
 public class PlayCommand implements Serializable {
     private static final long serialVersionUID = 1L;
-    private String username;
+    private String player;
     private Card card;
     private int value;
 
-    public String getUsername() {
-        return username;
+    public String getPlayer() {
+        return player;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setPlayer(String player) {
+        this.player = player;
     }
 
     public Card getCard() {

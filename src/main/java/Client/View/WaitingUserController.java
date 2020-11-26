@@ -3,8 +3,8 @@ package Client.View;
 import Client.Connection.WaitingUserConn;
 import Client.Main;
 import Client.Status.PlayerStatus;
-import Shared.RoomPlayerCommand;
-import Shared.StartGameCommand;
+import Shared.Command.Room.RoomPlayerCommand;
+import Shared.Command.Room.StartGameCommand;
 import com.jfoenix.controls.JFXListView;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -43,7 +43,7 @@ class WaitingUserHandler implements Runnable {
 
                 // Play comes in or leave
                 if (receiveObject instanceof RoomPlayerCommand) {
-                    String[] players = ((RoomPlayerCommand) receiveObject).getPlayer();
+                    String[] players = ((RoomPlayerCommand) receiveObject).getPlayers();
                     for (String player : players) {
                         GUI.userList.getItems().add(player);
                     }

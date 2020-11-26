@@ -2,8 +2,7 @@ package Client.View;
 
 import Client.Connection.RegisterConn;
 import Client.Main;
-import Shared.RegisterCommand;
-import Shared.User;
+import Shared.Data.User;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.validation.RegexValidator;
@@ -12,9 +11,6 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.net.Socket;
 
 public class RegisterController {
     public JFXTextField usernameField;

@@ -1,8 +1,8 @@
 package Client.Connection;
 
 import Client.Main;
-import Shared.SignInCommand;
-import Shared.User;
+import Shared.Command.Player.SignInCommand;
+import Shared.Data.User;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -28,10 +28,6 @@ public class SignInConn {
 
         // Read object from server
         SignInCommand returnedCommand = (SignInCommand) in.readObject();
-        if (returnedCommand != null) {
-            return true;
-        } else {
-            return false;
-        }
+        return returnedCommand != null;
     }
 }

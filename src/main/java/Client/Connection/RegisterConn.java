@@ -1,8 +1,8 @@
 package Client.Connection;
 
 import Client.Main;
-import Shared.RegisterCommand;
-import Shared.User;
+import Shared.Command.Player.RegisterCommand;
+import Shared.Data.User;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -29,10 +29,6 @@ public class RegisterConn {
         out.writeObject(command); // Send command to the server
 
         RegisterCommand returnedCommand = (RegisterCommand) in.readObject();
-        if (returnedCommand != null) {
-            return true;
-        } else {
-            return false;
-        }
+        return returnedCommand != null;
     }
 }

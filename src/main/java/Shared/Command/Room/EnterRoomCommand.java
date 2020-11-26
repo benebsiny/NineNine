@@ -1,10 +1,12 @@
-package Shared;
+package Shared.Command.Room;
 
 import Shared.CardEnum.Card;
 
 import java.io.Serializable;
 
 public class EnterRoomCommand implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     private RoomAction action;
     private Card[] chosenCards;
 

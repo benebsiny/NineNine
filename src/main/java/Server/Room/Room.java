@@ -1,7 +1,6 @@
 package Server.Room;
 
 import Shared.CardEnum.Card;
-import Shared.User;
 
 public class Room {
     private String[] usersname;

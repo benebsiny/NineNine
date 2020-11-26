@@ -1,4 +1,4 @@
-package Shared;
+package Shared.Command.Room;
 
 import java.io.Serializable;
 

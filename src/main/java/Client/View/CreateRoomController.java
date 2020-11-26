@@ -4,7 +4,7 @@ import Client.Connection.RoomConn;
 import Client.Main;
 import Client.Status.PlayerStatus;
 import Shared.CardEnum.Card;
-import Shared.RoomStatusCommand;
+import Shared.Command.Room.RoomStatusCommand;
 import com.jfoenix.controls.JFXButton;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;

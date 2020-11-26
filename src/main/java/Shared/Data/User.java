@@ -1,4 +1,4 @@
-package Shared;
+package Shared.Data;
 
 import java.io.Serializable;
 

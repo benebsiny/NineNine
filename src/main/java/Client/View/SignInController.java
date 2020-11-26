@@ -3,7 +3,7 @@ package Client.View;
 import Client.Connection.SignInConn;
 import Client.Main;
 import Client.Status.UserStatus;
-import Shared.User;
+import Shared.Data.User;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.validation.RequiredFieldValidator;

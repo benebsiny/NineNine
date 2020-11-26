@@ -2,8 +2,8 @@ package Client.Connection;
 
 import Client.Main;
 import Shared.CardEnum.Card;
-import Shared.EnterRoomCommand;
-import Shared.RoomStatusCommand;
+import Shared.Command.Room.EnterRoomCommand;
+import Shared.Command.Room.RoomStatusCommand;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;

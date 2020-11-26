@@ -1,6 +1,10 @@
-package Shared;
+package Shared.Command.Room;
 
-public class RoomStatusCommand {
+import java.io.Serializable;
+
+public class RoomStatusCommand implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     private String[] players = null;
     private RoomStatus roomStatus;

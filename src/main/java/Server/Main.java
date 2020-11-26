@@ -3,8 +3,12 @@ package Server;
 import Server.Database.UserDB;
 import Server.Room.Room;
 import Server.Room.RoomFunction;
-import Shared.*;
 import Shared.CardEnum.Card;
+import Shared.Command.Player.RegisterCommand;
+import Shared.Command.Player.SignInCommand;
+import Shared.Command.Room.EnterRoomCommand;
+import Shared.Command.Room.RoomStatusCommand;
+import Shared.Data.User;
 
 import java.io.*;
 import java.net.ServerSocket;
@@ -15,8 +19,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class Main {
-    private static Map<String, Socket> clientMap = new ConcurrentHashMap<String, Socket>();
-    private static List<Room> roomList = Collections.synchronizedList(new ArrayList<Room>());
+    private static Map<String, Socket> clientMap = new ConcurrentHashMap<>();
+    private static List<Room> roomList = Collections.synchronizedList(new ArrayList<>());
 
     public static Map<String, Socket> getClientMap() {
         return clientMap;
@@ -85,12 +89,12 @@ public class Main {
                         System.out.println("bbb");
                     }
                 }
-                else if(input instanceof RoomCommand){
-                    RoomCommand.RoomAction roomAction = ((RoomCommand) input).getAction();
-                    Card[] chosenCards = ((RoomCommand) input).getChosenCards();
+                else if(input instanceof EnterRoomCommand){
+                    EnterRoomCommand.RoomAction roomAction = ((EnterRoomCommand) input).getAction();
+                    Card[] chosenCards = ((EnterRoomCommand) input).getChosenCards();
                     RoomStatusCommand roomStatusCommand = new RoomStatusCommand();
 
-                    if(roomAction == RoomCommand.RoomAction.CREATE){
+                    if(roomAction == EnterRoomCommand.RoomAction.CREATE){
 
                         if(RoomFunction.checkRoomPattern(chosenCards)){ //如果創房重複
 
@@ -106,10 +110,10 @@ public class Main {
                         }
                         out.writeObject(roomStatusCommand);
                     }
-                    else if(roomAction == RoomCommand.RoomAction.CHOOSE){
+                    else if(roomAction == EnterRoomCommand.RoomAction.CHOOSE){
                         if(RoomFunction.checkRoomPattern(chosenCards)){ //如果進入房間存在
                             for (Room room : roomList) {
-                                if(room.getChosenCards().equals(chosenCards)){
+                                if(Arrays.equals(room.getChosenCards(), chosenCards)){
                                     if(room.getChosenCards().length==4){
                                         roomStatusCommand.setRoomStatus(RoomStatusCommand.RoomStatus.FULL);
                                     }

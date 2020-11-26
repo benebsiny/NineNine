@@ -1,6 +1,5 @@
 package Server.Database;
 
-import Shared.User;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.Transaction;

@@ -3,8 +3,8 @@ package Client.View;
 import Client.Connection.GamePageConn;
 import Client.Status.PlayerStatus;
 import Shared.CardEnum.Card;
-import Shared.NextPlayerCommand;
-import Shared.PlayCommand;
+import Shared.Command.Game.NextPlayerCommand;
+import Shared.Command.Game.PlayCommand;
 import javafx.animation.*;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -251,7 +251,7 @@ class PlayCommandHandler implements Runnable {
         if (GUI.ft != null) GUI.ft.stop(); // Stop the shining effect
 
         // Show playing card animation for others
-        int turnId = GUI.getTurnByName(command.getUsername());
+        int turnId = GUI.getTurnByName(command.getPlayer());
         if (turnId != 3) {
             Platform.runLater(() -> GUI.playCard(turnId, Card.D2, 20));
         }
@@ -271,7 +271,7 @@ class NextPlayerHandler implements Runnable {
     @Override
     public void run() {
 
-        int turnId = GUI.getTurnByName(command.getNextPlayerUsername());
+        int turnId = GUI.getTurnByName(command.getNextPlayer());
 
         // It's not my turn
         if (turnId != 3) {
