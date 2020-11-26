@@ -1,6 +1,8 @@
 package Server;
 
 import Server.Database.UserDB;
+import Server.Room.Room;
+import Server.Room.RoomFunction;
 import Shared.*;
 import Shared.CardEnum.Card;
 
@@ -15,6 +17,22 @@ import java.util.concurrent.Executors;
 public class Main {
     private static Map<String, Socket> clientMap = new ConcurrentHashMap<String, Socket>();
     private static List<Room> roomList = Collections.synchronizedList(new ArrayList<Room>());
+
+    public static Map<String, Socket> getClientMap() {
+        return clientMap;
+    }
+
+    public static void setClientMap(Map<String, Socket> clientMap) {
+        Main.clientMap = clientMap;
+    }
+
+    public static List<Room> getRoomList() {
+        return roomList;
+    }
+
+    public static void setRoomList(List<Room> roomList) {
+        Main.roomList = roomList;
+    }
 
     static class ExecuteClientThread implements Runnable {
         private Socket client;
@@ -42,7 +60,7 @@ public class Main {
 
                     if(userDB.signUp()){
                         out.writeObject(input);
-                        clientMap.put(user.getUsername(), client);
+//                        clientMap.put(user.getUsername(), client);
                     }
                     else{
                         out.writeObject(null);
@@ -70,35 +88,47 @@ public class Main {
                 else if(input instanceof RoomCommand){
                     RoomCommand.RoomAction roomAction = ((RoomCommand) input).getAction();
                     Card[] chosenCards = ((RoomCommand) input).getChosenCards();
+                    RoomStatusCommand roomStatusCommand = new RoomStatusCommand();
+
                     if(roomAction == RoomCommand.RoomAction.CREATE){
 
-                        if(checkRoomPattern(chosenCards)){ //如果創房重複
-                            out.writeObject("Room repeat");
+                        if(RoomFunction.checkRoomPattern(chosenCards)){ //如果創房重複
+
+                            roomStatusCommand.setRoomStatus(RoomStatusCommand.RoomStatus.REPEATED);
                         }
-                        else {
-                            Room room = new Room(chosenCards);
-                            room.setUsername(getClientUsername(client));
-                            out.writeObject(room.getChosenCards());
+                        else { //成功創房
+                            Room newRoom = new Room(chosenCards);
+                            newRoom.setUsername(getClientUsername(client));
+                            roomList.add(newRoom);
+
+                            roomStatusCommand.setRoomStatus(RoomStatusCommand.RoomStatus.FOUND);
+                            roomStatusCommand.setPlayers(newRoom.getUsersname());
                         }
+                        out.writeObject(roomStatusCommand);
                     }
                     else if(roomAction == RoomCommand.RoomAction.CHOOSE){
-                        if(checkRoomPattern(chosenCards)){ //如果進入房間存在
+                        if(RoomFunction.checkRoomPattern(chosenCards)){ //如果進入房間存在
                             for (Room room : roomList) {
                                 if(room.getChosenCards().equals(chosenCards)){
                                     if(room.getChosenCards().length==4){
-                                        out.writeObject("Room full");
+                                        roomStatusCommand.setRoomStatus(RoomStatusCommand.RoomStatus.FULL);
                                     }
                                     else {
+
                                         room.setUsername(getClientUsername(client));
-                                        out.writeObject(room.getChosenCards());
+                                        roomStatusCommand.setRoomStatus(RoomStatusCommand.RoomStatus.FOUND);
+                                        roomStatusCommand.setPlayers(room.getUsersname());
+
                                     }
+                                    out.writeObject(roomStatusCommand);
                                     break;
                                 }
                             }
 
                         }
                         else{
-                            out.writeObject("Room not exist");
+                            roomStatusCommand.setRoomStatus(RoomStatusCommand.RoomStatus.NOT_FOUND);
+                            out.writeObject(roomStatusCommand);
                         }
                     }
 
@@ -110,18 +140,8 @@ public class Main {
                 e.printStackTrace();
             }
 
-
-
         }
 
-        private boolean checkRoomPattern (Card[] chosenCards){
-            for (Room room : roomList) {
-                if(room.getChosenCards().equals(chosenCards)){
-                    return true;
-                }
-            }
-            return false;
-        }
         private String getClientUsername (Socket client){
             Set<Map.Entry<String, Socket>> entrySet = clientMap.entrySet();
             String userName = null;
