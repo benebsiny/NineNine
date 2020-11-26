@@ -1,4 +1,4 @@
-package Server;
+package Server.Room;
 
 import Shared.CardEnum.Card;
 import Shared.User;
@@ -8,7 +8,9 @@ public class Room {
     private Card[] chosenCards;
 
     public Room(Card[] chosenCards) {
-        this.chosenCards = chosenCards;
+        Card[] cloneCards = new Card[chosenCards.length];
+        System.arraycopy(chosenCards, 0, cloneCards, 0, chosenCards.length);
+        this.chosenCards = cloneCards;
     }
 
     public String[] getUsersname() {
@@ -16,7 +18,7 @@ public class Room {
     }
 
     public void setUsername(String username) {
-        usersname[usersname.length-1] = username;
+        usersname[usersname.length - 1] = username;
     }
 
     public Card[] getChosenCards() {

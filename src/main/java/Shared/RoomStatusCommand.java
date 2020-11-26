@@ -2,7 +2,7 @@ package Shared;
 
 public class RoomStatusCommand {
 
-    private String[] players;
+    private String[] players = null;
     private RoomStatus roomStatus;
 
     public String[] getPlayers() {
