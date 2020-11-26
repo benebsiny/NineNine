@@ -14,7 +14,7 @@
         <!-- SQL方言，這邊設定的是MySQL -->
         <property name="dialect">org.hibernate.dialect.MySQLDialect</property>
         <!-- JDBC驅動程式 -->
-        <property name="connection.driver_class">com.mysql.jdbc.Driver</property>
+        <property name="connection.driver_class">com.mysql.cj.jdbc.Driver</property>
         <!-- JDBC URL -->
         <property name="connection.url">jdbc:mysql://localhost:53306/nine_nine</property>
         <!-- 資料庫使用者 -->

@@ -11,6 +11,7 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
+import javafx.scene.image.ImageView;
 
 import java.io.IOException;
 
@@ -19,6 +20,7 @@ public class SignInController {
     public JFXTextField usernameField;
     public JFXPasswordField passwordField;
     public Label errMsg;
+    public ImageView loadingImg;
 
     @FXML
     void initialize() {
@@ -26,6 +28,7 @@ public class SignInController {
         usernameField.getValidators().add(rfv);
         passwordField.getValidators().add(rfv);
         errMsg.setVisible(false);
+        loadingImg.setVisible(false);
     }
 
     public void goBack(ActionEvent actionEvent) {
@@ -53,7 +56,11 @@ class SignInHandler implements Runnable{
     @Override
     public void run() {
         try {
+            Platform.runLater(()->GUI.loadingImg.setVisible(true)); // Show loading image
+
             boolean signInSuccess = SignInConn.signIn(new User(GUI.usernameField.getText(), GUI.passwordField.getText()));
+
+            Platform.runLater(()->GUI.loadingImg.setVisible(false)); // Hide loading image
 
             // Sign in success
             if (signInSuccess) {

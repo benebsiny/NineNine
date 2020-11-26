@@ -9,6 +9,7 @@ import org.hibernate.exception.ConstraintViolationException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 public class UserDB {
     private int id;
@@ -37,18 +38,15 @@ public class UserDB {
     public boolean login() {
         try {
             UserDB[] users = UserDB.getAll();
-            UserDB loginUser = Arrays.stream(users)
+            Optional<UserDB> existUser =  Arrays.stream(users)
                     .filter(user -> user.name.equals(this.name) && user.password.equals(this.password))
-                    .findFirst()
-                    .get();
-            UserDB.loginUser = loginUser;
-        } catch (NoSuchElementException exception) {
-            System.err.println("Wrong User or password");
-            return false;
+                    .findFirst();
+            return existUser.isPresent();
+
         } catch (Exception exception) {
             exception.printStackTrace();
+            return false;
         }
-        return true;
     }
 
 
