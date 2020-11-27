@@ -3,7 +3,10 @@
 <?import com.jfoenix.controls.JFXButton?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
 
 <AnchorPane prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Client.View.ChooseRoomController">
    <children>
@@ -57,5 +60,15 @@
       </JFXButton>
       <JFXButton fx:id="enterRoomButton" buttonType="RAISED" layoutX="386.0" layoutY="505.0" mnemonicParsing="false" onAction="#enterRoom" prefHeight="53.0" prefWidth="114.0" style="-fx-background-color: #D32F2F; -fx-text-fill: white; -fx-font-size: 18px;" text="進入房間" />
       <JFXButton layoutX="38.0" layoutY="29.0" onAction="#goBack" prefHeight="40.0" prefWidth="40.0" styleClass="back-button" stylesheets="@../Style/General.css" />
+      <Label fx:id="errMsg" layoutX="522.0" layoutY="518.0" text="房間已存在" textFill="RED">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
+      <ImageView fx:id="loadingImg" fitHeight="130.0" fitWidth="104.0" layoutX="499.0" layoutY="479.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../Img/loading.gif" />
+         </image>
+      </ImageView>
    </children>
 </AnchorPane>

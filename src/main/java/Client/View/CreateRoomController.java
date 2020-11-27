@@ -6,6 +6,7 @@ import Client.Status.PlayerStatus;
 import Shared.CardEnum.Card;
 import Shared.Command.Room.RoomStatusCommand;
 import com.jfoenix.controls.JFXButton;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -21,6 +22,8 @@ public class CreateRoomController {
     public Label secondPicked;
     public Label thirdPicked;
     public JFXButton createRoomButton;
+    public ImageView loadingImg;
+    public Label errMsg;
 
     Label[] labels;
     String[] pickedCard;
@@ -30,6 +33,10 @@ public class CreateRoomController {
 
     @FXML
     void initialize() {
+
+        loadingImg.setVisible(false);
+        errMsg.setVisible(false);
+
         labels = new Label[]{firstPicked, secondPicked, thirdPicked};
         pickedCard = new String[3];
         createRoomButton.setDisable(true);
@@ -91,16 +98,38 @@ public class CreateRoomController {
         Card secondCard = Card.valueOf(pickedCard[1]);
         Card thirdCard = Card.valueOf(pickedCard[2]);
 
+        new Thread(new CreateRoomHandler(this, firstCard, secondCard, thirdCard)).start();
+    }
+}
+
+class CreateRoomHandler implements Runnable {
+
+    CreateRoomController GUI;
+    Card firstCard, secondCard, thirdCard;
+
+    CreateRoomHandler(CreateRoomController GUI, Card firstCard, Card secondCard, Card thirdCard) {
+        this.GUI = GUI;
+        this.firstCard = firstCard;
+        this.secondCard = secondCard;
+        this.thirdCard = thirdCard;
+    }
+
+    @Override
+    public void run() {
         try {
+            Platform.runLater(() -> GUI.loadingImg.setVisible(true));
             RoomStatusCommand command = RoomConn.chooseRoom(firstCard, secondCard, thirdCard);
+            Platform.runLater(() -> GUI.loadingImg.setVisible(false));
 
-            // Room found
-            if (command.getRoomStatus() == RoomStatusCommand.RoomStatus.FOUND) {
+            // Room created
+            if (command.getRoomStatus() == RoomStatusCommand.RoomStatus.CREATED) {
                 PlayerStatus.setPlayers(command.getPlayers()); // Set status
-                Main.switchScene("WaitingUser"); // Go to waiting user
+                Platform.runLater(() -> Main.switchScene("WaitingUser")); // Go to waiting user
 
-            } else { // Room not found
-                // TODO Show error message
+            }
+            // Room already exists
+            else if (command.getRoomStatus() == RoomStatusCommand.RoomStatus.REPEATED) {
+                Platform.runLater(() -> GUI.errMsg.setVisible(true));
             }
 
         } catch (IOException e) {

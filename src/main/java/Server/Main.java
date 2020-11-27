@@ -107,7 +107,7 @@ public class Main {
                             newRoom.addPlayer(getClientUsername(client));
                             roomList.add(newRoom);
 
-                            roomStatusCommand.setRoomStatus(RoomStatusCommand.RoomStatus.CREATE);
+                            roomStatusCommand.setRoomStatus(RoomStatusCommand.RoomStatus.CREATED);
                             roomStatusCommand.setPlayers(newRoom.getPlayersName());
                         }
                         out.writeObject(roomStatusCommand);
