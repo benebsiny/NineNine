@@ -17,12 +17,16 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import static Server.ClientMap.ClientMapFunction.getClientUsername;
+import static Server.Room.RoomFunction.processEnterRoomCommand;
+
 public class Main {
     private static Map<String, Socket> clientMap = new ConcurrentHashMap<>();
-    private static List<Room> roomList = Collections.synchronizedList(new ArrayList<>());
+    private static CopyOnWriteArrayList<Room> roomList = new CopyOnWriteArrayList<>();
 
     public static Map<String, Socket> getClientMap() {
         return clientMap;
@@ -32,16 +36,16 @@ public class Main {
         Main.clientMap = clientMap;
     }
 
-    public static List<Room> getRoomList() {
+    public static CopyOnWriteArrayList<Room> getRoomList() {
         return roomList;
     }
 
-    public static void setRoomList(List<Room> roomList) {
+    public static void setRoomList(CopyOnWriteArrayList<Room> roomList) {
         Main.roomList = roomList;
     }
 
     static class ExecuteClientThread implements Runnable {
-        private Socket client;
+        private final Socket client;
 
         ObjectInputStream in = null;
         ObjectOutputStream out = null;
@@ -92,65 +96,30 @@ public class Main {
                     }
                 }
                 else if(input instanceof EnterRoomCommand){
-                    EnterRoomCommand.RoomAction roomAction = ((EnterRoomCommand) input).getAction();
-                    Card[] chosenCards = ((EnterRoomCommand) input).getChosenCards();
-                    RoomStatusCommand roomStatusCommand = new RoomStatusCommand();
-
-                    if(roomAction == EnterRoomCommand.RoomAction.CREATE){
-
-                        if(RoomFunction.checkRoomPattern(chosenCards)){ //如果創房重複
-
-                            roomStatusCommand.setRoomStatus(RoomStatusCommand.RoomStatus.REPEATED);
-                        }
-                        else { //成功創房
-                            Room newRoom = new Room(chosenCards);
-                            newRoom.addPlayer(getClientUsername(client));
-                            roomList.add(newRoom);
-
-                            roomStatusCommand.setRoomStatus(RoomStatusCommand.RoomStatus.CREATED);
-                            roomStatusCommand.setPlayers(newRoom.getPlayersName());
-                        }
-                        out.writeObject(roomStatusCommand);
-                    }
-                    else if(roomAction == EnterRoomCommand.RoomAction.CHOOSE){
-                        if(RoomFunction.checkRoomPattern(chosenCards)){ //如果進入房間存在
-                            for (Room room : roomList) {
-                                if(Arrays.equals(room.getChosenCards(), chosenCards)){
-                                    if(room.getPlayersName().length==4){
-                                        roomStatusCommand.setRoomStatus(RoomStatusCommand.RoomStatus.FULL);
-                                    }
-                                    else {
-
-                                        room.addPlayer(getClientUsername(client));
-                                        roomStatusCommand.setRoomStatus(RoomStatusCommand.RoomStatus.FOUND);
-                                        roomStatusCommand.setPlayers(room.getPlayersName());
-
-                                    }
-                                    out.writeObject(roomStatusCommand);
-                                    break;
-                                }
-                            }
-
-                        }
-                        else{
-                            roomStatusCommand.setRoomStatus(RoomStatusCommand.RoomStatus.NOT_FOUND);
-                            out.writeObject(roomStatusCommand);
-                        }
-                    }
+                    processEnterRoomCommand((EnterRoomCommand)input,client);
                 }
                 else if(input instanceof LeaveRoomCommand){
                     String leavePlayerName = ((LeaveRoomCommand) input).getPlayer();
                     for (Room room : roomList) {
                         if(Arrays.binarySearch(room.getPlayersName(),leavePlayerName)==0){ //房間主人離開
+                            String[] roomPlayers = room.getPlayersName();
 
                             Set<Map.Entry<String, Socket>> entrySet = clientMap.entrySet();
-                            for (Map.Entry<String, Socket> stringSocketEntry : entrySet) {
 
+                            for (int i = 1; i < roomPlayers.length;i++){       //找該房間其他人的socket,送roomDisbandCommand
+
+                                for (Map.Entry<String, Socket> stringSocketEntry : entrySet) {
+                                    if(stringSocketEntry.getKey().equals(roomPlayers[i])){
+
+                                        Socket socket = stringSocketEntry.getValue();
+                                        ObjectOutputStream otherClientOut = new ObjectOutputStream(socket.getOutputStream());
+                                        RoomDisbandCommand roomDisbandCommand = new RoomDisbandCommand();
+                                        otherClientOut.writeObject(roomDisbandCommand);
+                                    }
+                                }
                             }
 
-                            RoomDisbandCommand roomDisbandCommand = new RoomDisbandCommand();
                             roomList.remove(room);
-                            out.writeObject(roomDisbandCommand);
                             break;
                         }
                         else if(Arrays.binarySearch(room.getPlayersName(),leavePlayerName)>0){
@@ -165,17 +134,6 @@ public class Main {
                 e.printStackTrace();
             }
 
-        }
-
-        private String getClientUsername (Socket client){
-            Set<Map.Entry<String, Socket>> entrySet = clientMap.entrySet();
-            String userName = null;
-            for (Map.Entry<String, Socket> socketEntry : entrySet) {
-                if (socketEntry.getValue() == client) {
-                    userName = socketEntry.getKey();
-                }
-            }
-            return userName;
         }
 
     }

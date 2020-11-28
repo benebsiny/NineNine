@@ -17,7 +17,7 @@ public class Room {
     }
 
     public void addPlayer(String player) {
-        this.playersName[playersName.length - 1] = player;
+        this.playersName[playersName.length] = player;
     }
 
     public Card[] getChosenCards() {
