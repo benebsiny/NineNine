@@ -23,6 +23,7 @@ import java.util.concurrent.Executors;
 
 import static Server.ClientMap.ClientMapFunction.getClientUsername;
 import static Server.Room.RoomFunction.processEnterRoomCommand;
+import static Server.Room.RoomFunction.sendRoomPlayerCommand;
 
 public class Main {
     private static Map<String, Socket> clientMap = new ConcurrentHashMap<>();
@@ -124,7 +125,12 @@ public class Main {
                         }
                         else if(Arrays.binarySearch(room.getPlayersName(),leavePlayerName)>0){
 
+                            List<String> list=new ArrayList(Arrays.asList(room.getPlayersName()));
+                            list.remove(leavePlayerName);
+                            room.setPlayersName((String[])list.toArray());
 
+                            sendRoomPlayerCommand(room,leavePlayerName);
+                            break;
                         }
                     }
                 }

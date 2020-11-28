@@ -24,5 +24,7 @@ public class Room {
         return chosenCards;
     }
 
-
+    public void setPlayersName(String[] playersName) {
+        this.playersName = playersName;
+    }
 }

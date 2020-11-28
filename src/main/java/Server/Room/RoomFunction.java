@@ -4,6 +4,8 @@ import Server.ClientMap.ClientMapFunction;
 import Server.Main;
 import Shared.CardEnum.Card;
 import Shared.Command.Room.EnterRoomCommand;
+import Shared.Command.Room.RoomDisbandCommand;
+import Shared.Command.Room.RoomPlayerCommand;
 import Shared.Command.Room.RoomStatusCommand;
 
 import java.io.IOException;
@@ -12,6 +14,8 @@ import java.net.Socket;
 import java.util.Arrays;
 import java.util.List;
 
+import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 
@@ -62,10 +66,11 @@ public class RoomFunction {
                             roomStatusCommand.setRoomStatus(RoomStatusCommand.RoomStatus.FOUND);
                             roomStatusCommand.setPlayers(room.getPlayersName());
 
-
                             Main.setRoomList(roomList);
+                            sendRoomPlayerCommand(room,ClientMapFunction.getClientUsername(client));
                         }
                         out.writeObject(roomStatusCommand);
+
                         break;
                     }
                 }
@@ -80,6 +85,28 @@ public class RoomFunction {
 
 
     }
+
+    public static void sendRoomPlayerCommand(Room room,String player) throws IOException {
+        Map<String, Socket> clientMap = Main.getClientMap();
+
+        Set<Map.Entry<String, Socket>> entrySet = clientMap.entrySet();
+        String[] roomPlayers = room.getPlayersName();
+
+        for (String roomPlayer : roomPlayers) {       //找該房間其他人的socket,送roomPlayerCommand
+            if (!roomPlayer.equals(player)) {
+                for (Map.Entry<String, Socket> stringSocketEntry : entrySet) {
+                    if (stringSocketEntry.getKey().equals(roomPlayer)) {
+
+                        Socket socket = stringSocketEntry.getValue();
+                        ObjectOutputStream otherClientOut = new ObjectOutputStream(socket.getOutputStream());
+                        RoomPlayerCommand roomPlayerCommand = new RoomPlayerCommand(roomPlayers);
+                        otherClientOut.writeObject(roomPlayerCommand);
+                    }
+                }
+            }
+        }
+    }
+
 
     public static boolean checkRoomPattern (Card[] chosenCards){
         List<Room> roomList = Main.getRoomList();
