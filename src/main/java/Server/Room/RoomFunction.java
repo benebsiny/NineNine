@@ -12,6 +12,8 @@ import java.util.*;
 
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import static Server.ClientMap.ClientMapFunction.getClientUsername;
+
 
 public class RoomFunction {
     public static void processEnterRoomCommand(EnterRoomCommand input,Socket client) throws IOException {
@@ -19,7 +21,7 @@ public class RoomFunction {
         Card[] chosenCards = input.getChosenCards();
         RoomStatusCommand roomStatusCommand = new RoomStatusCommand();
 
-        CopyOnWriteArrayList<Room> roomList = Main.getRoomList();
+        CopyOnWriteArrayList<Room> roomList = Main.getWaitRoomList();
 
         ObjectOutputStream out = new ObjectOutputStream(client.getOutputStream());
 
@@ -37,7 +39,7 @@ public class RoomFunction {
                 newRoom.addPlayer(ClientMapFunction.getClientUsername(client));
                 roomList.add(newRoom);
 
-                Main.setRoomList(roomList);
+                Main.setWaitRoomList(roomList);
 
                 roomStatusCommand.setRoomStatus(RoomStatusCommand.RoomStatus.CREATED);
                 roomStatusCommand.setPlayers(newRoom.getPlayersName());
@@ -60,7 +62,7 @@ public class RoomFunction {
                             roomStatusCommand.setRoomStatus(RoomStatusCommand.RoomStatus.FOUND);
                             roomStatusCommand.setPlayers(room.getPlayersName());
 
-                            Main.setRoomList(roomList);
+                            Main.setWaitRoomList(roomList);
                             sendRoomPlayerCommand(room,ClientMapFunction.getClientUsername(client));
                         }
                         out.writeObject(roomStatusCommand);
@@ -84,7 +86,7 @@ public class RoomFunction {
         String leavePlayerName = input.getPlayer();
 
         Map<String, Socket> clientMap = Main.getClientMap();
-        CopyOnWriteArrayList<Room> roomList = Main.getRoomList();
+        CopyOnWriteArrayList<Room> roomList = Main.getWaitRoomList();
 
         for (Room room : roomList) {
             if(Arrays.binarySearch(room.getPlayersName(),leavePlayerName)==0){ //房間主人離開
@@ -106,7 +108,7 @@ public class RoomFunction {
                 }
 
                 roomList.remove(room);
-                Main.setRoomList(roomList);
+                Main.setWaitRoomList(roomList);
                 break;
             }
             else if(Arrays.binarySearch(room.getPlayersName(),leavePlayerName)>0){ //非房間主人離開
@@ -115,9 +117,40 @@ public class RoomFunction {
                 list.remove(leavePlayerName);
                 room.setPlayersName((String[])list.toArray());
 
-                Main.setRoomList(roomList);
+                Main.setWaitRoomList(roomList);
 
                 sendRoomPlayerCommand(room,leavePlayerName);
+                break;
+            }
+        }
+    }
+
+    public static void processStartGameCommand(StartGameCommand input,Socket client) throws IOException{
+        CopyOnWriteArrayList<Room> waitRoomList = Main.getWaitRoomList();
+        Map<String, Socket> clientMap = Main.getClientMap();
+
+        for (Room room : waitRoomList) {
+            if(room.getPlayersName()[0].equals(getClientUsername(client))){
+
+                String[] roomPlayers = room.getPlayersName();
+                Set<Map.Entry<String, Socket>> entrySet = clientMap.entrySet();
+
+                for (String roomPlayer : roomPlayers) {    //找該房間所有人的socket,送StartGameCommand
+                    for (Map.Entry<String, Socket> stringSocketEntry : entrySet) {
+                        if (stringSocketEntry.getKey().equals(roomPlayer)) {
+
+                            Socket socket = stringSocketEntry.getValue();
+                            ObjectOutputStream allClientOut = new ObjectOutputStream(socket.getOutputStream());
+                            StartGameCommand startGameCommand = new StartGameCommand();
+                            allClientOut.writeObject(startGameCommand);
+                        }
+                    }
+                }
+                CopyOnWriteArrayList<Room> playRoomList = Main.getPlayRoomList();
+                playRoomList.add(room);
+                Main.setPlayRoomList(playRoomList);
+                waitRoomList.remove(room);
+                Main.setWaitRoomList(waitRoomList);
                 break;
             }
         }
@@ -147,7 +180,7 @@ public class RoomFunction {
 
 
     public static boolean checkRoomPattern (Card[] chosenCards){
-        List<Room> roomList = Main.getRoomList();
+        List<Room> roomList = Main.getWaitRoomList();
         for (Room room : roomList) {
             if(Arrays.equals(room.getChosenCards(), chosenCards)){
                 return true;

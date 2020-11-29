@@ -2,8 +2,6 @@ package Server;
 
 import Server.Database.UserDB;
 import Server.Room.Room;
-import Server.Room.RoomFunction;
-import Shared.CardEnum.Card;
 import Shared.Command.Player.RegisterCommand;
 import Shared.Command.Player.SignInCommand;
 import Shared.Command.Room.*;
@@ -23,7 +21,16 @@ import static Server.Room.RoomFunction.*;
 
 public class Main {
     private static Map<String, Socket> clientMap = new ConcurrentHashMap<>();
-    private static CopyOnWriteArrayList<Room> roomList = new CopyOnWriteArrayList<>();
+    private static CopyOnWriteArrayList<Room> waitRoomList = new CopyOnWriteArrayList<>();
+    private static CopyOnWriteArrayList<Room> playRoomList = new CopyOnWriteArrayList<>();
+
+    public static CopyOnWriteArrayList<Room> getPlayRoomList() {
+        return playRoomList;
+    }
+
+    public static void setPlayRoomList(CopyOnWriteArrayList<Room> playRoomList) {
+        Main.playRoomList = playRoomList;
+    }
 
     public static Map<String, Socket> getClientMap() {
         return clientMap;
@@ -33,12 +40,12 @@ public class Main {
         Main.clientMap = clientMap;
     }
 
-    public static CopyOnWriteArrayList<Room> getRoomList() {
-        return roomList;
+    public static CopyOnWriteArrayList<Room> getWaitRoomList() {
+        return waitRoomList;
     }
 
-    public static void setRoomList(CopyOnWriteArrayList<Room> roomList) {
-        Main.roomList = roomList;
+    public static void setWaitRoomList(CopyOnWriteArrayList<Room> waitRoomList) {
+        Main.waitRoomList = waitRoomList;
     }
 
     static class ExecuteClientThread implements Runnable {
@@ -99,27 +106,9 @@ public class Main {
                     processLeaveRoomCommand((LeaveRoomCommand)input);
                 }
                 else if(input instanceof StartGameCommand){
-                    for (Room room : roomList) {
-                        if(room.getPlayersName()[0].equals(getClientUsername(client))){
-
-                            String[] roomPlayers = room.getPlayersName();
-                            Set<Map.Entry<String, Socket>> entrySet = clientMap.entrySet();
-
-                            for (String roomPlayer : roomPlayers) {    //找該房間所有人的socket,送StartGameCommand
-                                for (Map.Entry<String, Socket> stringSocketEntry : entrySet) {
-                                    if (stringSocketEntry.getKey().equals(roomPlayer)) {
-
-                                        Socket socket = stringSocketEntry.getValue();
-                                        ObjectOutputStream allClientOut = new ObjectOutputStream(socket.getOutputStream());
-                                        StartGameCommand startGameCommand = new StartGameCommand();
-                                        allClientOut.writeObject(startGameCommand);
-                                    }
-                                }
-                            }
-                        }
-                    }
-
+                    processStartGameCommand((StartGameCommand)input,client);
                 }
+
 
 
             } catch (IOException | ClassNotFoundException e) {
