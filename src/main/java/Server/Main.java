@@ -1,6 +1,7 @@
 package Server;
 
 import Server.Database.UserDB;
+import Server.Game.GameRoom;
 import Server.Room.Room;
 import Shared.Command.Player.RegisterCommand;
 import Shared.Command.Player.SignInCommand;
@@ -16,20 +17,19 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import static Server.ClientMap.ClientMapFunction.getClientUsername;
 import static Server.Room.RoomFunction.*;
 
 public class Main {
     private static Map<String, Socket> clientMap = new ConcurrentHashMap<>();
     private static CopyOnWriteArrayList<Room> waitRoomList = new CopyOnWriteArrayList<>();
-    private static CopyOnWriteArrayList<Room> playRoomList = new CopyOnWriteArrayList<>();
+    private static CopyOnWriteArrayList<GameRoom> gameRoomList = new CopyOnWriteArrayList<>();
 
-    public static CopyOnWriteArrayList<Room> getPlayRoomList() {
-        return playRoomList;
+    public static CopyOnWriteArrayList<GameRoom> getGameRoomList() {
+        return gameRoomList;
     }
 
-    public static void setPlayRoomList(CopyOnWriteArrayList<Room> playRoomList) {
-        Main.playRoomList = playRoomList;
+    public static void setGameRoomList(CopyOnWriteArrayList<GameRoom> gameRoomList) {
+        Main.gameRoomList = gameRoomList;
     }
 
     public static Map<String, Socket> getClientMap() {
@@ -107,7 +107,9 @@ public class Main {
                 }
                 else if(input instanceof StartGameCommand){
                     processStartGameCommand((StartGameCommand)input,client);
+
                 }
+                //else if(input instanceof )
 
 
 
