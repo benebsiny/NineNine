@@ -6,10 +6,7 @@ import Server.Room.RoomFunction;
 import Shared.CardEnum.Card;
 import Shared.Command.Player.RegisterCommand;
 import Shared.Command.Player.SignInCommand;
-import Shared.Command.Room.EnterRoomCommand;
-import Shared.Command.Room.LeaveRoomCommand;
-import Shared.Command.Room.RoomDisbandCommand;
-import Shared.Command.Room.RoomStatusCommand;
+import Shared.Command.Room.*;
 import Shared.Data.User;
 
 import java.io.*;
@@ -22,8 +19,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import static Server.ClientMap.ClientMapFunction.getClientUsername;
-import static Server.Room.RoomFunction.processEnterRoomCommand;
-import static Server.Room.RoomFunction.sendRoomPlayerCommand;
+import static Server.Room.RoomFunction.*;
 
 public class Main {
     private static Map<String, Socket> clientMap = new ConcurrentHashMap<>();
@@ -50,7 +46,7 @@ public class Main {
 
         ObjectInputStream in = null;
         ObjectOutputStream out = null;
-        byte [] buf = new byte[1000];
+        //byte [] buf = new byte[1000];
 
         ExecuteClientThread(Socket client) {
             this.client = client;
@@ -100,39 +96,29 @@ public class Main {
                     processEnterRoomCommand((EnterRoomCommand)input,client);
                 }
                 else if(input instanceof LeaveRoomCommand){
-                    String leavePlayerName = ((LeaveRoomCommand) input).getPlayer();
+                    processLeaveRoomCommand((LeaveRoomCommand)input);
+                }
+                else if(input instanceof StartGameCommand){
                     for (Room room : roomList) {
-                        if(Arrays.binarySearch(room.getPlayersName(),leavePlayerName)==0){ //房間主人離開
-                            String[] roomPlayers = room.getPlayersName();
+                        if(room.getPlayersName()[0].equals(getClientUsername(client))){
 
+                            String[] roomPlayers = room.getPlayersName();
                             Set<Map.Entry<String, Socket>> entrySet = clientMap.entrySet();
 
-                            for (int i = 1; i < roomPlayers.length;i++){       //找該房間其他人的socket,送roomDisbandCommand
-
+                            for (String roomPlayer : roomPlayers) {    //找該房間所有人的socket,送StartGameCommand
                                 for (Map.Entry<String, Socket> stringSocketEntry : entrySet) {
-                                    if(stringSocketEntry.getKey().equals(roomPlayers[i])){
+                                    if (stringSocketEntry.getKey().equals(roomPlayer)) {
 
                                         Socket socket = stringSocketEntry.getValue();
-                                        ObjectOutputStream otherClientOut = new ObjectOutputStream(socket.getOutputStream());
-                                        RoomDisbandCommand roomDisbandCommand = new RoomDisbandCommand();
-                                        otherClientOut.writeObject(roomDisbandCommand);
+                                        ObjectOutputStream allClientOut = new ObjectOutputStream(socket.getOutputStream());
+                                        StartGameCommand startGameCommand = new StartGameCommand();
+                                        allClientOut.writeObject(startGameCommand);
                                     }
                                 }
                             }
-
-                            roomList.remove(room);
-                            break;
-                        }
-                        else if(Arrays.binarySearch(room.getPlayersName(),leavePlayerName)>0){
-
-                            List<String> list=new ArrayList(Arrays.asList(room.getPlayersName()));
-                            list.remove(leavePlayerName);
-                            room.setPlayersName((String[])list.toArray());
-
-                            sendRoomPlayerCommand(room,leavePlayerName);
-                            break;
                         }
                     }
+
                 }
 
 

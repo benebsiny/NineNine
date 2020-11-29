@@ -3,19 +3,13 @@ package Server.Room;
 import Server.ClientMap.ClientMapFunction;
 import Server.Main;
 import Shared.CardEnum.Card;
-import Shared.Command.Room.EnterRoomCommand;
-import Shared.Command.Room.RoomDisbandCommand;
-import Shared.Command.Room.RoomPlayerCommand;
-import Shared.Command.Room.RoomStatusCommand;
+import Shared.Command.Room.*;
 
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
-import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 
@@ -56,7 +50,7 @@ public class RoomFunction {
 
                 for (Room room : roomList) {
                     if(Arrays.equals(room.getChosenCards(), chosenCards)){  //房間額滿
-                        if(room.getPlayersName().length==4){
+                        if(room.getPlayersName().length>=4){
                             System.out.println("full");
                             roomStatusCommand.setRoomStatus(RoomStatusCommand.RoomStatus.FULL);
                         }
@@ -85,6 +79,50 @@ public class RoomFunction {
 
 
     }
+
+    public static void processLeaveRoomCommand(LeaveRoomCommand input) throws IOException {
+        String leavePlayerName = input.getPlayer();
+
+        Map<String, Socket> clientMap = Main.getClientMap();
+        CopyOnWriteArrayList<Room> roomList = Main.getRoomList();
+
+        for (Room room : roomList) {
+            if(Arrays.binarySearch(room.getPlayersName(),leavePlayerName)==0){ //房間主人離開
+                String[] roomPlayers = room.getPlayersName();
+
+                Set<Map.Entry<String, Socket>> entrySet = clientMap.entrySet();
+
+                for (int i = 1; i < roomPlayers.length;i++){       //找該房間其他人的socket,送roomDisbandCommand
+
+                    for (Map.Entry<String, Socket> stringSocketEntry : entrySet) {
+                        if(stringSocketEntry.getKey().equals(roomPlayers[i])){
+
+                            Socket socket = stringSocketEntry.getValue();
+                            ObjectOutputStream otherClientOut = new ObjectOutputStream(socket.getOutputStream());
+                            RoomDisbandCommand roomDisbandCommand = new RoomDisbandCommand();
+                            otherClientOut.writeObject(roomDisbandCommand);
+                        }
+                    }
+                }
+
+                roomList.remove(room);
+                Main.setRoomList(roomList);
+                break;
+            }
+            else if(Arrays.binarySearch(room.getPlayersName(),leavePlayerName)>0){ //非房間主人離開
+
+                List<String> list = new ArrayList(Arrays.asList(room.getPlayersName()));
+                list.remove(leavePlayerName);
+                room.setPlayersName((String[])list.toArray());
+
+                Main.setRoomList(roomList);
+
+                sendRoomPlayerCommand(room,leavePlayerName);
+                break;
+            }
+        }
+    }
+
 
     public static void sendRoomPlayerCommand(Room room,String player) throws IOException {
         Map<String, Socket> clientMap = Main.getClientMap();
