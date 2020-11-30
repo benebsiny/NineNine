@@ -4,6 +4,7 @@ import Server.ClientMap.ClientMapFunction;
 import Server.Game.GameRoom;
 import Server.Main;
 import Shared.CardEnum.Card;
+import Shared.Command.Game.DrawCommand;
 import Shared.Command.Room.*;
 
 import java.io.IOException;
@@ -14,6 +15,7 @@ import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import static Server.ClientMap.ClientMapFunction.getClientUsername;
+import static Server.Game.GameFunction.shuffle;
 
 
 public class RoomFunction {
@@ -140,12 +142,13 @@ public class RoomFunction {
                             ObjectOutputStream allClientOut = new ObjectOutputStream(socket.getOutputStream());
                             StartGameCommand startGameCommand = new StartGameCommand();
                             allClientOut.writeObject(startGameCommand);
+
                         }
                     }
                 }
                 CopyOnWriteArrayList<GameRoom> gameRoomList = Main.getGameRoomList();
 
-                GameRoom gameRoom = new GameRoom();
+                GameRoom gameRoom = new GameRoom(shuffle());
                 gameRoom.setPlayersName(room.getPlayersName());
                 gameRoomList.add(gameRoom);
                 Main.setGameRoomList(gameRoomList);

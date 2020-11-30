@@ -2,12 +2,16 @@ package Server.Game;
 
 import Shared.CardEnum.Card;
 import java.util.Arrays;
-import java.util.List;
 
 public class GameRoom {
 
     private String[] playersName;
-    private Card[] usedCards;
+    private final Card[] desk;
+    private int deskIndex = 0;
+
+    public GameRoom(Card[] desk) {
+        this.desk = Arrays.copyOf(desk, desk.length);
+    }
 
     public String[] getPlayersName() {
         return Arrays.copyOf(playersName, playersName.length);
@@ -17,9 +21,15 @@ public class GameRoom {
         this.playersName = Arrays.copyOf(playersName, playersName.length);
     }
 
-    public void addUsedCard(Card card){
-        List<Card> list = Arrays.asList(usedCards.clone());
-        list.add(card);
-        this.usedCards = (Card[])list.toArray();
+    public Card[] getDesk() {
+        return Arrays.copyOf(desk, desk.length);
+    }
+
+    public int getDeskIndex() {
+        return deskIndex;
+    }
+
+    public void setDeskIndex(int deskIndex) {
+        this.deskIndex = deskIndex;
     }
 }
