@@ -7,8 +7,8 @@ import java.util.Arrays;
 import java.util.List;
 
 public class Room {
-    private String[] playersName;
-    private Card[] chosenCards;
+    private String[] playersName = new String[0];
+    private final Card[] chosenCards;
 
     public Room(Card[] chosenCards) {
         this.chosenCards = Arrays.copyOf(chosenCards, chosenCards.length);
@@ -19,9 +19,9 @@ public class Room {
     }
 
     public void addPlayer(String player) {
-        List<String> list = Arrays.asList(playersName.clone());
+        ArrayList<String>  list = new ArrayList<>(Arrays.asList(playersName.clone()));
         list.add(player);
-        this.playersName = (String[])list.toArray();
+        this.playersName = (String[])list.toArray(new String[list.size()]);
     }
 
     public Card[] getChosenCards() {

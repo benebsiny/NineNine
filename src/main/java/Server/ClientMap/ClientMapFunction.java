@@ -10,6 +10,7 @@ public class ClientMapFunction {
 
     public static String getClientUsername (Socket client){
         Map<String, Socket> clientMap = Main.getClientMap();
+
         Set<Map.Entry<String, Socket>> entrySet = clientMap.entrySet();
         String userName = null;
         for (Map.Entry<String, Socket> socketEntry : entrySet) {
@@ -17,6 +18,7 @@ public class ClientMapFunction {
                 userName = socketEntry.getKey();
             }
         }
+
         return userName;
     }
 }

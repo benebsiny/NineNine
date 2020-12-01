@@ -31,7 +31,6 @@ public class RoomFunction {
         System.out.println(roomAction);
 
         if (roomAction == EnterRoomCommand.RoomAction.CREATE) {
-            System.out.println("create");
             if (checkRoomPattern(chosenCards)) {          //如果創房重複
                 System.out.println("repeat");
                 roomStatusCommand.setRoomStatus(RoomStatusCommand.RoomStatus.REPEATED);

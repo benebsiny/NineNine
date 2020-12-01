@@ -63,60 +63,59 @@ public class Main {
 
         @Override
         public void run() {
-            try {
-                out = new ObjectOutputStream(client.getOutputStream());
+            while (true) {
+                try {
 
-                in = new ObjectInputStream(client.getInputStream());
+                    out = new ObjectOutputStream(client.getOutputStream());
 
-                Object input = in.readObject();
+                    in = new ObjectInputStream(client.getInputStream());
 
-                if(input instanceof RegisterCommand){
-                    User user = ((RegisterCommand) input).getUser();
-                    UserDB userDB = new UserDB(user.getUsername(), user.getPassword());
+                    Object input = in.readObject();
 
-                    if(userDB.signUp()){
-                        out.writeObject(input);
+                    if (input instanceof RegisterCommand) {
+                        User user = ((RegisterCommand) input).getUser();
+                        UserDB userDB = new UserDB(user.getUsername(), user.getPassword());
+
+                        if (userDB.signUp()) {
+                            out.writeObject(input);
 //                        clientMap.put(user.getUsername(), client);
+                        } else {
+                            out.writeObject(null);
+                        }
+
+                    } else if (input instanceof SignInCommand) {
+
+                        User user = ((SignInCommand) input).getUser();
+                        UserDB userDB = new UserDB(user.getUsername(), user.getPassword());
+
+                        System.out.println(user.getUsername());
+                        System.out.println(user.getPassword());
+
+                        if (userDB.login()) {
+                            out.writeObject(input);
+                            clientMap.put(user.getUsername(), client);
+                            System.out.println("socket " + client);
+                            System.out.println("aaa");
+                        } else {
+                            out.writeObject(null);
+                            System.out.println("bbb");
+                        }
+                    } else if (input instanceof EnterRoomCommand) {
+                        System.out.println(clientMap.keySet());
+                        System.out.println("socket " + client);
+                        processEnterRoomCommand((EnterRoomCommand) input, client);
+                    } else if (input instanceof LeaveRoomCommand) {
+                        processLeaveRoomCommand((LeaveRoomCommand) input);
+                    } else if (input instanceof StartGameCommand) {
+                        processStartGameCommand((StartGameCommand) input, client);
+                        initialDrawCard(client);
                     }
-                    else{
-                        out.writeObject(null);
-                    }
+                    //else if(input instanceof PlayCommand)
 
+
+                } catch (IOException | ClassNotFoundException e) {
+                    e.printStackTrace();
                 }
-                else if(input instanceof SignInCommand){
-
-                    User user = ((SignInCommand) input).getUser();
-                    UserDB userDB = new UserDB(user.getUsername(), user.getPassword());
-
-                    System.out.println(user.getUsername());
-                    System.out.println(user.getPassword());
-
-                    if(userDB.login()){
-                        out.writeObject(input);
-                        clientMap.put(user.getUsername(), client);
-                        System.out.println("aaa");
-                    }
-                    else{
-                        out.writeObject(null);
-                        System.out.println("bbb");
-                    }
-                }
-                else if(input instanceof EnterRoomCommand){
-                    processEnterRoomCommand((EnterRoomCommand)input,client);
-                }
-                else if(input instanceof LeaveRoomCommand){
-                    processLeaveRoomCommand((LeaveRoomCommand)input);
-                }
-                else if(input instanceof StartGameCommand){
-                    processStartGameCommand((StartGameCommand)input,client);
-                    initialDrawCard(client);
-                }
-                //else if(input instanceof )
-
-
-
-            } catch (IOException | ClassNotFoundException e) {
-                e.printStackTrace();
             }
 
         }
