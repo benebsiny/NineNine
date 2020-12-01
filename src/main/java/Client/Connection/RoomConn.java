@@ -14,12 +14,14 @@ public class RoomConn {
 
     public static RoomStatusCommand chooseRoom(Card firstCard, Card secondCard, Card thirdCard, EnterRoomCommand.RoomAction action) throws IOException, ClassNotFoundException {
         Socket server = Main.getServer();
-        ObjectInputStream in = new ObjectInputStream(server.getInputStream());
-        ObjectOutputStream out = new ObjectOutputStream(server.getOutputStream());
-
         EnterRoomCommand command = new EnterRoomCommand(action, new Card[]{firstCard, secondCard, thirdCard});
+
+        // Send command to server
+        ObjectOutputStream out = new ObjectOutputStream(server.getOutputStream());
         out.writeObject(command);
 
+        // Get command from server
+        ObjectInputStream in = new ObjectInputStream(server.getInputStream());
         return (RoomStatusCommand) in.readObject();
     }
 }

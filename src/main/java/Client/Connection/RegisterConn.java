@@ -21,13 +21,14 @@ public class RegisterConn {
     public static boolean register(User user) throws IOException, ClassNotFoundException {
 
         Socket server = Main.getServer();
-        ObjectInputStream in = new ObjectInputStream(server.getInputStream());
-        ObjectOutput out = new ObjectOutputStream(server.getOutputStream());
 
+        // Send command to server
         RegisterCommand command = new RegisterCommand(user);
-
+        ObjectOutput out = new ObjectOutputStream(server.getOutputStream());
         out.writeObject(command); // Send command to the server
 
+        // Get command from server
+        ObjectInputStream in = new ObjectInputStream(server.getInputStream());
         RegisterCommand returnedCommand = (RegisterCommand) in.readObject();
         return returnedCommand != null;
     }

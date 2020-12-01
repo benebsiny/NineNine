@@ -20,13 +20,13 @@ public class SignInConn {
     public static boolean signIn(User user) throws IOException, ClassNotFoundException {
         Socket server = Main.getServer();
 
-        ObjectInputStream in = new ObjectInputStream(server.getInputStream());
-        ObjectOutputStream out = new ObjectOutputStream(server.getOutputStream());
-
+        // Send command to server
         SignInCommand command = new SignInCommand(user);
+        ObjectOutputStream out = new ObjectOutputStream(server.getOutputStream());
         out.writeObject(command); // Send sign in command to server
 
-        // Read object from server
+        // Get command from server
+        ObjectInputStream in = new ObjectInputStream(server.getInputStream());
         SignInCommand returnedCommand = (SignInCommand) in.readObject();
         return returnedCommand != null;
     }
