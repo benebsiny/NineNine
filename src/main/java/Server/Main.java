@@ -11,6 +11,7 @@ import Shared.Data.User;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -94,15 +95,12 @@ public class Main {
                         if (userDB.login()) {
                             out.writeObject(input);
                             clientMap.put(user.getUsername(), client);
-                            System.out.println("socket " + client);
                             System.out.println("aaa");
                         } else {
                             out.writeObject(null);
                             System.out.println("bbb");
                         }
                     } else if (input instanceof EnterRoomCommand) {
-                        System.out.println(clientMap.keySet());
-                        System.out.println("socket " + client);
                         processEnterRoomCommand((EnterRoomCommand) input, client);
                     } else if (input instanceof LeaveRoomCommand) {
                         processLeaveRoomCommand((LeaveRoomCommand) input);
@@ -115,6 +113,10 @@ public class Main {
 
                 } catch (IOException | ClassNotFoundException e) {
                     e.printStackTrace();
+                    if(e instanceof SocketException){
+                        System.out.println("Client disconnect!!");
+                        break;
+                    }
                 }
             }
 
