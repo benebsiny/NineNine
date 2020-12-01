@@ -17,6 +17,7 @@ public class Main extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         Main.stage = stage;
+        Main.socket = new Socket("127.0.0.1", 8888);
 
         Parent root = FXMLLoader.load(getClass().getResource("View/Home.fxml"));
         Scene scene = new Scene(root, 900, 600);
@@ -48,8 +49,7 @@ public class Main extends Application {
      *
      * @return - Socket connected to server
      */
-    public static Socket getServer() throws IOException {
-        socket = new Socket("127.0.0.1", 8888);
+    public static Socket getServer() {
         return socket;
     }
 
