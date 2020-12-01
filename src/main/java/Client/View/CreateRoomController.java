@@ -55,7 +55,6 @@ public class CreateRoomController {
 
         pickedCard[nextPosition] = picked.getId();
         labels[nextPosition].setGraphic(imageView); // Set graphic on the label
-//        labels[nextPosition].getStyleClass().add("pointer");
 
         findNextPosition();
     }

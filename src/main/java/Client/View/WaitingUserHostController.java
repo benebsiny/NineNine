@@ -6,6 +6,7 @@ import Client.Status.PlayerStatus;
 import Shared.Command.Room.RoomDisbandCommand;
 import Shared.Command.Room.RoomPlayerCommand;
 import Shared.Command.Room.StartGameCommand;
+import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXListView;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -14,10 +15,10 @@ import javafx.scene.control.Label;
 
 import java.io.IOException;
 
-public class WaitingUserController {
-
+public class WaitingUserHostController {
     public JFXListView<String> userList;
     public Label hostRoomLabel;
+    public JFXButton startGameButton;
 
     @FXML
     void initialize() {
@@ -25,7 +26,7 @@ public class WaitingUserController {
         hostRoomLabel.setText(String.format("%s 的房間", PlayerStatus.getPlayers()[0]));
 
         // Keep connection at backend
-        new Thread(new WaitingUserHandler(this)).start();
+        new Thread(new WaitingUserHostHandler(this)).start();
     }
 
     public void goBack(ActionEvent actionEvent) {
@@ -34,17 +35,33 @@ public class WaitingUserController {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
         Main.switchScene("ChooseRoom");
+    }
+
+    public void startGame(ActionEvent actionEvent) {
+        new Thread(new StartGameHandler()).start();
     }
 }
 
 
-class WaitingUserHandler implements Runnable {
+class StartGameHandler implements Runnable {
 
-    WaitingUserController GUI;
+    @Override
+    public void run() {
+        try {
+            WaitingUserConn.start();
+        } catch (IOException e) {
+            e.printStackTrace();
+            // TODO Show connection error message
+        }
+    }
+}
 
-    public WaitingUserHandler(WaitingUserController GUI) {
+class WaitingUserHostHandler implements Runnable {
+
+    WaitingUserHostController GUI;
+
+    public WaitingUserHostHandler(WaitingUserHostController GUI) {
         this.GUI = GUI;
     }
 
