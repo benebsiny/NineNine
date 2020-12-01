@@ -4,6 +4,7 @@ import Client.Connection.RoomConn;
 import Client.Main;
 import Client.Status.PlayerStatus;
 import Shared.CardEnum.Card;
+import Shared.Command.Room.EnterRoomCommand;
 import Shared.Command.Room.RoomStatusCommand;
 import com.jfoenix.controls.JFXButton;
 import javafx.application.Platform;
@@ -117,7 +118,7 @@ class ChooseRoomHandler implements Runnable {
         try {
             Platform.runLater(() -> GUI.errMsg.setVisible(false));
             Platform.runLater(() -> GUI.loadingImg.setVisible(true));
-            RoomStatusCommand command = RoomConn.chooseRoom(firstCard, secondCard, thirdCard);
+            RoomStatusCommand command = RoomConn.chooseRoom(firstCard, secondCard, thirdCard, EnterRoomCommand.RoomAction.CHOOSE);
             Platform.runLater(() -> GUI.loadingImg.setVisible(false));
 
             // Room found

@@ -4,6 +4,7 @@ import Client.Connection.RoomConn;
 import Client.Main;
 import Client.Status.PlayerStatus;
 import Shared.CardEnum.Card;
+import Shared.Command.Room.EnterRoomCommand;
 import Shared.Command.Room.RoomStatusCommand;
 import com.jfoenix.controls.JFXButton;
 import javafx.application.Platform;
@@ -118,7 +119,7 @@ class CreateRoomHandler implements Runnable {
     public void run() {
         try {
             Platform.runLater(() -> GUI.loadingImg.setVisible(true));
-            RoomStatusCommand command = RoomConn.chooseRoom(firstCard, secondCard, thirdCard);
+            RoomStatusCommand command = RoomConn.chooseRoom(firstCard, secondCard, thirdCard, EnterRoomCommand.RoomAction.CREATE);
             Platform.runLater(() -> GUI.loadingImg.setVisible(false));
 
             // Room created

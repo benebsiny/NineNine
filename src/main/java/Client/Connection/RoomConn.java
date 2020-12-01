@@ -12,12 +12,12 @@ import java.net.Socket;
 
 public class RoomConn {
 
-    public static RoomStatusCommand chooseRoom(Card firstCard, Card secondCard, Card thirdCard) throws IOException, ClassNotFoundException {
+    public static RoomStatusCommand chooseRoom(Card firstCard, Card secondCard, Card thirdCard, EnterRoomCommand.RoomAction action) throws IOException, ClassNotFoundException {
         Socket server = Main.getServer();
         ObjectInputStream in = new ObjectInputStream(server.getInputStream());
         ObjectOutputStream out = new ObjectOutputStream(server.getOutputStream());
 
-        EnterRoomCommand command = new EnterRoomCommand(EnterRoomCommand.RoomAction.CHOOSE, new Card[]{firstCard, secondCard, thirdCard});
+        EnterRoomCommand command = new EnterRoomCommand(action, new Card[]{firstCard, secondCard, thirdCard});
         out.writeObject(command);
 
         return (RoomStatusCommand) in.readObject();
