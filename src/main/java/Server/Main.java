@@ -68,11 +68,11 @@ public class Main {
             while (true) {
                 try {
                     in = new ObjectInputStream(client.getInputStream());
-                    out = new ObjectOutputStream(client.getOutputStream());
 
                     Object input = in.readObject();
 
                     if (input instanceof RegisterCommand) {
+                        out = new ObjectOutputStream(client.getOutputStream());
                         User user = ((RegisterCommand) input).getUser();
                         UserDB userDB = new UserDB(user.getUsername(), user.getPassword());
 
@@ -84,7 +84,7 @@ public class Main {
                         }
 
                     } else if (input instanceof SignInCommand) {
-
+                        out = new ObjectOutputStream(client.getOutputStream());
                         User user = ((SignInCommand) input).getUser();
                         UserDB userDB = new UserDB(user.getUsername(), user.getPassword());
 
@@ -100,9 +100,12 @@ public class Main {
                             System.out.println("bbb");
                         }
                     } else if (input instanceof EnterRoomCommand) {
+                        out = new ObjectOutputStream(client.getOutputStream());
                         processEnterRoomCommand((EnterRoomCommand) input, client, out);
                     } else if (input instanceof LeaveRoomCommand) {
                         processLeaveRoomCommand((LeaveRoomCommand) input);
+                        out = new ObjectOutputStream(client.getOutputStream());
+                        out.writeObject(input);
                     } else if (input instanceof StartGameCommand) {
                         processStartGameCommand((StartGameCommand) input, client);
                         initialDrawCard(client);
@@ -114,6 +117,9 @@ public class Main {
                     e.printStackTrace();
                     if(e instanceof SocketException){
                         System.out.println("Client disconnect!!");
+                        break;
+                    }
+                    if(e instanceof EOFException){
                         break;
                     }
                 }

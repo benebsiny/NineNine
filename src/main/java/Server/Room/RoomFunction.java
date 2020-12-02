@@ -121,6 +121,7 @@ public class RoomFunction {
                 break;
             }
         }
+
     }
 
     public static void processStartGameCommand(StartGameCommand input, Socket client) throws IOException {
