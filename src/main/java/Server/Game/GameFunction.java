@@ -53,9 +53,10 @@ public class GameFunction {
                 break;
             }
         }
-
-
     }
+
+    //public static void sendNextPlayerCommand()
+
     public static Card[] shuffle() {
 
         Card[] deck = Card.values();

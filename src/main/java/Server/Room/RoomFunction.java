@@ -19,14 +19,14 @@ import static Server.Game.GameFunction.shuffle;
 
 
 public class RoomFunction {
-    public static void processEnterRoomCommand(EnterRoomCommand input, Socket client) throws IOException {
+    public static void processEnterRoomCommand(EnterRoomCommand input, Socket client,ObjectOutputStream out ) throws IOException {
         EnterRoomCommand.RoomAction roomAction = input.getAction();
         Card[] chosenCards = input.getChosenCards();
         RoomStatusCommand roomStatusCommand = new RoomStatusCommand();
 
         CopyOnWriteArrayList<Room> roomList = Main.getWaitRoomList();
 
-        ObjectOutputStream out = new ObjectOutputStream(client.getOutputStream());
+
 
         System.out.println(roomAction);
 
@@ -45,9 +45,9 @@ public class RoomFunction {
                 roomStatusCommand.setRoomStatus(RoomStatusCommand.RoomStatus.CREATED);
                 roomStatusCommand.setPlayers(newRoom.getPlayersName());
             }
+
             out.writeObject(roomStatusCommand);
         } else if (roomAction == EnterRoomCommand.RoomAction.CHOOSE) {
-            System.out.println("choose");
             if (checkRoomPattern(chosenCards)) {
 
                 for (Room room : roomList) {

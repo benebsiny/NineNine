@@ -64,12 +64,11 @@ public class Main {
 
         @Override
         public void run() {
+
             while (true) {
                 try {
-
-                    out = new ObjectOutputStream(client.getOutputStream());
-
                     in = new ObjectInputStream(client.getInputStream());
+                    out = new ObjectOutputStream(client.getOutputStream());
 
                     Object input = in.readObject();
 
@@ -89,8 +88,8 @@ public class Main {
                         User user = ((SignInCommand) input).getUser();
                         UserDB userDB = new UserDB(user.getUsername(), user.getPassword());
 
-                        System.out.println(user.getUsername());
-                        System.out.println(user.getPassword());
+//                        System.out.println(user.getUsername());
+//                        System.out.println(user.getPassword());
 
                         if (userDB.login()) {
                             out.writeObject(input);
@@ -101,7 +100,7 @@ public class Main {
                             System.out.println("bbb");
                         }
                     } else if (input instanceof EnterRoomCommand) {
-                        processEnterRoomCommand((EnterRoomCommand) input, client);
+                        processEnterRoomCommand((EnterRoomCommand) input, client, out);
                     } else if (input instanceof LeaveRoomCommand) {
                         processLeaveRoomCommand((LeaveRoomCommand) input);
                     } else if (input instanceof StartGameCommand) {

@@ -19,6 +19,7 @@ public class Main extends Application {
         Main.stage = stage;
         Main.socket = new Socket("127.0.0.1", 8888);
 
+
         Parent root = FXMLLoader.load(getClass().getResource("View/Home.fxml"));
         Scene scene = new Scene(root, 900, 600);
         stage.setScene(scene);
