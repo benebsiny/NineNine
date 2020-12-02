@@ -27,15 +27,14 @@ public class RoomFunction {
         CopyOnWriteArrayList<Room> roomList = Main.getWaitRoomList();
 
 
-
-        System.out.println(roomAction);
+        //System.out.println(roomAction);
 
         if (roomAction == EnterRoomCommand.RoomAction.CREATE) {
             if (checkRoomPattern(chosenCards)) {          //如果創房重複
-                System.out.println("repeat");
+                System.out.println("Room repeat");
                 roomStatusCommand.setRoomStatus(RoomStatusCommand.RoomStatus.REPEATED);
             } else {                                      //成功創房
-                System.out.println("create");
+                System.out.println("Room create");
                 Room newRoom = new Room(chosenCards);
                 newRoom.addPlayer(ClientMapFunction.getClientUsername(client));
                 roomList.add(newRoom);
@@ -53,10 +52,10 @@ public class RoomFunction {
                 for (Room room : roomList) {
                     if (Arrays.equals(room.getChosenCards(), chosenCards)) {  //房間額滿
                         if (room.getPlayersName().length >= 4) {
-                            System.out.println("full");
+                            System.out.println("Room full");
                             roomStatusCommand.setRoomStatus(RoomStatusCommand.RoomStatus.FULL);
                         } else {
-                            System.out.println("found");                   //成功進房
+                            System.out.println("Room found");                   //成功進房
                             room.addPlayer(ClientMapFunction.getClientUsername(client));
                             roomStatusCommand.setRoomStatus(RoomStatusCommand.RoomStatus.FOUND);
                             roomStatusCommand.setPlayers(room.getPlayersName());
@@ -71,7 +70,7 @@ public class RoomFunction {
                 }
 
             } else {
-                System.out.println("not found");        //房間不存在
+                System.out.println("Room not found");        //房間不存在
                 roomStatusCommand.setRoomStatus(RoomStatusCommand.RoomStatus.NOT_FOUND);
                 out.writeObject(roomStatusCommand);
             }
@@ -87,7 +86,9 @@ public class RoomFunction {
         CopyOnWriteArrayList<Room> roomList = Main.getWaitRoomList();
 
         for (Room room : roomList) {
-            if (Arrays.binarySearch(room.getPlayersName(), leavePlayerName) == 0) { //房間主人離開
+            //System.out.println("dd"+Arrays.binarySearch(room.getPlayersName(), leavePlayerName));
+            if (Arrays.binarySearch(room.getPlayersName(), leavePlayerName)==0) { //房間主人離開
+                System.out.println("Host leave");
                 String[] roomPlayers = room.getPlayersName();
 
                 Set<Map.Entry<String, Socket>> entrySet = clientMap.entrySet();
@@ -108,12 +109,14 @@ public class RoomFunction {
                 roomList.remove(room);
                 Main.setWaitRoomList(roomList);
                 break;
-            } else if (Arrays.binarySearch(room.getPlayersName(), leavePlayerName) > 0) { //非房間主人離開
+            } else if (Arrays.asList(room.getPlayersName()).contains(leavePlayerName)) { //非房間主人離開
+                System.out.println("Not host leave");
 
-
-                List<String> list = Arrays.asList(room.getPlayersName().clone());
+                ArrayList<String>  list = new ArrayList<>(Arrays.asList(room.getPlayersName().clone()));
+                //List<String> list = Arrays.asList(room.getPlayersName().clone());
                 list.remove(leavePlayerName);
-                room.setPlayersName((String[]) list.toArray());
+                //room.setPlayersName((String[]) list.toArray());
+                room.setPlayersName((String[])list.toArray(new String[list.size()]));
 
                 Main.setWaitRoomList(roomList);
 
@@ -169,6 +172,7 @@ public class RoomFunction {
 
         for (String roomPlayer : roomPlayers) {       //找該房間其他人的socket,送roomPlayerCommand
             if (roomPlayer != player) {
+                //System.out.println("Send other roomPlayerCommand: " + roomPlayer);
                 for (Map.Entry<String, Socket> stringSocketEntry : entrySet) {
                     if (stringSocketEntry.getKey().equals(roomPlayer)) {
 

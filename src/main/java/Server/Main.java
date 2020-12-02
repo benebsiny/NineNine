@@ -71,6 +71,8 @@ public class Main {
 
                     Object input = in.readObject();
 
+                    System.out.println(input.toString());
+
                     if (input instanceof RegisterCommand) {
                         out = new ObjectOutputStream(client.getOutputStream());
                         User user = ((RegisterCommand) input).getUser();
@@ -94,22 +96,34 @@ public class Main {
                         if (userDB.login()) {
                             out.writeObject(input);
                             clientMap.put(user.getUsername(), client);
-                            System.out.println("aaa");
+                            System.out.println("login success");
                         } else {
                             out.writeObject(null);
-                            System.out.println("bbb");
+                            System.out.println("login fail");
                         }
                     } else if (input instanceof EnterRoomCommand) {
                         out = new ObjectOutputStream(client.getOutputStream());
                         processEnterRoomCommand((EnterRoomCommand) input, client, out);
                     } else if (input instanceof LeaveRoomCommand) {
                         processLeaveRoomCommand((LeaveRoomCommand) input);
+                        System.out.println("leave player: "+((LeaveRoomCommand) input).getPlayer());
                         out = new ObjectOutputStream(client.getOutputStream());
                         out.writeObject(input);
                     } else if (input instanceof StartGameCommand) {
                         processStartGameCommand((StartGameCommand) input, client);
                         initialDrawCard(client);
                     }
+
+                    int j = 0;
+                    for (Room w : waitRoomList){
+                        j++;
+                        System.out.println("waitRoom " + j + ".");
+                        for (int i=0;i<w.getPlayersName().length;i++){
+                            System.out.println(i +". "+ w.getPlayersName()[i]);
+                        }
+
+                    }
+
                     //else if(input instanceof PlayCommand)
 
 
