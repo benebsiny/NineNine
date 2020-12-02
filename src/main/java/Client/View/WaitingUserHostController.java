@@ -25,6 +25,7 @@ public class WaitingUserHostController {
     void initialize() {
 
         hostRoomLabel.setText(String.format("%s 的房間", PlayerStatus.getPlayers()[0]));
+        userList.getItems().addAll(PlayerStatus.getPlayers());
 
         // Keep connection at backend
         new Thread(new WaitingUserHostHandler(this)).start();
@@ -78,7 +79,7 @@ class WaitingUserHostHandler implements Runnable {
 
                     Platform.runLater(() -> {
                         GUI.userList.getItems().clear(); // Remove all user from the list
-                        GUI.userList.getItems().addAll(players); // Add new users to the list
+                        GUI.userList.getItems().addAll(PlayerStatus.getPlayers());
                     });
 
                     PlayerStatus.setPlayers(players);

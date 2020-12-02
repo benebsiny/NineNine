@@ -24,6 +24,7 @@ public class WaitingUserController {
     void initialize() {
 
         hostRoomLabel.setText(String.format("%s 的房間", PlayerStatus.getPlayers()[0]));
+        userList.getItems().addAll(PlayerStatus.getPlayers());
 
         // Keep connection at backend
         new Thread(new WaitingUserHandler(this)).start();
