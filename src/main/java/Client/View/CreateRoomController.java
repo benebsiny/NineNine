@@ -84,7 +84,6 @@ public class CreateRoomController {
     public void removeCard(MouseEvent mouseEvent) {
         Label label = (Label) mouseEvent.getSource(); // Get the clicked label
         label.setGraphic(null); // Remove image
-//        labels[nextPosition].getStyleClass().remove("pointer");
         findNextPosition();
     }
 
@@ -124,7 +123,7 @@ class CreateRoomHandler implements Runnable {
             // Room created
             if (command.getRoomStatus() == RoomStatusCommand.RoomStatus.CREATED) {
                 PlayerStatus.setPlayers(command.getPlayers()); // Set status
-                Platform.runLater(() -> Main.switchScene("WaitingUser")); // Go to waiting user
+                Platform.runLater(() -> Main.switchScene("WaitingUserHost")); // Go to waiting user
 
             }
             // Room already exists

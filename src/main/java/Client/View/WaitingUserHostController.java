@@ -35,7 +35,7 @@ public class WaitingUserHostController {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        Main.switchScene("ChooseRoom");
+        Main.switchScene("CreateRoom");
     }
 
     public void startGame(ActionEvent actionEvent) {
