@@ -3,6 +3,7 @@ package Client.View;
 import Client.Connection.WaitingUserConn;
 import Client.Main;
 import Client.Status.PlayerStatus;
+import Shared.Command.Room.LeaveRoomCommand;
 import Shared.Command.Room.RoomDisbandCommand;
 import Shared.Command.Room.RoomPlayerCommand;
 import Shared.Command.Room.StartGameCommand;
@@ -90,6 +91,10 @@ class WaitingUserHostHandler implements Runnable {
                 // Game start
                 else if (receiveObject instanceof StartGameCommand) {
                     Platform.runLater(() -> Main.switchScene("GamePage"));
+                }
+                // Time to close this thread (leave room)
+                else if (receiveObject instanceof LeaveRoomCommand) {
+                    break;
                 }
 
             } catch (IOException e) {
