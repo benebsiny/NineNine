@@ -38,6 +38,8 @@ public class ChooseRoomController {
         pickedArray = new Label[]{firstPicked, secondPicked, thirdPicked};
         pickedCard = new String[3];
         enterRoomButton.setDisable(true);
+        loadingImg.setVisible(false);
+        errMsg.setVisible(false);
     }
 
 
