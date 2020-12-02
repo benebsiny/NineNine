@@ -75,8 +75,8 @@ public class UserDB {
         Transaction tx = session.beginTransaction(); // Start a session
         session.save(this); // Save object to database
         tx.commit();
-        session.close();
-        HibernateUtil.shutdown();
+        //session.close();
+        //HibernateUtil.shutdown();
     }
 
     /**
@@ -94,6 +94,8 @@ public class UserDB {
         for (int i = 0; i < users.size(); i++) {
             userArray[i] = users.get(i);
         }
+        //session.close();
+        //HibernateUtil.shutdown();
         return userArray;
     }
 
