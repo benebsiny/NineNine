@@ -3,8 +3,10 @@
 <?import com.jfoenix.controls.JFXButton?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Text?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" stylesheets="@../Style/Home.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Client.View.HomeController">
+<?import javafx.scene.layout.AnchorPane?>
+<AnchorPane fx:id="pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" stylesheets="@../Style/Home.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Client.View.HomeController">
    <children>
       <ImageView fitHeight="173.0" fitWidth="387.0" layoutX="108.0" layoutY="94.0" pickOnBounds="true" preserveRatio="true" />
       <JFXButton layoutX="814.0" layoutY="32.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="50.0" styleClass="setting-button" stylesheets="@../Style/General.css" />
@@ -25,5 +27,6 @@
             </Pane>
          </children>
       </Pane>
+      <Text fx:id="signInUserLabel" layoutX="782.0" layoutY="138.0" strokeType="OUTSIDE" strokeWidth="0.0" text="username" textAlignment="CENTER" wrappingWidth="114.0" />
    </children>
-</Pane>
+</AnchorPane>
