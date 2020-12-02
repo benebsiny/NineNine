@@ -1,6 +1,7 @@
 package Shared.Command.Room;
 
 import java.io.Serializable;
+import java.util.Arrays;
 
 public class RoomPlayerCommand implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -8,20 +9,14 @@ public class RoomPlayerCommand implements Serializable {
     private String[] players;
 
     public RoomPlayerCommand(String[] players) {
-        String[] clonePlayer = new String[players.length];
-        System.arraycopy(clonePlayer, 0, players, 0, clonePlayer.length);
-        this.players = clonePlayer;
+        this.players = Arrays.copyOf(players, players.length);
     }
 
     public String[] getPlayers() {
-        String[] clonePlayer = new String[players.length];
-        System.arraycopy(players, 0, clonePlayer, 0, players.length);
-        return clonePlayer;
+        return Arrays.copyOf(players, players.length);
     }
 
     public void setPlayers(String[] players) {
-        String[] clonePlayer = new String[players.length];
-        System.arraycopy(clonePlayer, 0, players, 0, clonePlayer.length);
-        this.players = clonePlayer;
+        this.players = Arrays.copyOf(players, players.length);
     }
 }
