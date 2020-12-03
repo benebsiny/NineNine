@@ -4,11 +4,13 @@ import Shared.CardEnum.Card;
 
 import java.io.Serializable;
 
-public class PlayCommand implements Serializable {
+public class ReturnPlayCommand implements Serializable {
     private static final long serialVersionUID = 1L;
     private String player;
     private int remainCardCount;
     private Card card;
+    private int value;
+    private boolean hasCardsInDesk;
 
     public int getRemainCardCount() {
         return remainCardCount;
@@ -34,4 +36,19 @@ public class PlayCommand implements Serializable {
         this.card = card;
     }
 
+    public int getValue() {
+        return value;
+    }
+
+    public void setValue(int value) {
+        this.value = value;
+    }
+
+    public boolean isHasCardsInDesk() {
+        return hasCardsInDesk;
+    }
+
+    public void setHasCardsInDesk(boolean hasCardsInDesk) {
+        this.hasCardsInDesk = hasCardsInDesk;
+    }
 }
