@@ -26,6 +26,7 @@ public class WaitingUserHostController {
 
         hostRoomLabel.setText(String.format("%s 的房間", PlayerStatus.getPlayers()[0]));
         userList.getItems().addAll(PlayerStatus.getPlayers());
+        startGameButton.setDisable(true);
 
         // Keep connection at backend
         new Thread(new WaitingUserHostHandler(this)).start();
@@ -80,11 +81,13 @@ class WaitingUserHostHandler implements Runnable {
                     Platform.runLater(() -> {
                         GUI.userList.getItems().clear(); // Remove all user from the list
                         GUI.userList.getItems().addAll(PlayerStatus.getPlayers());
+
+                        GUI.startGameButton.setDisable(players.length < 2);
                     });
 
                     PlayerStatus.setPlayers(players);
                 }
-                // Host leave the room -> client leave the room
+                // Host leave the room -> others also leave the room
                 else if (receiveObject instanceof RoomDisbandCommand) {
                     PlayerStatus.setPlayers(new String[0]);
                     Platform.runLater(() -> Main.switchScene("Home"));
