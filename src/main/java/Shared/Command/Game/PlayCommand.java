@@ -7,8 +7,17 @@ import java.io.Serializable;
 public class PlayCommand implements Serializable {
     private static final long serialVersionUID = 1L;
     private String player;
+    private int remainCardCount;
     private Card card;
     private int value;
+
+    public int getRemainCardCount() {
+        return remainCardCount;
+    }
+
+    public void setRemainCardCount(int remainCardCount) {
+        this.remainCardCount = remainCardCount;
+    }
 
     public String getPlayer() {
         return player;

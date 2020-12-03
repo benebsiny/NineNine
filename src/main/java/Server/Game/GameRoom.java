@@ -6,8 +6,27 @@ import java.util.Arrays;
 public class GameRoom {
 
     private String[] playersName;
+
     private final Card[] desk;
     private int deskIndex = 0;
+    private int order = 0;
+    private int value = 0;
+
+    public int getOrder() {
+        return order;
+    }
+
+    public void setOrder(int order) {
+        this.order = order;
+    }
+
+    public int getValue() {
+        return value;
+    }
+
+    public void setValue(int value) {
+        this.value = value;
+    }
 
     public GameRoom(Card[] desk) {
         this.desk = Arrays.copyOf(desk, desk.length);

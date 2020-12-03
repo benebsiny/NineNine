@@ -22,7 +22,7 @@ public class GameFunction {
         Map<String, Socket> clientMap = Main.getClientMap();
 
         for (GameRoom gameRoom : gameRoomList){   //找到該玩家的gameRoom
-            if(Arrays.binarySearch(gameRoom.getPlayersName(), getClientUsername(client)) >= 0){
+            if(Arrays.asList(gameRoom.getPlayersName()).contains(getClientUsername(client))){
 
                 Set<Map.Entry<String, Socket>> entrySet = clientMap.entrySet();
                 String[] roomPlayers = gameRoom.getPlayersName();
