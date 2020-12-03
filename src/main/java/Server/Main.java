@@ -20,7 +20,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import static Server.ClientMap.ClientMapFunction.getClientUsername;
-import static Server.Game.GameFunction.initialDrawCard;
+import static Server.Game.GameFunction.*;
 import static Server.Room.RoomFunction.*;
 
 public class Main {
@@ -113,8 +113,10 @@ public class Main {
                     } else if (input instanceof StartGameCommand) {
                         processStartGameCommand((StartGameCommand) input, client);
                         initialDrawCard(client);
+                        sendNextPlayerCommand(client);
                     } else if (input instanceof PlayCommand){
 
+                        processPlayCommand((PlayCommand) input,client);
                     }
 
                     int j = 0;

@@ -3,20 +3,21 @@ package Server.Game;
 import Shared.CardEnum.Card;
 import java.util.Arrays;
 
+
 public class GameRoom {
 
     private String[] playersName;
 
     private final Card[] desk;
     private int deskIndex = 0;
-    private int order = 0;
+    private Order order = GameRoom.Order.Clockwise;
     private int value = 0;
 
-    public int getOrder() {
+    public Order getOrder() {
         return order;
     }
 
-    public void setOrder(int order) {
+    public void setOrder(Order order) {
         this.order = order;
     }
 
@@ -50,5 +51,11 @@ public class GameRoom {
 
     public void setDeskIndex(int deskIndex) {
         this.deskIndex = deskIndex;
+    }
+
+
+    public enum Order {
+        Clockwise,
+        Counterclockwise
     }
 }
