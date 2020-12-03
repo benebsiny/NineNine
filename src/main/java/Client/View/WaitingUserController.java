@@ -3,6 +3,7 @@ package Client.View;
 import Client.Connection.WaitingUserConn;
 import Client.Main;
 import Client.Status.PlayerStatus;
+import Client.Status.WindowStatus;
 import Shared.Command.Room.LeaveRoomCommand;
 import Shared.Command.Room.RoomDisbandCommand;
 import Shared.Command.Room.RoomPlayerCommand;
@@ -70,7 +71,8 @@ class WaitingUserHandler implements Runnable {
                 // Host leave the room -> client leave the room
                 else if (receiveObject instanceof RoomDisbandCommand) {
                     PlayerStatus.setPlayers(new String[0]);
-                    Platform.runLater(() -> Main.switchScene("Home"));
+                    Platform.runLater(() -> Main.switchScene("Home", "房主離開房間", WindowStatus.MessageSeverity.ERROR));
+                    break;
                 }
                 // Game start
                 else if (receiveObject instanceof StartGameCommand) {
