@@ -2,9 +2,13 @@ package Client.View;
 
 import Client.Connection.GamePageConn;
 import Client.Status.PlayerStatus;
+import Client.Status.UserStatus;
 import Shared.CardEnum.Card;
+import Shared.Command.Game.DrawCommand;
 import Shared.Command.Game.NextPlayerCommand;
 import Shared.Command.Game.PlayCommand;
+import Shared.Command.Game.ReturnPlayCommand;
+import com.jfoenix.controls.JFXButton;
 import javafx.animation.*;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -27,6 +31,18 @@ public class GamePageController {
     public Circle shineCircle;
     public Rectangle countdownBar;
     public Label valueLabel;
+    public ImageView deskCardImage;
+    public JFXButton first;
+    public JFXButton second;
+    public JFXButton third;
+    public JFXButton fourth;
+    public JFXButton fifth;
+
+    Card[] myCards = new Card[5];
+    int nextPositionToPlace = 0;
+    int cardCount = 0;
+
+    JFXButton[] cardButtons;
 
     volatile int value = 0;
 
@@ -34,6 +50,8 @@ public class GamePageController {
 
     @FXML
     void initialize() {
+
+        cardButtons = new JFXButton[]{first, second, third, fourth, fifth};
 
         countdownBar.setVisible(false);
         shineCircle.setVisible(false);
@@ -43,15 +61,110 @@ public class GamePageController {
         connection.start();
     }
 
+    public void pickCard(ActionEvent actionEvent) {
+        JFXButton pickedButton = (JFXButton) actionEvent.getSource();
+
+        // Card I picked
+        Card pickedCard = myCards[0];
+        switch (pickedButton.getId()) {
+            case "first" -> {
+                pickedCard = myCards[0];
+                myCards[0] = null;
+            }
+            case "second" -> {
+                pickedCard = myCards[1];
+                myCards[1] = null;
+            }
+            case "third" -> {
+                pickedCard = myCards[2];
+                myCards[2] = null;
+            }
+            case "forth" -> {
+                pickedCard = myCards[3];
+                myCards[3] = null;
+            }
+            case "fifth" -> {
+                pickedCard = myCards[4];
+                myCards[4] = null;
+            }
+        }
+
+        // Send command to server
+        PlayCommand playCommand = new PlayCommand();
+        playCommand.setPlayer(UserStatus.getSignInUser());
+        playCommand.setCard(pickedCard);
+        playCommand.setRemainCardCount(--cardCount); // Since I played a card, so cardCount - 1
+        try {
+            GamePageConn.send(playCommand);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        // Show play card animation
+        pickedButton.setGraphic(null);
+        playCardImage.setImage(new Image(String.format("/Client/Img/Card/%s.png", pickedCard.toString())));
+        EventHandler<ActionEvent> moving = event -> {
+            Line line = new Line();
+            line.setStartX(pickedButton.getLayoutX());
+            line.setStartY(pickedButton.getLayoutY());
+            line.setEndX(450);
+            line.setEndY(300);
+
+            // Path transition
+            PathTransition pathTransition = new PathTransition();
+            pathTransition.setNode(playCardImage);
+            pathTransition.setDuration(Duration.millis(500));
+            pathTransition.setPath(line);
+            pathTransition.setCycleCount(1);
+            pathTransition.setInterpolator(Interpolator.EASE_IN);
+
+            // Scale transition
+            ScaleTransition scaleTransition = new ScaleTransition(Duration.millis(500), playCardImage);
+            scaleTransition.setFromX(0);
+            scaleTransition.setFromY(0);
+            scaleTransition.setToX(1.4);
+            scaleTransition.setToY(1.4);
+
+            pathTransition.play();
+            scaleTransition.play();
+        };
+
+        // Scale
+        EventHandler<ActionEvent> zoomOut = event -> {
+            ScaleTransition scaleTransition = new ScaleTransition(Duration.millis(50), playCardImage);
+            scaleTransition.setFromX(1.4);
+            scaleTransition.setFromY(1.4);
+            scaleTransition.setToX(1);
+            scaleTransition.setToY(1);
+            scaleTransition.play();
+        };
+
+        // Fade out
+        EventHandler<ActionEvent> fadeOut = event -> {
+            FadeTransition fadeTransition = new FadeTransition(Duration.millis(300), playCardImage);
+            fadeTransition.setFromValue(1);
+            fadeTransition.setToValue(0);
+            fadeTransition.play();
+        };
+
+        Timeline timeline = new Timeline();
+        timeline.getKeyFrames().add(new KeyFrame(Duration.millis(0), __ -> pickedButton.setVisible(true)));
+        timeline.getKeyFrames().add(new KeyFrame(Duration.millis(1), moving));
+        timeline.getKeyFrames().add(new KeyFrame(Duration.millis(500), zoomOut));
+        timeline.getKeyFrames().add(new KeyFrame(Duration.millis(550), fadeOut));
+        timeline.getKeyFrames().add(new KeyFrame(Duration.millis(850), __ -> pickedButton.setVisible(false)));
+        timeline.play();
+    }
+
 
     /**
-     * Play the animation that play the card
+     * Play the animation that play the card, and show the number adding animation
      *
      * @param turnId    - Which player to play the card.
      * @param card      - The card the player played
      * @param nextValue - The next value of the sea
      */
-    public void playCard(int turnId, Card card, int nextValue) {
+    public void playCardAnimation(int turnId, Card card, int nextValue) {
 
         // Set card image
         playCardImage.setImage(new Image(String.format("/Client/Img/Card/%s.png", card.toString())));
@@ -122,6 +235,7 @@ public class GamePageController {
         time.getKeyFrames().add(new KeyFrame(Duration.millis(1), moving));
         time.getKeyFrames().add(new KeyFrame(Duration.millis(700), zoomOut));
         time.getKeyFrames().add(new KeyFrame(Duration.millis(1700), fadeOut));
+        time.getKeyFrames().add(new KeyFrame(Duration.millis(2000), event -> playCardImage.setVisible(false)));
 
 
         // The value calculating
@@ -148,7 +262,7 @@ public class GamePageController {
      *
      * @param turnId - Which player to play the card
      */
-    public void otherPlayerThinking(int turnId) {
+    public void otherPlayerThinkingAnimation(int turnId) {
 
         if (turnId == 1) {
             shineCircle.setCenterX(150);
@@ -173,7 +287,7 @@ public class GamePageController {
     /**
      * Show the countdown bar
      */
-    public void countdown() {
+    public void countdownAnimation() {
         countdownBar.setWidth(900);
         countdownBar.setVisible(true);
         Timeline timeline = new Timeline();
@@ -181,6 +295,50 @@ public class GamePageController {
         KeyFrame kf = new KeyFrame(Duration.seconds(20), kv);
         timeline.getKeyFrames().add(kf);
         timeline.play();
+    }
+
+
+    /**
+     * Draw the card to me
+     *
+     * @param card Card to show on my desk
+     */
+    public void drawCardToMeAnimation(Card card) {
+
+        playCardImage.setImage(new Image(String.format("/Client/Img/Card/%s.png", card.toString())));
+
+        Line line = new Line();
+        line.setStartX(820);
+        line.setStartY(310);
+
+        line.setEndY(394);
+        switch (nextPositionToPlace) {
+            case 0 -> line.setEndX(95);
+            case 1 -> line.setEndX(235);
+            case 2 -> line.setEndX(385);
+            case 3 -> line.setEndX(546);
+            case 4 -> line.setEndX(696);
+        }
+
+        EventHandler<ActionEvent> moving = event -> {
+            PathTransition pathTransition = new PathTransition();
+            pathTransition.setNode(playCardImage);
+            pathTransition.setDuration(Duration.millis(500));
+            pathTransition.setPath(line);
+            pathTransition.setCycleCount(1);
+            pathTransition.setInterpolator(Interpolator.EASE_IN);
+
+            pathTransition.play();
+        };
+
+        Timeline timeline = new Timeline();
+        timeline.getKeyFrames().add(new KeyFrame(Duration.millis(0), event -> playCardImage.setVisible(true)));
+        timeline.getKeyFrames().add(new KeyFrame(Duration.millis(1), moving));
+        timeline.getKeyFrames().add(new KeyFrame(Duration.millis(501), event -> playCardImage.setVisible(false)));
+        timeline.play();
+
+        cardButtons[nextPositionToPlace].setGraphic(new ImageView(new Image(String.format("/Client/Img/Card/%s.png", card.toString()))));
+
     }
 
     /**
@@ -201,8 +359,24 @@ public class GamePageController {
         }
         return -1;
     }
+
+    /**
+     * Find the next empty place of the card that had been played
+     */
+    public void findNextEmptyPlaceForCard() {
+        for (int i = 0; i < 5; i++) {
+            if (myCards[i] == null) {
+                nextPositionToPlace = i;
+                return;
+            }
+        }
+        nextPositionToPlace = -1; // There are full of cards
+    }
 }
 
+/**
+ * Receive the command from server
+ */
 class GamePageConnection implements Runnable {
 
     private final GamePageController GUI;
@@ -219,13 +393,18 @@ class GamePageConnection implements Runnable {
                 Object receivedObject = GamePageConn.receive();
 
                 // Other player play the card
-                if (receivedObject instanceof PlayCommand) {
-                    new Thread(new PlayCommandHandler(GUI, (PlayCommand) receivedObject)).start();
+                if (receivedObject instanceof ReturnPlayCommand) {
+                    new Thread(new ReturnPlayCommandHandler(GUI, (ReturnPlayCommand) receivedObject)).start();
                 }
 
                 // It's other player's turn
                 else if (receivedObject instanceof NextPlayerCommand) {
                     new Thread(new NextPlayerHandler(GUI, (NextPlayerCommand) receivedObject)).start();
+                }
+
+                // Draw cards
+                else if (receivedObject instanceof DrawCommand) {
+                    new Thread(new DrawHandler(GUI, (DrawCommand) receivedObject)).start();
                 }
 
             } catch (IOException | ClassNotFoundException e) {
@@ -235,12 +414,41 @@ class GamePageConnection implements Runnable {
     }
 }
 
-class PlayCommandHandler implements Runnable {
+/**
+ * I'll get the Draw Card Command (I'll draw the card)
+ */
+class DrawHandler implements Runnable {
 
-    PlayCommand command;
+    GamePageController GUI;
+    DrawCommand command;
+
+    DrawHandler(GamePageController GUI, DrawCommand command) {
+        this.GUI = GUI;
+        this.command = command;
+    }
+
+    @Override
+    public void run() {
+        Card[] cards = command.getDrawCards();
+        for (Card card : cards) {
+            Platform.runLater(() -> GUI.drawCardToMeAnimation(card)); // Show the drawing card animation
+            GUI.cardCount++;
+            GUI.myCards[GUI.nextPositionToPlace] = card; // Save the card to the array
+            GUI.findNextEmptyPlaceForCard(); // Find the next empty position
+        }
+    }
+}
+
+
+/**
+ * When player play a card, all the user will get this message.
+ */
+class ReturnPlayCommandHandler implements Runnable {
+
+    ReturnPlayCommand command;
     GamePageController GUI;
 
-    PlayCommandHandler(GamePageController GUI, PlayCommand command) {
+    ReturnPlayCommandHandler(GamePageController GUI, ReturnPlayCommand command) {
         this.GUI = GUI;
         this.command = command;
     }
@@ -252,12 +460,22 @@ class PlayCommandHandler implements Runnable {
 
         // Show playing card animation for others
         int turnId = GUI.getTurnByName(command.getPlayer());
-        if (turnId != 3) {
-            Platform.runLater(() -> GUI.playCard(turnId, Card.D2, 20));
+
+        // The card is not played by me. Show the animation of whom to play the card
+        if (turnId != 0) {
+            Platform.runLater(() -> GUI.playCardAnimation(turnId, command.getCard(), command.getValue()));
+        }
+
+        // There's no card on the desk, hide it!!
+        if (!command.isHasCardsInDesk()) {
+            Platform.runLater(() -> GUI.deskCardImage.setVisible(false));
         }
     }
 }
 
+/**
+ * It's time to the next player to play card, and it may be my turn
+ */
 class NextPlayerHandler implements Runnable {
 
     GamePageController GUI;
@@ -275,12 +493,14 @@ class NextPlayerHandler implements Runnable {
 
         // It's not my turn
         if (turnId != 3) {
-            Platform.runLater(() -> GUI.otherPlayerThinking(turnId));
+            Platform.runLater(() -> GUI.otherPlayerThinkingAnimation(turnId));
         }
 
-        // It's my turn!!
+        // It's my turn!! Count down the bar
         else {
-            Platform.runLater(() -> GUI.countdown());
+            Platform.runLater(() -> {
+                GUI.countdownAnimation();
+            });
         }
     }
 }
