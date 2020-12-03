@@ -90,6 +90,7 @@ class WaitingUserHostHandler implements Runnable {
                 // Host leave the room -> others also leave the room
                 else if (receiveObject instanceof RoomDisbandCommand) {
                     PlayerStatus.setPlayers(new String[0]);
+                    PlayerStatus.countTurnPlayer();
                     Platform.runLater(() -> Main.switchScene("Home"));
                 }
                 // Game start

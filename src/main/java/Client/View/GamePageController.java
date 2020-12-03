@@ -59,15 +59,15 @@ public class GamePageController {
         // Set card start position
         Line line = new Line();
 
-        if (turnId == 0) { // Left player
+        if (turnId == 1) { // Left player
             line.setStartX(160);
             line.setStartY(250);
 
-        } else if (turnId == 1) { // Middle player
+        } else if (turnId == 2) { // Middle player
             line.setStartX(450);
             line.setStartY(80);
 
-        } else if (turnId == 2) { // Right player
+        } else if (turnId == 3) { // Right player
             line.setStartX(750);
             line.setStartY(250);
         }
@@ -150,13 +150,13 @@ public class GamePageController {
      */
     public void otherPlayerThinking(int turnId) {
 
-        if (turnId == 0) {
+        if (turnId == 1) {
             shineCircle.setCenterX(150);
             shineCircle.setCenterY(225);
-        } else if (turnId == 1) {
+        } else if (turnId == 2) {
             shineCircle.setCenterX(450);
             shineCircle.setCenterY(100);
-        } else if (turnId == 2) {
+        } else if (turnId == 3) {
             shineCircle.setCenterX(750);
             shineCircle.setCenterY(225);
         }
@@ -191,7 +191,7 @@ public class GamePageController {
      */
     public int getTurnByName(String username) {
 
-        String[] players = PlayerStatus.getPlayers();
+        String[] players = PlayerStatus.getTurnPlayers();
 
         // Who's play the card??
         for (int i = 0; i < 4; i++) {
