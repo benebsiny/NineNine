@@ -24,6 +24,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 public class GamePageController {
 
@@ -61,38 +62,25 @@ public class GamePageController {
         connection.start();
     }
 
+    /**
+     * When a user picked a card to play
+     */
     public void pickCard(ActionEvent actionEvent) {
         JFXButton pickedButton = (JFXButton) actionEvent.getSource();
 
         // Card I picked
-        Card pickedCard = myCards[0];
+        Card pickedCard;
+        int pickedNumber = -1;
         switch (pickedButton.getId()) {
-            case "first" -> {
-                pickedCard = myCards[0];
-                nextPositionToPlace = 0;
-                myCards[0] = null;
-            }
-            case "second" -> {
-                pickedCard = myCards[1];
-                nextPositionToPlace = 1;
-                myCards[1] = null;
-            }
-            case "third" -> {
-                pickedCard = myCards[2];
-                nextPositionToPlace = 2;
-                myCards[2] = null;
-            }
-            case "forth" -> {
-                pickedCard = myCards[3];
-                nextPositionToPlace = 3;
-                myCards[3] = null;
-            }
-            case "fifth" -> {
-                pickedCard = myCards[4];
-                nextPositionToPlace = 4;
-                myCards[4] = null;
-            }
+            case "first" -> pickedNumber = 0;
+            case "second" -> pickedNumber = 1;
+            case "third" -> pickedNumber = 2;
+            case "forth" -> pickedNumber = 3;
+            case "fifth" -> pickedNumber = 4;
         }
+        pickedCard = myCards[pickedNumber];
+        myCards[pickedNumber] = null;
+        findNextEmptyPlaceForCard();
 
         // Send command to server
         PlayCommand playCommand = new PlayCommand();
@@ -105,6 +93,16 @@ public class GamePageController {
             e.printStackTrace();
         }
 
+        mePlayCardAnimation(pickedButton, pickedCard);
+    }
+
+    /**
+     * Play the animation that I play the card
+     *
+     * @param pickedButton The button I clicked
+     * @param pickedCard   The card I picked
+     */
+    private void mePlayCardAnimation(JFXButton pickedButton, Card pickedCard) {
         // Show play card animation
         pickedButton.setGraphic(null);
         playCardImage.setImage(new Image(String.format("/Client/Img/Card/%s.png", pickedCard.toString())));
@@ -308,7 +306,7 @@ public class GamePageController {
      *
      * @param card Card to show on my desk
      */
-    public void drawCardToMeAnimation(Card card) {
+    public void draw1CardToMeAnimation(Card card) {
 
         playCardImage.setImage(new Image(String.format("/Client/Img/Card/%s.png", card.toString())));
 
@@ -316,15 +314,16 @@ public class GamePageController {
         line.setStartX(820);
         line.setStartY(310);
 
-        line.setEndY(394);
+        line.setEndY(478);
         switch (nextPositionToPlace) {
-            case 0 -> line.setEndX(95);
-            case 1 -> line.setEndX(235);
-            case 2 -> line.setEndX(385);
-            case 3 -> line.setEndX(546);
-            case 4 -> line.setEndX(696);
+            case 0 -> line.setEndX(180);
+            case 1 -> line.setEndX(320);
+            case 2 -> line.setEndX(460);
+            case 3 -> line.setEndX(600);
+            case 4 -> line.setEndX(740);
         }
 
+        // Move a card from desk the my empty space
         EventHandler<ActionEvent> moving = event -> {
             PathTransition pathTransition = new PathTransition();
             pathTransition.setNode(playCardImage);
@@ -343,11 +342,66 @@ public class GamePageController {
         timeline.play();
 
         cardButtons[nextPositionToPlace].setGraphic(new ImageView(new Image(String.format("/Client/Img/Card/%s.png", card.toString()))));
-
+        findNextEmptyPlaceForCard();
     }
 
+    /**
+     * Draw 5 cards to me
+     *
+     * @param cards Card array
+     */
     void draw5CardsToMeAnimation(Card[] cards) {
+        Timeline timeline = new Timeline();
+        for (int i = 0; i < cards.length; i++) {
+            int finalI = i;
 
+            // Card animation
+            int finalI1 = i;
+//            timeline.getKeyFrames().add(new KeyFrame(Duration.millis(300 * i), __ -> playCardImage.setVisible(true)));
+
+            timeline.getKeyFrames().add(new KeyFrame(Duration.millis(300 * i + 1), __ -> {
+                playCardImage.setImage(new Image(String.format("/Client/Img/Card/%s.png", cards[finalI1].toString())));
+                playCardImage.setX(820);
+                playCardImage.setY(310);
+                playCardImage.setVisible(true);
+                playCardImage.setFitWidth(120);
+                playCardImage.setFitHeight(168);
+
+                Line line = new Line();
+                line.setStartX(848);
+                line.setStartY(351);
+                line.setEndX(180 + finalI * 140);
+                line.setEndY(478);
+
+                // Path transition
+                PathTransition pathTransition = new PathTransition();
+                pathTransition.setNode(playCardImage);
+                pathTransition.setDuration(Duration.millis(295));
+                pathTransition.setPath(line);
+                pathTransition.setCycleCount(1);
+                pathTransition.setInterpolator(Interpolator.EASE_IN);
+                pathTransition.play();
+
+                // Scale transition
+                ScaleTransition scaleTransition = new ScaleTransition();
+                scaleTransition.setNode(playCardImage);
+                scaleTransition.setFromX(0.54);
+                scaleTransition.setFromY(0.54);
+                scaleTransition.setToX(1);
+                scaleTransition.setToY(1);
+                scaleTransition.play();
+            }));
+
+            // Set button with a background image card
+            timeline.getKeyFrames().add(new KeyFrame(Duration.millis(300 * (i + 1)), __ -> {
+                playCardImage.setVisible(false);
+                ImageView imageView = new ImageView(new Image(String.format("/Client/Img/Card/%s.png", cards[finalI].toString())));
+                imageView.setFitHeight(168);
+                imageView.setFitWidth(120);
+                cardButtons[finalI].setGraphic(imageView);
+            }));
+        }
+        timeline.play();
     }
 
     /**
@@ -387,10 +441,21 @@ public class GamePageController {
      *
      * @param card Card drew from server
      */
-    public void addOneCard(Card card) {
+    public void add1Card(Card card) {
         cardCount++;
         myCards[nextPositionToPlace] = card; // Save the card to the array
         findNextEmptyPlaceForCard(); // Find the next empty position
+    }
+
+    /**
+     * Draw 5 cards from server
+     *
+     * @param cards Card array
+     */
+    public void add5Cards(Card[] cards) {
+        cardCount = 5;
+        myCards = Arrays.copyOf(cards, cards.length);
+        findNextEmptyPlaceForCard();
     }
 }
 
@@ -453,14 +518,15 @@ class DrawHandler implements Runnable {
 
         // First draw
         if (cards.length == 5) {
-
+            Platform.runLater(() -> GUI.draw5CardsToMeAnimation(cards));
+            GUI.add5Cards(cards);
         }
 
         // Draw one card
         else {
             Card card = cards[0];
-            Platform.runLater(() -> GUI.drawCardToMeAnimation(card)); // Show the drawing card animation
-            GUI.addOneCard(card);
+            Platform.runLater(() -> GUI.draw1CardToMeAnimation(card)); // Show the drawing card animation
+            GUI.add1Card(card);
         }
     }
 }
@@ -524,9 +590,7 @@ class NextPlayerHandler implements Runnable {
 
         // It's my turn!! Count down the bar
         else {
-            Platform.runLater(() -> {
-                GUI.countdownAnimation();
-            });
+            Platform.runLater(() -> GUI.countdownAnimation());
         }
     }
 }

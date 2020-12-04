@@ -12,7 +12,6 @@
 
 <AnchorPane prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Client.View.RegisterController">
    <children>
-      <JFXButton layoutX="36.0" layoutY="35.0" onAction="#goBack" prefHeight="40.0" prefWidth="40.0" styleClass="back-button" stylesheets="@../Style/General.css" />
       <Text layoutX="295.0" layoutY="110.0" strokeType="OUTSIDE" strokeWidth="0.0" text="註冊" textAlignment="CENTER" wrappingWidth="301.0">
          <font>
             <Font size="36.0" />
@@ -36,5 +35,6 @@
             <Image url="@../Img/loading.gif" />
          </image>
       </ImageView>
+      <JFXButton layoutX="36.0" layoutY="35.0" onAction="#goBack" prefHeight="40.0" prefWidth="40.0" styleClass="back-button" stylesheets="@../Style/General.css" />
    </children>
 </AnchorPane>

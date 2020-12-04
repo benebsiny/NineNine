@@ -16,11 +16,11 @@
          <font>
             <Font size="48.0" />
          </font></Label>
-      <JFXButton fx:id="first" layoutX="95.0" layoutY="394.0" mnemonicParsing="false" onAction="#pickCard" prefHeight="168.0" prefWidth="120.0" text="Button" />
-      <JFXButton fx:id="second" layoutX="235.0" layoutY="394.0" mnemonicParsing="false" onAction="#pickCard" prefHeight="168.0" prefWidth="120.0" text="Button" />
-      <JFXButton fx:id="third" layoutX="385.0" layoutY="394.0" mnemonicParsing="false" onAction="#pickCard" prefHeight="168.0" prefWidth="120.0" text="Button" />
-      <JFXButton fx:id="fourth" layoutX="546.0" layoutY="394.0" mnemonicParsing="false" onAction="#pickCard" prefHeight="168.0" prefWidth="120.0" text="Button" />
-      <JFXButton fx:id="fifth" layoutX="696.0" layoutY="394.0" mnemonicParsing="false" onAction="#pickCard" prefHeight="168.0" prefWidth="120.0" text="Button" />
+      <JFXButton fx:id="first" layoutX="120.0" layoutY="394.0" mnemonicParsing="false" onAction="#pickCard" prefHeight="168.0" prefWidth="120.0" />
+      <JFXButton fx:id="second" layoutX="260.0" layoutY="394.0" mnemonicParsing="false" onAction="#pickCard" prefHeight="168.0" prefWidth="120.0" />
+      <JFXButton fx:id="third" layoutX="400.0" layoutY="394.0" mnemonicParsing="false" onAction="#pickCard" prefHeight="168.0" prefWidth="120.0" />
+      <JFXButton fx:id="fourth" layoutX="540.0" layoutY="394.0" mnemonicParsing="false" onAction="#pickCard" prefHeight="168.0" prefWidth="120.0" />
+      <JFXButton fx:id="fifth" layoutX="680.0" layoutY="394.0" mnemonicParsing="false" onAction="#pickCard" prefHeight="168.0" prefWidth="120.0" />
       <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="48.0" layoutY="146.0" pickOnBounds="true" preserveRatio="true" rotate="90.0">
          <image>
             <Image url="@../Img/playing-user.png" />
@@ -36,10 +36,6 @@
             <Image url="@../Img/playing-user.png" />
          </image>
       </ImageView>
-      <ImageView fx:id="playCardImage" fitHeight="168.0" fitWidth="120.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../Img/Card/C2.png" />
-         </image></ImageView>
       <Circle fx:id="shineCircle" blendMode="ADD" fill="#ffcb21" radius="100.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0">
          <effect>
             <BoxBlur height="50.0" iterations="3" width="50.0" />
@@ -51,5 +47,9 @@
             <Image url="@../Img/card-back.png" />
          </image>
       </ImageView>
+      <ImageView fx:id="playCardImage" fitHeight="168.0" fitWidth="120.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../Img/Card/C2.png" />
+         </image></ImageView>
    </children>
 </Pane>
