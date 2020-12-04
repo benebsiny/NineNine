@@ -67,18 +67,17 @@ class WaitingUserHandler implements Runnable {
                     });
 
                     PlayerStatus.setPlayers(players);
-                    PlayerStatus.countTurnPlayer();
                 }
                 // Host leave the room -> client leave the room
                 else if (receiveObject instanceof RoomDisbandCommand) {
                     PlayerStatus.setPlayers(new String[0]);
-                    PlayerStatus.countTurnPlayer();
                     Platform.runLater(() -> Main.switchScene("Home", "房主離開房間", WindowStatus.MessageSeverity.ERROR));
                     break;
                 }
                 // Game start
                 else if (receiveObject instanceof StartGameCommand) {
                     Platform.runLater(() -> Main.switchScene("GamePage"));
+                    break;
                 }
                 // Time to close this thread (leave room)
                 else if (receiveObject instanceof LeaveRoomCommand) {

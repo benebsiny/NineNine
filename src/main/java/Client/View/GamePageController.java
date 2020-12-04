@@ -69,22 +69,27 @@ public class GamePageController {
         switch (pickedButton.getId()) {
             case "first" -> {
                 pickedCard = myCards[0];
+                nextPositionToPlace = 0;
                 myCards[0] = null;
             }
             case "second" -> {
                 pickedCard = myCards[1];
+                nextPositionToPlace = 1;
                 myCards[1] = null;
             }
             case "third" -> {
                 pickedCard = myCards[2];
+                nextPositionToPlace = 2;
                 myCards[2] = null;
             }
             case "forth" -> {
                 pickedCard = myCards[3];
+                nextPositionToPlace = 3;
                 myCards[3] = null;
             }
             case "fifth" -> {
                 pickedCard = myCards[4];
+                nextPositionToPlace = 4;
                 myCards[4] = null;
             }
         }
@@ -164,7 +169,7 @@ public class GamePageController {
      * @param card      - The card the player played
      * @param nextValue - The next value of the sea
      */
-    public void playCardAnimation(int turnId, Card card, int nextValue) {
+    public void otherPlayCardAnimation(int turnId, Card card, int nextValue) {
 
         // Set card image
         playCardImage.setImage(new Image(String.format("/Client/Img/Card/%s.png", card.toString())));
@@ -341,6 +346,10 @@ public class GamePageController {
 
     }
 
+    void draw5CardsToMeAnimation(Card[] cards) {
+
+    }
+
     /**
      * Get the order of the player by username
      *
@@ -371,6 +380,17 @@ public class GamePageController {
             }
         }
         nextPositionToPlace = -1; // There are full of cards
+    }
+
+    /**
+     * Draw a card from server, you have to record where the card should play
+     *
+     * @param card Card drew from server
+     */
+    public void addOneCard(Card card) {
+        cardCount++;
+        myCards[nextPositionToPlace] = card; // Save the card to the array
+        findNextEmptyPlaceForCard(); // Find the next empty position
     }
 }
 
@@ -430,11 +450,17 @@ class DrawHandler implements Runnable {
     @Override
     public void run() {
         Card[] cards = command.getDrawCards();
-        for (Card card : cards) {
+
+        // First draw
+        if (cards.length == 5) {
+
+        }
+
+        // Draw one card
+        else {
+            Card card = cards[0];
             Platform.runLater(() -> GUI.drawCardToMeAnimation(card)); // Show the drawing card animation
-            GUI.cardCount++;
-            GUI.myCards[GUI.nextPositionToPlace] = card; // Save the card to the array
-            GUI.findNextEmptyPlaceForCard(); // Find the next empty position
+            GUI.addOneCard(card);
         }
     }
 }
@@ -463,7 +489,7 @@ class ReturnPlayCommandHandler implements Runnable {
 
         // The card is not played by me. Show the animation of whom to play the card
         if (turnId != 0) {
-            Platform.runLater(() -> GUI.playCardAnimation(turnId, command.getCard(), command.getValue()));
+            Platform.runLater(() -> GUI.otherPlayCardAnimation(turnId, command.getCard(), command.getValue()));
         }
 
         // There's no card on the desk, hide it!!

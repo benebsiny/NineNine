@@ -12,6 +12,7 @@ public class PlayerStatus {
 
     public static void setPlayers(String[] players) {
         PlayerStatus.players = Arrays.copyOf(players, players.length);
+        countTurnPlayer();
     }
 
     public static String[] getTurnPlayers() {
