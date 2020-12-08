@@ -130,7 +130,7 @@ public class Main {
                             out.writeObject(loseGameCommand);
 
                         }*/
-                        Thread.sleep(500);
+                        Thread.sleep(1500);
                         processPlayCommand((PlayCommand) input,client);
                     }
 

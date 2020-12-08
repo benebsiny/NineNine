@@ -47,7 +47,15 @@
             <Image url="@../Img/card-back.png" />
          </image>
       </ImageView>
-      <ImageView fx:id="playCardImage" fitHeight="168.0" fitWidth="120.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="otherPlayCardImage" fitHeight="168.0" fitWidth="120.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../Img/Card/C2.png" />
+         </image></ImageView>
+       <ImageView fx:id="mePlayCardImage" fitHeight="168.0" fitWidth="120.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../Img/Card/C2.png" />
+         </image></ImageView>
+       <ImageView fx:id="drawCardImage" fitHeight="168.0" fitWidth="120.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../Img/Card/C2.png" />
          </image></ImageView>

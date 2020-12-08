@@ -29,7 +29,9 @@ import java.util.Arrays;
 
 public class GamePageController {
 
-    public ImageView playCardImage;
+    public ImageView otherPlayCardImage;
+    public ImageView mePlayCardImage;
+    public ImageView drawCardImage;
     public Circle shineCircle;
     public Rectangle countdownBar;
     public Label valueLabel;
@@ -58,7 +60,9 @@ public class GamePageController {
 
         countdownBar.setVisible(false);
         shineCircle.setVisible(false);
-        playCardImage.setVisible(false);
+        otherPlayCardImage.setVisible(false);
+        mePlayCardImage.setVisible(false);
+        drawCardImage.setVisible(false);
 
         Thread connection = new Thread(new GamePageConnection(this));
         connection.start();
@@ -106,30 +110,40 @@ public class GamePageController {
      * @param pickedCard   The card I picked
      */
     private void mePlayCardAnimation(JFXButton pickedButton, Card pickedCard) {
-        // Show play card animation
-        pickedButton.setGraphic(null);
-        playCardImage.setImage(new Image(String.format("/Client/Img/Card/%s.png", pickedCard.toString())));
+
+        System.out.println(pickedButton.getLayoutX());
+        System.out.println(pickedButton.getLayoutY());
+
+        EventHandler<ActionEvent> init = event -> {
+            mePlayCardImage.setImage(new Image(String.format("/Client/Img/Card/%s.png", pickedCard.toString())));
+            mePlayCardImage.setFitWidth(120);
+            mePlayCardImage.setFitHeight(168);
+            mePlayCardImage.setX(pickedButton.getLayoutX());
+            mePlayCardImage.setY(pickedButton.getLayoutY());
+            mePlayCardImage.setVisible(true);
+            pickedButton.setGraphic(null);
+        };
+
         EventHandler<ActionEvent> moving = event -> {
+
             Line line = new Line();
             line.setStartX(pickedButton.getLayoutX());
             line.setStartY(pickedButton.getLayoutY());
             line.setEndX(450);
             line.setEndY(300);
-            System.out.println("Clicked button X: " + pickedButton.getLayoutX());
-            System.out.println("Clicked button Y: " + pickedButton.getLayoutY());
 
             // Path transition
             PathTransition pathTransition = new PathTransition();
-            pathTransition.setNode(playCardImage);
+            pathTransition.setNode(mePlayCardImage);
             pathTransition.setDuration(Duration.millis(500));
             pathTransition.setPath(line);
             pathTransition.setCycleCount(1);
             pathTransition.setInterpolator(Interpolator.EASE_IN);
 
             // Scale transition
-            ScaleTransition scaleTransition = new ScaleTransition(Duration.millis(500), playCardImage);
-            scaleTransition.setFromX(0);
-            scaleTransition.setFromY(0);
+            ScaleTransition scaleTransition = new ScaleTransition(Duration.millis(500), mePlayCardImage);
+            scaleTransition.setFromX(1);
+            scaleTransition.setFromY(1);
             scaleTransition.setToX(1.4);
             scaleTransition.setToY(1.4);
 
@@ -139,7 +153,7 @@ public class GamePageController {
 
         // Scale
         EventHandler<ActionEvent> zoomOut = event -> {
-            ScaleTransition scaleTransition = new ScaleTransition(Duration.millis(50), playCardImage);
+            ScaleTransition scaleTransition = new ScaleTransition(Duration.millis(50), mePlayCardImage);
             scaleTransition.setFromX(1.4);
             scaleTransition.setFromY(1.4);
             scaleTransition.setToX(1);
@@ -149,18 +163,18 @@ public class GamePageController {
 
         // Fade out
         EventHandler<ActionEvent> fadeOut = event -> {
-            FadeTransition fadeTransition = new FadeTransition(Duration.millis(300), playCardImage);
+            FadeTransition fadeTransition = new FadeTransition(Duration.millis(300), mePlayCardImage);
             fadeTransition.setFromValue(1);
             fadeTransition.setToValue(0);
             fadeTransition.play();
         };
 
         Timeline timeline = new Timeline();
-        timeline.getKeyFrames().add(new KeyFrame(Duration.millis(0), __ -> pickedButton.setVisible(true)));
+        timeline.getKeyFrames().add(new KeyFrame(Duration.millis(0), init));
         timeline.getKeyFrames().add(new KeyFrame(Duration.millis(1), moving));
-        timeline.getKeyFrames().add(new KeyFrame(Duration.millis(500), zoomOut));
-        timeline.getKeyFrames().add(new KeyFrame(Duration.millis(550), fadeOut));
-        timeline.getKeyFrames().add(new KeyFrame(Duration.millis(850), __ -> pickedButton.setVisible(false)));
+        timeline.getKeyFrames().add(new KeyFrame(Duration.millis(501), zoomOut));
+        timeline.getKeyFrames().add(new KeyFrame(Duration.millis(551), fadeOut));
+        timeline.getKeyFrames().add(new KeyFrame(Duration.millis(851), __ -> mePlayCardImage.setVisible(false)));
         timeline.play();
     }
 
@@ -175,10 +189,10 @@ public class GamePageController {
     public void otherPlayCardAnimation(int turnId, Card card, int nextValue) {
 
         // Set card image
-        playCardImage.setImage(new Image(String.format("/Client/Img/Card/%s.png", card.toString())));
-        playCardImage.setX(160);
-        playCardImage.setY(250);
-        playCardImage.setVisible(true);
+        otherPlayCardImage.setImage(new Image(String.format("/Client/Img/Card/%s.png", card.toString())));
+        otherPlayCardImage.setX(160);
+        otherPlayCardImage.setY(250);
+        otherPlayCardImage.setVisible(true);
 
         // Set card start position
         Line line = new Line();
@@ -204,14 +218,14 @@ public class GamePageController {
         EventHandler<ActionEvent> moving = event -> {
             // Moving path
             PathTransition pathTransition = new PathTransition();
-            pathTransition.setNode(playCardImage);
+            pathTransition.setNode(otherPlayCardImage);
             pathTransition.setDuration(Duration.millis(500));
             pathTransition.setPath(line);
             pathTransition.setCycleCount(1);
             pathTransition.setInterpolator(Interpolator.EASE_IN);
 
             // Scale
-            ScaleTransition scaleTransition = new ScaleTransition(Duration.millis(500), playCardImage);
+            ScaleTransition scaleTransition = new ScaleTransition(Duration.millis(500), otherPlayCardImage);
             scaleTransition.setFromX(0);
             scaleTransition.setFromY(0);
             scaleTransition.setToX(1.4);
@@ -224,7 +238,7 @@ public class GamePageController {
         // Scale
         EventHandler<ActionEvent> zoomOut = event -> {
 
-            ScaleTransition scaleTransition = new ScaleTransition(Duration.millis(50), playCardImage);
+            ScaleTransition scaleTransition = new ScaleTransition(Duration.millis(50), otherPlayCardImage);
             scaleTransition.setFromX(1.4);
             scaleTransition.setFromY(1.4);
             scaleTransition.setToX(1);
@@ -234,7 +248,7 @@ public class GamePageController {
 
         // Fade out
         EventHandler<ActionEvent> fadeOut = event -> {
-            FadeTransition fadeTransition = new FadeTransition(Duration.millis(300), playCardImage);
+            FadeTransition fadeTransition = new FadeTransition(Duration.millis(300), otherPlayCardImage);
             fadeTransition.setFromValue(1);
             fadeTransition.setToValue(0);
             fadeTransition.play();
@@ -242,11 +256,11 @@ public class GamePageController {
 
 
         Timeline time = new Timeline();
-        time.getKeyFrames().add(new KeyFrame(Duration.millis(0), event -> playCardImage.setVisible(true)));
+        time.getKeyFrames().add(new KeyFrame(Duration.millis(0), event -> otherPlayCardImage.setVisible(true)));
         time.getKeyFrames().add(new KeyFrame(Duration.millis(1), moving));
         time.getKeyFrames().add(new KeyFrame(Duration.millis(700), zoomOut));
         time.getKeyFrames().add(new KeyFrame(Duration.millis(1700), fadeOut));
-        time.getKeyFrames().add(new KeyFrame(Duration.millis(2000), event -> playCardImage.setVisible(false)));
+        time.getKeyFrames().add(new KeyFrame(Duration.millis(2000), event -> otherPlayCardImage.setVisible(false)));
 
 
         // The value calculating
@@ -316,9 +330,9 @@ public class GamePageController {
      */
     public void draw1CardToMeAnimation(Card card) {
 
-        playCardImage.setImage(new Image(String.format("/Client/Img/Card/%s.png", card.toString())));
-        playCardImage.setX(820);
-        playCardImage.setY(310);
+        drawCardImage.setImage(new Image(String.format("/Client/Img/Card/%s.png", card.toString())));
+        drawCardImage.setX(820);
+        drawCardImage.setY(310);
 
         Line line = new Line();
         line.setStartX(848);
@@ -338,7 +352,7 @@ public class GamePageController {
 
             // Path transition
             PathTransition pathTransition = new PathTransition();
-            pathTransition.setNode(playCardImage);
+            pathTransition.setNode(drawCardImage);
             pathTransition.setDuration(Duration.millis(500));
             pathTransition.setPath(line);
             pathTransition.setCycleCount(1);
@@ -346,7 +360,8 @@ public class GamePageController {
 
             // Scale transition
             ScaleTransition scaleTransition = new ScaleTransition();
-            scaleTransition.setNode(playCardImage);
+            scaleTransition.setNode(drawCardImage);
+            scaleTransition.setDuration(Duration.millis(500));
             scaleTransition.setFromX(0.54);
             scaleTransition.setFromY(0.54);
             scaleTransition.setToX(1);
@@ -356,18 +371,24 @@ public class GamePageController {
             scaleTransition.play();
         };
 
+        EventHandler<ActionEvent> fin = event -> {
+            ImageView imageView = new ImageView(new Image(String.format("/Client/Img/Card/%s.png", card.toString())));
+            imageView.setFitHeight(168);
+            imageView.setFitWidth(120);
+            cardButtons[nextPositionToPlace].setGraphic(imageView);
+            drawCardImage.setVisible(false);
+
+            // Add card at server
+            myCards[nextPositionToPlace] = card; // Save the card to the array
+            cardCount++;
+            findNextEmptyPlaceForCard(); // Find the next empty position
+        };
+
         Timeline timeline = new Timeline();
-        timeline.getKeyFrames().add(new KeyFrame(Duration.millis(0), event -> playCardImage.setVisible(true)));
+        timeline.getKeyFrames().add(new KeyFrame(Duration.millis(0), event -> drawCardImage.setVisible(true)));
         timeline.getKeyFrames().add(new KeyFrame(Duration.millis(1), moving));
-        timeline.getKeyFrames().add(new KeyFrame(Duration.millis(501), event -> playCardImage.setVisible(false)));
+        timeline.getKeyFrames().add(new KeyFrame(Duration.millis(501), fin));
         timeline.play();
-
-        cardButtons[nextPositionToPlace].setGraphic(new ImageView(new Image(String.format("/Client/Img/Card/%s.png", card.toString()))));
-
-        // Add card at server
-        myCards[nextPositionToPlace] = card; // Save the card to the array
-        cardCount++;
-        findNextEmptyPlaceForCard(); // Find the next empty position
     }
 
     /**
@@ -385,12 +406,12 @@ public class GamePageController {
 //            timeline.getKeyFrames().add(new KeyFrame(Duration.millis(300 * i), __ -> playCardImage.setVisible(true)));
 
             timeline.getKeyFrames().add(new KeyFrame(Duration.millis(300 * i + 1), __ -> {
-                playCardImage.setImage(new Image(String.format("/Client/Img/Card/%s.png", cards[finalI1].toString())));
-                playCardImage.setX(820);
-                playCardImage.setY(310);
-                playCardImage.setVisible(true);
-                playCardImage.setFitWidth(120);
-                playCardImage.setFitHeight(168);
+                drawCardImage.setImage(new Image(String.format("/Client/Img/Card/%s.png", cards[finalI1].toString())));
+                drawCardImage.setX(820);
+                drawCardImage.setY(310);
+                drawCardImage.setVisible(true);
+                drawCardImage.setFitWidth(120);
+                drawCardImage.setFitHeight(168);
 
                 Line line = new Line();
                 line.setStartX(848);
@@ -400,7 +421,7 @@ public class GamePageController {
 
                 // Path transition
                 PathTransition pathTransition = new PathTransition();
-                pathTransition.setNode(playCardImage);
+                pathTransition.setNode(drawCardImage);
                 pathTransition.setDuration(Duration.millis(295));
                 pathTransition.setPath(line);
                 pathTransition.setCycleCount(1);
@@ -409,7 +430,7 @@ public class GamePageController {
 
                 // Scale transition
                 ScaleTransition scaleTransition = new ScaleTransition();
-                scaleTransition.setNode(playCardImage);
+                scaleTransition.setNode(drawCardImage);
                 scaleTransition.setFromX(0.54);
                 scaleTransition.setFromY(0.54);
                 scaleTransition.setToX(1);
@@ -419,7 +440,7 @@ public class GamePageController {
 
             // Set button with a background image card
             timeline.getKeyFrames().add(new KeyFrame(Duration.millis(300 * (i + 1)), __ -> {
-                playCardImage.setVisible(false);
+                drawCardImage.setVisible(false);
                 ImageView imageView = new ImageView(new Image(String.format("/Client/Img/Card/%s.png", cards[finalI].toString())));
                 imageView.setFitHeight(168);
                 imageView.setFitWidth(120);
