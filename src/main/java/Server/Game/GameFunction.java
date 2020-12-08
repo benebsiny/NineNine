@@ -22,7 +22,7 @@ import static Server.ClientMap.ClientMapFunction.getClientUsername;
 
 public class GameFunction {
 
-    public static void processPlayCommand(PlayCommand playCommand, Socket client) throws IOException{
+    public static void processPlayCommand(PlayCommand playCommand, Socket client) throws IOException, InterruptedException {
 
         CopyOnWriteArrayList<GameRoom> gameRoomList = Main.getGameRoomList();
         Map<String, Socket> clientMap = Main.getClientMap();
@@ -42,8 +42,7 @@ public class GameFunction {
                     drawCard[0] = gameRoom.getDesk()[deskIndex];
 
                     DrawCommand drawCommand = new DrawCommand(drawCard);
-                    ObjectOutputStream out = new ObjectOutputStream(client.getOutputStream());
-                    out.writeObject(drawCommand);         //發牌
+
 
                     if(deskIndex == 51){
                         returnPlayCommand.setHasCardsInDesk(false);
@@ -56,6 +55,12 @@ public class GameFunction {
                     returnPlayCommand.setValue(gameRoom.getValue());
 
                     sendReturnPlayCommand(clientMap,gameRoom.getPlayersName(),returnPlayCommand); //發送returnPlayCommand
+
+                    Thread.sleep(1000);
+
+                    ObjectOutputStream out = new ObjectOutputStream(client.getOutputStream());
+                    out.writeObject(drawCommand);         //發牌
+
 
                     deskIndex = deskIndex + 1;
                     gameRoom.setDeskIndex(deskIndex);
