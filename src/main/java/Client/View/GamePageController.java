@@ -274,22 +274,9 @@ public class GamePageController {
         time.getKeyFrames().add(new KeyFrame(Duration.millis(1700), fadeOut));
         time.getKeyFrames().add(new KeyFrame(Duration.millis(2000), event -> otherPlayCardImage.setVisible(false)));
 
+        countingValue(nextValue, time);
 
-        // The value calculating
-        int diff = nextValue - this.value;
-        if (diff > 0) {
-            for (int i = 1; i <= diff; i++) {
-                int finalI = i;
-                time.getKeyFrames().add(new KeyFrame(Duration.millis(2200 + 50 * i),
-                        event -> valueLabel.setText(String.format("%02d", this.value + finalI))));
-            }
-        } else if (diff < 0) {
-            for (int i = 1; i <= -diff; i++) {
-                int finalI = i;
-                time.getKeyFrames().add(new KeyFrame(Duration.millis(2200 + 50 * i),
-                        event -> valueLabel.setText(String.format("%02d", this.value - finalI))));
-            }
-        }
+        time.getKeyFrames().add(new KeyFrame(Duration.millis(5000), __ -> this.value = nextValue));
 
         time.play();
     }
@@ -318,6 +305,55 @@ public class GamePageController {
         ft.play();
 
         shineCircle.setVisible(true);
+    }
+
+    public void countingValue(int nextValue, Timeline time) {
+
+        System.out.println("Current Value: " + this.value);
+        System.out.println("Next Value: " + nextValue);
+
+        // The value calculating
+        int diff = nextValue - this.value;
+        if (diff == 0) return;
+
+        int allDuration;
+        if (Math.abs(diff) > 80) allDuration = 2000;
+        else if (Math.abs(diff) > 50) allDuration = 1500;
+        else if (Math.abs(diff) > 10) allDuration = 1000;
+        else if (Math.abs(diff) > 5) allDuration = 500;
+        else allDuration = 100;
+
+        int diffSecond = allDuration / diff;
+        System.out.println("diff: " + diff);
+        System.out.println("diff Second: " + diffSecond);
+
+        if (diff > 0) {
+            for (int i = 1; i <= diff; i++) {
+                System.out.print(i + " ");
+                int finalI = i;
+                time.getKeyFrames().add(new KeyFrame(Duration.millis(2200 + diffSecond * i),
+                        event -> valueLabel.setText(String.format("%02d", this.value + finalI))));
+            }
+            time.getKeyFrames().add(new KeyFrame(Duration.millis(2200 + diffSecond * (diff + 1)),
+                    __ -> this.value = nextValue));
+        } else {
+            for (int i = 1; i <= -diff; i++) {
+                System.out.print(i + " ");
+                int finalI = i;
+                time.getKeyFrames().add(new KeyFrame(Duration.millis(2200 + (-diffSecond) * i),
+                        event -> valueLabel.setText(String.format("%02d", this.value - finalI))));
+            }
+            time.getKeyFrames().add(new KeyFrame(Duration.millis(2200 + (-diffSecond) * (-diff + 1)),
+                    __ -> this.value = nextValue));
+        }
+
+        System.out.println();
+    }
+
+    public void countingValue(int nextValue) {
+        Timeline time = new Timeline();
+        countingValue(nextValue, time);
+        time.play();
     }
 
 
@@ -596,6 +632,8 @@ class ReturnPlayCommandHandler implements Runnable {
         // The card is not played by me. Show the animation of whom to play the card
         if (turnId != 0) {
             Platform.runLater(() -> GUI.otherPlayCardAnimation(turnId, command.getCard(), command.getValue()));
+        } else {
+            Platform.runLater(() -> GUI.countingValue(command.getValue()));
         }
 
         // There's no card on the desk, hide it!!
