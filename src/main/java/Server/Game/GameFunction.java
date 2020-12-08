@@ -57,7 +57,7 @@ public class GameFunction {
 
                     sendReturnPlayCommand(clientMap,gameRoom.getPlayersName(),returnPlayCommand); //發送returnPlayCommand
 
-                    Thread.sleep(1000);
+                    Thread.sleep(2500);
 
                     ObjectOutputStream out = new ObjectOutputStream(client.getOutputStream());
                     out.writeObject(drawCommand);         //發牌

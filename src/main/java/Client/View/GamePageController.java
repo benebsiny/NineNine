@@ -58,6 +58,10 @@ public class GamePageController {
 
         cardButtons = new JFXButton[]{first, second, third, fourth, fifth};
 
+        for (int i = 0; i < 5; i++) {
+            System.out.println("Button " + i + " X=" + cardButtons[i].getLayoutX() + ", Y=" + cardButtons[i].getLayoutY());
+        }
+
         countdownBar.setVisible(false);
         shineCircle.setVisible(false);
         otherPlayCardImage.setVisible(false);
@@ -110,13 +114,16 @@ public class GamePageController {
      */
     private void mePlayCardAnimation(JFXButton pickedButton, Card pickedCard) {
 
+        System.out.println("X: " + pickedButton.getLayoutX() + ", Y: " + pickedButton.getLayoutY());
 
         EventHandler<ActionEvent> init = event -> {
             mePlayCardImage.setImage(new Image(String.format("/Client/Img/Card/%s.png", pickedCard.toString())));
             mePlayCardImage.setFitWidth(120);
             mePlayCardImage.setFitHeight(168);
-            mePlayCardImage.setX(pickedButton.getLayoutX());
-            mePlayCardImage.setY(pickedButton.getLayoutY());
+            mePlayCardImage.setScaleX(1);
+            mePlayCardImage.setScaleY(1);
+            mePlayCardImage.setTranslateX(-150);
+            mePlayCardImage.setTranslateY(-150);
             mePlayCardImage.setOpacity(1);
             mePlayCardImage.setVisible(true);
             pickedButton.setGraphic(null);
@@ -125,8 +132,8 @@ public class GamePageController {
         EventHandler<ActionEvent> moving = event -> {
 
             Line line = new Line();
-            line.setStartX(pickedButton.getLayoutX());
-            line.setStartY(pickedButton.getLayoutY());
+            line.setStartX(pickedButton.getLayoutX() + 60);
+            line.setStartY(pickedButton.getLayoutY() + 84);
             line.setEndX(450);
             line.setEndY(300);
 
@@ -169,8 +176,8 @@ public class GamePageController {
 
         Timeline timeline = new Timeline();
         timeline.getKeyFrames().add(new KeyFrame(Duration.millis(0), init));
-        timeline.getKeyFrames().add(new KeyFrame(Duration.millis(100), moving));
-        timeline.getKeyFrames().add(new KeyFrame(Duration.millis(650), zoomOut));
+        timeline.getKeyFrames().add(new KeyFrame(Duration.millis(0), moving));
+        timeline.getKeyFrames().add(new KeyFrame(Duration.millis(550), zoomOut));
         timeline.getKeyFrames().add(new KeyFrame(Duration.millis(1080), fadeOut));
         timeline.getKeyFrames().add(new KeyFrame(Duration.millis(2000), __ -> mePlayCardImage.setVisible(false)));
         timeline.play();
@@ -188,11 +195,10 @@ public class GamePageController {
 
         // Set card image
         otherPlayCardImage.setImage(new Image(String.format("/Client/Img/Card/%s.png", card.toString())));
-        otherPlayCardImage.setX(160);
-        otherPlayCardImage.setY(250);
-        otherPlayCardImage.setVisible(true);
+        otherPlayCardImage.setTranslateX(-150);
+        otherPlayCardImage.setTranslateY(-150);
         otherPlayCardImage.setOpacity(1);
-
+        otherPlayCardImage.setVisible(true);
 
         // Set card start position
         Line line = new Line();
@@ -200,14 +206,20 @@ public class GamePageController {
         if (turnId == 1) { // Left player
             line.setStartX(160);
             line.setStartY(250);
+            otherPlayCardImage.setX(160);
+            otherPlayCardImage.setY(250);
 
         } else if (turnId == 2) { // Middle player
             line.setStartX(450);
             line.setStartY(80);
+            otherPlayCardImage.setX(450);
+            otherPlayCardImage.setY(80);
 
         } else if (turnId == 3) { // Right player
             line.setStartX(750);
             line.setStartY(250);
+            otherPlayCardImage.setX(750);
+            otherPlayCardImage.setY(250);
         }
 
         // Set card end position
