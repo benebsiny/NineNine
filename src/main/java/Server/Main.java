@@ -3,6 +3,7 @@ package Server;
 import Server.Database.UserDB;
 import Server.Game.GameRoom;
 import Server.Room.Room;
+import Shared.Command.Game.NextPlayerCommand;
 import Shared.Command.Game.PlayCommand;
 import Shared.Command.Player.RegisterCommand;
 import Shared.Command.Player.SignInCommand;
@@ -113,7 +114,12 @@ public class Main {
                     } else if (input instanceof StartGameCommand) {
                         processStartGameCommand((StartGameCommand) input, client);
                         initialDrawCard(client);
-                        sendNextPlayerCommand(client);
+
+                        NextPlayerCommand nextPlayerCommand = new NextPlayerCommand(getClientUsername(client));
+                        out = new ObjectOutputStream(client.getOutputStream());
+                        out.writeObject(nextPlayerCommand);
+
+                        //sendNextPlayerCommand(client);
                     } else if (input instanceof PlayCommand){
 
                         processPlayCommand((PlayCommand) input,client);
