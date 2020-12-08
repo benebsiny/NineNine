@@ -6,6 +6,7 @@ import Shared.CardEnum.Suit;
 import Shared.Command.Game.PlayCommand;
 
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -20,6 +21,14 @@ public class ManageGameRoomValue {
         for (GameRoom gameRoom : gameRoomList) {          //確定玩家的遊戲房間
             if (Arrays.asList(gameRoom.getPlayersName()).contains(deletePlayer)) {
 
+                String[] playersName = gameRoom.getPlayersName();
+                ArrayList<String> list = new ArrayList<>(Arrays.asList(playersName.clone()));
+
+                list.remove(deletePlayer);
+                gameRoom.setPlayersName((String[])list.toArray(new String[list.size()]));
+
+                Main.setGameRoomList(gameRoomList);
+                break;
             }
         }
     }
@@ -119,7 +128,6 @@ public class ManageGameRoomValue {
         }
 
         return loseFlag;
-
 
     }
 }

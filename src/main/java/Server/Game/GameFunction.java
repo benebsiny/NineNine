@@ -6,6 +6,7 @@ import Shared.Command.Game.DrawCommand;
 import Shared.Command.Game.NextPlayerCommand;
 import Shared.Command.Game.PlayCommand;
 import Shared.Command.Game.ReturnPlayCommand;
+import Shared.Command.Room.LoseGameCommand;
 import com.mysql.cj.xdevapi.Client;
 
 import java.io.IOException;
@@ -75,11 +76,42 @@ public class GameFunction {
                 }
 
                 //TODO manage card value 5
-                sendNextPlayerCommand(client);
+                sendNextPlayerCommand(client,playCommand);
                 Main.setGameRoomList(gameRoomList);
                 break;
             }
         }
+    }
+
+    public static void sendLoseGameCommand(Socket client) throws IOException {
+        Map<String, Socket> clientMap = Main.getClientMap();
+        Set<Map.Entry<String, Socket>> entrySet = clientMap.entrySet();
+
+        CopyOnWriteArrayList<GameRoom> gameRoomList = Main.getGameRoomList();
+
+        String losePlayer = getClientUsername(client);
+
+        LoseGameCommand loseGameCommand = new LoseGameCommand(losePlayer);
+
+        for (GameRoom gameRoom : gameRoomList) {                    //找到該玩家的gameRoom
+            if (Arrays.asList(gameRoom.getPlayersName()).contains(losePlayer)) {
+                String[] roomPlayers = gameRoom.getPlayersName();
+
+                for (String roomPlayer : roomPlayers) {             //發出loseGameCommand給房間所有玩家
+                    for (Map.Entry<String, Socket> stringSocketEntry : entrySet) {
+                        if (stringSocketEntry.getKey().equals(roomPlayer)) {
+                            Socket socket = stringSocketEntry.getValue();
+                            ObjectOutputStream allClientOut = new ObjectOutputStream(socket.getOutputStream());
+
+                            allClientOut.writeObject(loseGameCommand);
+                        }
+                    }
+                }
+
+                break;
+            }
+        }
+
     }
 
     public static void sendReturnPlayCommand(Map<String, Socket> clientMap,String[] roomPlayers,ReturnPlayCommand returnPlayCommand) throws IOException {
@@ -136,7 +168,7 @@ public class GameFunction {
         }
     }
 
-    public static void sendNextPlayerCommand(Socket client) throws IOException {
+    public static void sendNextPlayerCommand(Socket client,PlayCommand playCommand) throws IOException {
 
         CopyOnWriteArrayList<GameRoom> gameRoomList = Main.getGameRoomList();
         Map<String, Socket> clientMap = Main.getClientMap();
@@ -144,32 +176,35 @@ public class GameFunction {
         String nowPlayer = getClientUsername(client);
         String nextPlayer = null;
 
+
         for (GameRoom gameRoom : gameRoomList){   //找到該玩家的gameRoom
             if(Arrays.asList(gameRoom.getPlayersName()).contains(nowPlayer)){
                 String[] playersName = gameRoom.getPlayersName();
 
-                for(int i = 0;i < playersName.length; i ++){  //找出下個玩家
-                    if(playersName[i] == nowPlayer){
-                        if(gameRoom.getOrder() == GameRoom.Order.Clockwise){   //如果為順序
-                            if(i == playersName.length-1){
-                                nextPlayer = playersName[0];
+                if(playCommand.getCard().getRank() == 5){
+                    nextPlayer = playCommand.getAssignPlayer();
+                }
+                else {
+
+                    for (int i = 0; i < playersName.length; i++) {  //找出下個玩家
+                        if (playersName[i] == nowPlayer) {
+                            if (gameRoom.getOrder() == GameRoom.Order.Clockwise) {   //如果為順序
+                                if (i == playersName.length - 1) {
+                                    nextPlayer = playersName[0];
+                                } else {
+                                    nextPlayer = playersName[i + 1];
+                                }
+                            } else if (gameRoom.getOrder() == GameRoom.Order.Counterclockwise) {  //如果為逆序
+                                if (i == 0) {
+                                    nextPlayer = playersName[playersName.length - 1];
+                                } else {
+                                    nextPlayer = playersName[i - 1];
+                                }
                             }
-                            else {
-                                nextPlayer = playersName[i+1];
-                            }
+                            break;
                         }
-                        else if (gameRoom.getOrder() == GameRoom.Order.Counterclockwise){  //如果為逆序
-                            if(i == 0){
-                                nextPlayer = playersName[playersName.length-1];
-                            }
-                            else {
-                                nextPlayer = playersName[i-1];
-                            }
-                        }
-                        break;
                     }
                 }
-
                 String[] roomPlayers = gameRoom.getPlayersName();
                 Set<Map.Entry<String, Socket>> entrySet = clientMap.entrySet();
 

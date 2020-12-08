@@ -23,6 +23,7 @@ import java.util.concurrent.Executors;
 
 import static Server.ClientMap.ClientMapFunction.getClientUsername;
 import static Server.Game.GameFunction.*;
+import static Server.Game.ManageGameRoomValue.deleteGameRoomPlayer;
 import static Server.Game.ManageGameRoomValue.manageGameRoomValue;
 import static Server.Room.RoomFunction.*;
 
@@ -122,16 +123,20 @@ public class Main {
 
                         //sendNextPlayerCommand(client);
                     } else if (input instanceof PlayCommand){
-                        /*
-                        boolean result = manageGameRoomValue((PlayCommand) input);
-                        if(result == true){
-                            out = new ObjectOutputStream(client.getOutputStream());
-                            LoseGameCommand loseGameCommand = new LoseGameCommand();
-                            out.writeObject(loseGameCommand);
 
-                        }*/
+                        boolean result = manageGameRoomValue((PlayCommand) input);
+
+                        if(result){
+                            sendLoseGameCommand(client);
+                            sendNextPlayerCommand(client,(PlayCommand) input);
+                            deleteGameRoomPlayer((PlayCommand) input);
+                        }
+                        else{
+                            processPlayCommand((PlayCommand) input,client);
+                        }
+
                         //Thread.sleep(1500);
-                        processPlayCommand((PlayCommand) input,client);
+
                     }
 
                     int j = 0;
