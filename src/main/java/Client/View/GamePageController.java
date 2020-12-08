@@ -17,6 +17,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
@@ -38,6 +39,7 @@ public class GamePageController {
     public JFXButton third;
     public JFXButton fourth;
     public JFXButton fifth;
+    public Pane coverPane;
 
     Card[] myCards = new Card[5];
     int nextPositionToPlace = 0;
@@ -75,12 +77,13 @@ public class GamePageController {
             case "first" -> pickedNumber = 0;
             case "second" -> pickedNumber = 1;
             case "third" -> pickedNumber = 2;
-            case "forth" -> pickedNumber = 3;
+            case "fourth" -> pickedNumber = 3;
             case "fifth" -> pickedNumber = 4;
         }
         pickedCard = myCards[pickedNumber];
         myCards[pickedNumber] = null;
         findNextEmptyPlaceForCard();
+        System.out.println("86: Next position to place:" + nextPositionToPlace);
 
         // Send command to server
         PlayCommand playCommand = new PlayCommand();
@@ -112,6 +115,8 @@ public class GamePageController {
             line.setStartY(pickedButton.getLayoutY());
             line.setEndX(450);
             line.setEndY(300);
+            System.out.println("Clicked button X: " + pickedButton.getLayoutX());
+            System.out.println("Clicked button Y: " + pickedButton.getLayoutY());
 
             // Path transition
             PathTransition pathTransition = new PathTransition();
@@ -171,6 +176,9 @@ public class GamePageController {
 
         // Set card image
         playCardImage.setImage(new Image(String.format("/Client/Img/Card/%s.png", card.toString())));
+        playCardImage.setX(160);
+        playCardImage.setY(250);
+        playCardImage.setVisible(true);
 
         // Set card start position
         Line line = new Line();
@@ -309,10 +317,12 @@ public class GamePageController {
     public void draw1CardToMeAnimation(Card card) {
 
         playCardImage.setImage(new Image(String.format("/Client/Img/Card/%s.png", card.toString())));
+        playCardImage.setX(820);
+        playCardImage.setY(310);
 
         Line line = new Line();
-        line.setStartX(820);
-        line.setStartY(310);
+        line.setStartX(848);
+        line.setStartY(351);
 
         line.setEndY(478);
         switch (nextPositionToPlace) {
@@ -325,6 +335,8 @@ public class GamePageController {
 
         // Move a card from desk the my empty space
         EventHandler<ActionEvent> moving = event -> {
+
+            // Path transition
             PathTransition pathTransition = new PathTransition();
             pathTransition.setNode(playCardImage);
             pathTransition.setDuration(Duration.millis(500));
@@ -332,7 +344,16 @@ public class GamePageController {
             pathTransition.setCycleCount(1);
             pathTransition.setInterpolator(Interpolator.EASE_IN);
 
+            // Scale transition
+            ScaleTransition scaleTransition = new ScaleTransition();
+            scaleTransition.setNode(playCardImage);
+            scaleTransition.setFromX(0.54);
+            scaleTransition.setFromY(0.54);
+            scaleTransition.setToX(1);
+            scaleTransition.setToY(1);
+
             pathTransition.play();
+            scaleTransition.play();
         };
 
         Timeline timeline = new Timeline();
@@ -342,7 +363,11 @@ public class GamePageController {
         timeline.play();
 
         cardButtons[nextPositionToPlace].setGraphic(new ImageView(new Image(String.format("/Client/Img/Card/%s.png", card.toString()))));
-        findNextEmptyPlaceForCard();
+
+        // Add card at server
+        myCards[nextPositionToPlace] = card; // Save the card to the array
+        cardCount++;
+        findNextEmptyPlaceForCard(); // Find the next empty position
     }
 
     /**
@@ -402,6 +427,11 @@ public class GamePageController {
             }));
         }
         timeline.play();
+
+        // Save 5 cards to client
+        cardCount = 5;
+        myCards = Arrays.copyOf(cards, cards.length);
+        findNextEmptyPlaceForCard();
     }
 
     /**
@@ -434,28 +464,6 @@ public class GamePageController {
             }
         }
         nextPositionToPlace = -1; // There are full of cards
-    }
-
-    /**
-     * Draw a card from server, you have to record where the card should play
-     *
-     * @param card Card drew from server
-     */
-    public void add1Card(Card card) {
-        cardCount++;
-        myCards[nextPositionToPlace] = card; // Save the card to the array
-        findNextEmptyPlaceForCard(); // Find the next empty position
-    }
-
-    /**
-     * Draw 5 cards from server
-     *
-     * @param cards Card array
-     */
-    public void add5Cards(Card[] cards) {
-        cardCount = 5;
-        myCards = Arrays.copyOf(cards, cards.length);
-        findNextEmptyPlaceForCard();
     }
 }
 
@@ -519,14 +527,12 @@ class DrawHandler implements Runnable {
         // First draw
         if (cards.length == 5) {
             Platform.runLater(() -> GUI.draw5CardsToMeAnimation(cards));
-            GUI.add5Cards(cards);
         }
 
         // Draw one card
         else {
             Card card = cards[0];
             Platform.runLater(() -> GUI.draw1CardToMeAnimation(card)); // Show the drawing card animation
-            GUI.add1Card(card);
         }
     }
 }
@@ -549,6 +555,7 @@ class ReturnPlayCommandHandler implements Runnable {
     public void run() {
 
         if (GUI.ft != null) GUI.ft.stop(); // Stop the shining effect
+        GUI.shineCircle.setVisible(false);
 
         // Show playing card animation for others
         int turnId = GUI.getTurnByName(command.getPlayer());
@@ -584,13 +591,15 @@ class NextPlayerHandler implements Runnable {
         int turnId = GUI.getTurnByName(command.getNextPlayer());
 
         // It's not my turn
-        if (turnId != 3) {
+        if (turnId != 0) {
             Platform.runLater(() -> GUI.otherPlayerThinkingAnimation(turnId));
+            Platform.runLater(() -> GUI.coverPane.setVisible(true));
         }
 
         // It's my turn!! Count down the bar
         else {
             Platform.runLater(() -> GUI.countdownAnimation());
+            Platform.runLater(() -> GUI.coverPane.setVisible(false));
         }
     }
 }

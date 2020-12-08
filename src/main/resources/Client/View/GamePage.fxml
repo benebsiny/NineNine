@@ -51,5 +51,6 @@
          <image>
             <Image url="@../Img/Card/C2.png" />
          </image></ImageView>
+      <Pane fx:id="coverPane" layoutY="390.0" opacity="0.5" prefHeight="211.0" prefWidth="900.0" style="-fx-background-color: gray;" />
    </children>
 </Pane>
