@@ -87,7 +87,6 @@ public class GamePageController {
         pickedCard = myCards[pickedNumber];
         myCards[pickedNumber] = null;
         findNextEmptyPlaceForCard();
-        System.out.println("86: Next position to place:" + nextPositionToPlace);
 
         // Send command to server
         PlayCommand playCommand = new PlayCommand();
@@ -111,8 +110,6 @@ public class GamePageController {
      */
     private void mePlayCardAnimation(JFXButton pickedButton, Card pickedCard) {
 
-        System.out.println(pickedButton.getLayoutX());
-        System.out.println(pickedButton.getLayoutY());
 
         EventHandler<ActionEvent> init = event -> {
             mePlayCardImage.setImage(new Image(String.format("/Client/Img/Card/%s.png", pickedCard.toString())));
@@ -120,6 +117,7 @@ public class GamePageController {
             mePlayCardImage.setFitHeight(168);
             mePlayCardImage.setX(pickedButton.getLayoutX());
             mePlayCardImage.setY(pickedButton.getLayoutY());
+            mePlayCardImage.setOpacity(1);
             mePlayCardImage.setVisible(true);
             pickedButton.setGraphic(null);
         };
@@ -171,10 +169,10 @@ public class GamePageController {
 
         Timeline timeline = new Timeline();
         timeline.getKeyFrames().add(new KeyFrame(Duration.millis(0), init));
-        timeline.getKeyFrames().add(new KeyFrame(Duration.millis(1), moving));
-        timeline.getKeyFrames().add(new KeyFrame(Duration.millis(501), zoomOut));
-        timeline.getKeyFrames().add(new KeyFrame(Duration.millis(551), fadeOut));
-        timeline.getKeyFrames().add(new KeyFrame(Duration.millis(851), __ -> mePlayCardImage.setVisible(false)));
+        timeline.getKeyFrames().add(new KeyFrame(Duration.millis(100), moving));
+        timeline.getKeyFrames().add(new KeyFrame(Duration.millis(650), zoomOut));
+        timeline.getKeyFrames().add(new KeyFrame(Duration.millis(1080), fadeOut));
+        timeline.getKeyFrames().add(new KeyFrame(Duration.millis(2000), __ -> mePlayCardImage.setVisible(false)));
         timeline.play();
     }
 
@@ -193,6 +191,8 @@ public class GamePageController {
         otherPlayCardImage.setX(160);
         otherPlayCardImage.setY(250);
         otherPlayCardImage.setVisible(true);
+        otherPlayCardImage.setOpacity(1);
+
 
         // Set card start position
         Line line = new Line();
