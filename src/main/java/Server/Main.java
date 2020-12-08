@@ -2,6 +2,7 @@ package Server;
 
 import Server.Database.UserDB;
 import Server.Game.GameRoom;
+import Server.Game.ManageGameRoomValue;
 import Server.Room.Room;
 import Shared.Command.Game.NextPlayerCommand;
 import Shared.Command.Game.PlayCommand;
@@ -22,6 +23,7 @@ import java.util.concurrent.Executors;
 
 import static Server.ClientMap.ClientMapFunction.getClientUsername;
 import static Server.Game.GameFunction.*;
+import static Server.Game.ManageGameRoomValue.manageGameRoomValue;
 import static Server.Room.RoomFunction.*;
 
 public class Main {
@@ -114,14 +116,21 @@ public class Main {
                     } else if (input instanceof StartGameCommand) {
                         processStartGameCommand((StartGameCommand) input, client);
                         initialDrawCard(client);
-
                         NextPlayerCommand nextPlayerCommand = new NextPlayerCommand(getClientUsername(client));
                         out = new ObjectOutputStream(client.getOutputStream());
                         out.writeObject(nextPlayerCommand);
 
                         //sendNextPlayerCommand(client);
                     } else if (input instanceof PlayCommand){
+                        /*
+                        boolean result = manageGameRoomValue((PlayCommand) input);
+                        if(result == true){
+                            out = new ObjectOutputStream(client.getOutputStream());
+                            LoseGameCommand loseGameCommand = new LoseGameCommand();
+                            out.writeObject(loseGameCommand);
 
+                        }*/
+                        Thread.sleep(500);
                         processPlayCommand((PlayCommand) input,client);
                     }
 
@@ -138,7 +147,7 @@ public class Main {
                     //else if(input instanceof PlayCommand)
 
 
-                } catch (IOException | ClassNotFoundException e) {
+                } catch (IOException | ClassNotFoundException | InterruptedException e) {
                     e.printStackTrace();
                     if(e instanceof SocketException){
                         System.out.println("Client disconnect!!");
