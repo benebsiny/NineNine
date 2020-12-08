@@ -95,9 +95,14 @@ public class ManageGameRoomValue {
                         }
 
                     }
-                    else {                                                             //紅色-10
-                        value = gameRoom.getValue() - 10;
-                        gameRoom.setValue(value);
+                    else {              //紅色-10
+                        if(gameRoom.getValue() - 10 < 0){
+                            gameRoom.setValue(0);
+                        }
+                        else {
+                            value = gameRoom.getValue() - 10;
+                            gameRoom.setValue(value);
+                        }
                     }
 
 
@@ -114,14 +119,22 @@ public class ManageGameRoomValue {
                         }
 
                     }
-                    else {                                                             //紅色-20
-                        value = gameRoom.getValue() - 20;
-                        gameRoom.setValue(value);
+                    else {                              //紅色-20
+                        if(gameRoom.getValue() - 20 < 0){
+                            gameRoom.setValue(0);
+                        }
+                        else {
+                            value = gameRoom.getValue() - 20;
+                            gameRoom.setValue(value);
+                        }
+
                     }
                 }
                 else if(card.getRank() == 13){
                     gameRoom.setValue(99);
                 }
+
+                Main.setGameRoomList(gameRoomList);
 
                 break;
             }

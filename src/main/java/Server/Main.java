@@ -107,14 +107,17 @@ public class Main {
                             System.out.println("login fail");
                         }
                     } else if (input instanceof EnterRoomCommand) {
+
                         out = new ObjectOutputStream(client.getOutputStream());
                         processEnterRoomCommand((EnterRoomCommand) input, client, out);
                     } else if (input instanceof LeaveRoomCommand) {
+
                         processLeaveRoomCommand((LeaveRoomCommand) input);
                         System.out.println("leave player: "+((LeaveRoomCommand) input).getPlayer());
                         out = new ObjectOutputStream(client.getOutputStream());
                         out.writeObject(input);
                     } else if (input instanceof StartGameCommand) {
+
                         processStartGameCommand((StartGameCommand) input, client);
                         initialDrawCard(client);
                         NextPlayerCommand nextPlayerCommand = new NextPlayerCommand(getClientUsername(client));
@@ -155,6 +158,9 @@ public class Main {
                 } catch (IOException | ClassNotFoundException | InterruptedException e) {
                     e.printStackTrace();
                     if(e instanceof SocketException){
+                        Set<Map.Entry<String, Socket>> entrySet = clientMap.entrySet();
+
+
                         System.out.println("Client disconnect!!");
                         break;
                     }
