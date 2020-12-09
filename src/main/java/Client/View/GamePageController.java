@@ -569,6 +569,9 @@ class GamePageConnection implements Runnable {
                     new Thread(new DrawHandler(GUI, (DrawCommand) receivedObject)).start();
                 }
 
+            } catch (SocketException ex) {
+                System.out.println("Bye Bye!");
+                break;
             } catch (IOException | ClassNotFoundException e) {
                 e.printStackTrace();
             }

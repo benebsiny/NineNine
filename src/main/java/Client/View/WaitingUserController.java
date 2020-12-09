@@ -15,6 +15,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 
 import java.io.IOException;
+import java.net.SocketException;
 
 public class WaitingUserController {
 
@@ -84,6 +85,9 @@ class WaitingUserHandler implements Runnable {
                     break;
                 }
 
+            } catch (SocketException ex) {
+                System.out.println("Bye Bye!");
+                break;
             } catch (IOException e) {
                 // TODO Show connection error message
                 e.printStackTrace();
