@@ -23,6 +23,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Text;
 import javafx.util.Duration;
 
 import java.io.IOException;
@@ -85,6 +86,9 @@ public class GamePageController {
     public Pane card5Cover;
 
     static PlayingStatus playingStatus = new PlayingStatus();
+    public Text firstPlayerLabel;
+    public Text secondPlayerLabel;
+    public Text thirdPlayerLabel;
 
     Card[] myCards = new Card[5];
     int nextPositionToPlace = 0;
@@ -92,6 +96,7 @@ public class GamePageController {
 
     JFXButton[] cardButtons;
     ImageView[] playerIcons;
+    Text[] playerNames;
 
     volatile int value = 0;
 
@@ -102,6 +107,12 @@ public class GamePageController {
 
         cardButtons = new JFXButton[]{first, second, third, fourth, fifth};
         playerIcons = new ImageView[]{null, turn1Icon, turn2Icon, turn3Icon};
+        playerNames = new Text[]{firstPlayerLabel, secondPlayerLabel, thirdPlayerLabel};
+
+        System.out.println(Arrays.toString(PlayerStatus.getTurnPlayers()));
+        for (int i = 1; i < PlayerStatus.getTurnPlayers().length; i++) {
+            playerNames[i - 1].setText(PlayerStatus.getTurnPlayers()[i]);
+        }
 
         countdownBar.setVisible(false);
         shineCircle.setVisible(false);
