@@ -21,17 +21,24 @@
       <JFXButton fx:id="third" layoutX="400.0" layoutY="394.0" mnemonicParsing="false" onAction="#pickCard" prefHeight="168.0" prefWidth="120.0" />
       <JFXButton fx:id="fourth" layoutX="540.0" layoutY="394.0" mnemonicParsing="false" onAction="#pickCard" prefHeight="168.0" prefWidth="120.0" />
       <JFXButton fx:id="fifth" layoutX="680.0" layoutY="394.0" mnemonicParsing="false" onAction="#pickCard" prefHeight="168.0" prefWidth="120.0" />
-      <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="48.0" layoutY="146.0" pickOnBounds="true" preserveRatio="true" rotate="90.0">
+      <Pane fx:id="card5Cover" opacity="0.8" prefHeight="600.0" prefWidth="900.0" style="-fx-background-color: gray;">
+         <children>
+            <Circle blendMode="OVERLAY" fill="WHITE" layoutX="149.0" layoutY="222.0" radius="132.0" stroke="BLACK" strokeType="INSIDE" />
+            <Circle blendMode="OVERLAY" fill="WHITE" layoutX="444.0" layoutY="82.0" radius="132.0" stroke="BLACK" strokeType="INSIDE" />
+            <Circle blendMode="OVERLAY" fill="WHITE" layoutX="769.0" layoutY="216.0" radius="132.0" stroke="BLACK" strokeType="INSIDE" />
+         </children>
+      </Pane>
+      <ImageView fx:id="turn1Icon" fitHeight="150.0" fitWidth="200.0" layoutX="48.0" layoutY="146.0" onMouseClicked="#choosePlayer" pickOnBounds="true" preserveRatio="true" rotate="90.0">
          <image>
             <Image url="@../Img/playing-user.png" />
          </image>
       </ImageView>
-      <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="353.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true" rotate="180.0">
+      <ImageView fx:id="turn2Icon" fitHeight="150.0" fitWidth="200.0" layoutX="353.0" layoutY="14.0" onMouseClicked="#choosePlayer" pickOnBounds="true" preserveRatio="true" rotate="180.0">
          <image>
             <Image url="@../Img/playing-user.png" />
          </image>
       </ImageView>
-      <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="679.0" layoutY="146.0" pickOnBounds="true" preserveRatio="true" rotate="270.0">
+      <ImageView fx:id="turn3Icon" fitHeight="150.0" fitWidth="200.0" layoutX="679.0" layoutY="146.0" onMouseClicked="#choosePlayer" pickOnBounds="true" preserveRatio="true" rotate="270.0">
          <image>
             <Image url="@../Img/playing-user.png" />
          </image>

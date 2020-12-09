@@ -17,6 +17,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -25,7 +26,43 @@ import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 
 import java.io.IOException;
+import java.net.SocketException;
 import java.util.Arrays;
+
+
+class PlayingStatus {
+    private Card pickedCard;
+    private JFXButton pickedButton;
+    private Status status = Status.NORMAL;
+
+    enum Status {
+        NORMAL, FIVE, TEN, QUEEN
+    }
+
+    public Card getPickedCard() {
+        return pickedCard;
+    }
+
+    public void setPickedCard(Card pickedCard) {
+        this.pickedCard = pickedCard;
+    }
+
+    public JFXButton getPickedButton() {
+        return pickedButton;
+    }
+
+    public void setPickedButton(JFXButton pickedButton) {
+        this.pickedButton = pickedButton;
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+}
 
 public class GamePageController {
 
@@ -42,12 +79,19 @@ public class GamePageController {
     public JFXButton fourth;
     public JFXButton fifth;
     public Pane coverPane;
+    public ImageView turn1Icon;
+    public ImageView turn2Icon;
+    public ImageView turn3Icon;
+    public Pane card5Cover;
+
+    static PlayingStatus playingStatus = new PlayingStatus();
 
     Card[] myCards = new Card[5];
     int nextPositionToPlace = 0;
     int cardCount = 0;
 
     JFXButton[] cardButtons;
+    ImageView[] playerIcons;
 
     volatile int value = 0;
 
@@ -57,16 +101,16 @@ public class GamePageController {
     void initialize() {
 
         cardButtons = new JFXButton[]{first, second, third, fourth, fifth};
-
-        for (int i = 0; i < 5; i++) {
-            System.out.println("Button " + i + " X=" + cardButtons[i].getLayoutX() + ", Y=" + cardButtons[i].getLayoutY());
-        }
+        playerIcons = new ImageView[]{null, turn1Icon, turn2Icon, turn3Icon};
 
         countdownBar.setVisible(false);
         shineCircle.setVisible(false);
+
         otherPlayCardImage.setVisible(false);
         mePlayCardImage.setVisible(false);
         drawCardImage.setVisible(false);
+
+        card5Cover.setVisible(false);
 
         Thread connection = new Thread(new GamePageConnection(this));
         connection.start();
@@ -92,6 +136,17 @@ public class GamePageController {
         myCards[pickedNumber] = null;
         findNextEmptyPlaceForCard();
 
+        if (pickedCard.getRank() == 5) {
+
+            // Save current status
+            playingStatus.setStatus(PlayingStatus.Status.FIVE);
+            playingStatus.setPickedCard(pickedCard);
+            playingStatus.setPickedButton(pickedButton);
+
+            card5Cover.setVisible(true);
+            return;
+        }
+
         // Send command to server
         PlayCommand playCommand = new PlayCommand();
         playCommand.setPlayer(UserStatus.getSignInUser());
@@ -104,6 +159,43 @@ public class GamePageController {
         }
 
         mePlayCardAnimation(pickedButton, pickedCard);
+    }
+
+    /**
+     * When play card of 5, choose a player to be te next player
+     */
+    public void choosePlayer(MouseEvent mouseEvent) {
+
+        if (playingStatus.getStatus() != PlayingStatus.Status.FIVE) return; // You're not player the '5' card
+
+        ImageView pickedPlayerIcon = (ImageView) mouseEvent.getSource();
+        int pickedPlayerTurn = 0;
+
+        for (int i = 1; i <= 3; i++) {
+            if (playerIcons[i] == pickedPlayerIcon) {
+                pickedPlayerTurn = i;
+                break;
+            }
+        }
+        String assignPlayer = PlayerStatus.getTurnPlayers()[pickedPlayerTurn];
+        System.out.println("Assign to " + assignPlayer);
+
+        // Send play command to server
+        PlayCommand playCommand = new PlayCommand();
+        playCommand.setPlayer(UserStatus.getSignInUser());
+        playCommand.setCard(playingStatus.getPickedCard());
+        playCommand.setAssignPlayer(assignPlayer);
+        playCommand.setRemainCardCount(--cardCount); // Since I played a card, so cardCount - 1
+        try {
+            GamePageConn.send(playCommand);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        card5Cover.setVisible(false); // Hide the cover
+
+        mePlayCardAnimation(playingStatus.getPickedButton(), playingStatus.getPickedCard()); // Play the animation
+
+        playingStatus = new PlayingStatus(); // Revert the plating status
     }
 
     /**
@@ -193,41 +285,42 @@ public class GamePageController {
      */
     public void otherPlayCardAnimation(int turnId, Card card, int nextValue) {
 
-        // Set card image
-        otherPlayCardImage.setImage(new Image(String.format("/Client/Img/Card/%s.png", card.toString())));
-        otherPlayCardImage.setTranslateX(-150);
-        otherPlayCardImage.setTranslateY(-150);
-        otherPlayCardImage.setOpacity(1);
-        otherPlayCardImage.setVisible(true);
-
-        // Set card start position
-        Line line = new Line();
-
-        if (turnId == 1) { // Left player
-            line.setStartX(160);
-            line.setStartY(250);
-            otherPlayCardImage.setX(160);
-            otherPlayCardImage.setY(250);
-
-        } else if (turnId == 2) { // Middle player
-            line.setStartX(450);
-            line.setStartY(80);
-            otherPlayCardImage.setX(450);
-            otherPlayCardImage.setY(80);
-
-        } else if (turnId == 3) { // Right player
-            line.setStartX(750);
-            line.setStartY(250);
-            otherPlayCardImage.setX(750);
-            otherPlayCardImage.setY(250);
-        }
-
-        // Set card end position
-        line.setEndX(450);
-        line.setEndY(300);
+        EventHandler<ActionEvent> init = event -> {
+            // Set card image
+            otherPlayCardImage.setImage(new Image(String.format("/Client/Img/Card/%s.png", card.toString())));
+            otherPlayCardImage.setFitWidth(120);
+            otherPlayCardImage.setFitHeight(168);
+            otherPlayCardImage.setScaleX(1);
+            otherPlayCardImage.setScaleY(1);
+            otherPlayCardImage.setTranslateX(-150);
+            otherPlayCardImage.setTranslateY(-150);
+            otherPlayCardImage.setOpacity(1);
+            otherPlayCardImage.setVisible(true);
+        };
 
         // The animation for the card
         EventHandler<ActionEvent> moving = event -> {
+
+            // Set card start position
+            Line line = new Line();
+
+            if (turnId == 1) { // Left player
+                line.setStartX(160);
+                line.setStartY(250);
+
+            } else if (turnId == 2) { // Middle player
+                line.setStartX(450);
+                line.setStartY(80);
+
+            } else if (turnId == 3) { // Right player
+                line.setStartX(750);
+                line.setStartY(250);
+            }
+
+            // Set card end position
+            line.setEndX(450);
+            line.setEndY(300);
+
             // Moving path
             PathTransition pathTransition = new PathTransition();
             pathTransition.setNode(otherPlayCardImage);
@@ -268,8 +361,8 @@ public class GamePageController {
 
 
         Timeline time = new Timeline();
-        time.getKeyFrames().add(new KeyFrame(Duration.millis(0), event -> otherPlayCardImage.setVisible(true)));
-        time.getKeyFrames().add(new KeyFrame(Duration.millis(1), moving));
+        time.getKeyFrames().add(new KeyFrame(Duration.millis(0), init));
+        time.getKeyFrames().add(new KeyFrame(Duration.millis(0), moving));
         time.getKeyFrames().add(new KeyFrame(Duration.millis(700), zoomOut));
         time.getKeyFrames().add(new KeyFrame(Duration.millis(1700), fadeOut));
         time.getKeyFrames().add(new KeyFrame(Duration.millis(2000), event -> otherPlayCardImage.setVisible(false)));
