@@ -238,7 +238,6 @@ public class GamePageController {
 
         // Dialog
         JFXDialog dialog = new JFXDialog(stackPane, chooseNumberBox, JFXDialog.DialogTransition.CENTER);
-        dialog.setOverlayClose(false);
         dialog.show();
 
         // Button Actions
@@ -421,18 +420,10 @@ public class GamePageController {
             // Set card start position
             Line line = new Line();
 
-            if (turnId == 1) { // Left player
-                line.setStartX(160);
-                line.setStartY(250);
-
-            } else if (turnId == 2) { // Middle player
-                line.setStartX(450);
-                line.setStartY(80);
-
-            } else if (turnId == 3) { // Right player
-                line.setStartX(750);
-                line.setStartY(250);
-            }
+            double x = playerIcons[turnId].getLayoutX() + playerIcons[turnId].getFitWidth() / 2;
+            double y = playerIcons[turnId].getLayoutY() + playerIcons[turnId].getFitHeight() / 2;
+            line.setStartX(x);
+            line.setStartY(y);
 
             // Set card end position
             line.setEndX(450);
