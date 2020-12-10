@@ -1,6 +1,8 @@
 package Shared.Command.Game;
 
-public class LoseGameCommand {
+import java.io.Serializable;
+
+public class LoseGameCommand implements Serializable {
 
     private static final long serialVersionUID = 1L;
     private String losePlayer;

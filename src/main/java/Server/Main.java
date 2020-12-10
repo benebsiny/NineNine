@@ -26,6 +26,7 @@ import static Server.Game.GameFunction.*;
 import static Server.Game.ManageGameRoomValue.deleteGameRoomPlayer;
 import static Server.Game.ManageGameRoomValue.manageGameRoomValue;
 import static Server.Room.RoomFunction.*;
+import static Server.Room.RoomFunction.processLeaveRoomCommand;
 
 public class Main {
     private static Map<String, Socket> clientMap = new ConcurrentHashMap<>();
@@ -112,8 +113,8 @@ public class Main {
                         processEnterRoomCommand((EnterRoomCommand) input, client, out);
                     } else if (input instanceof LeaveRoomCommand) {
 
-                        processLeaveRoomCommand((LeaveRoomCommand) input);
-                        System.out.println("leave player: "+((LeaveRoomCommand) input).getPlayer());
+                        processLeaveRoomCommand(((LeaveRoomCommand) input).getPlayer());
+                        System.out.println("leave player: " + ((LeaveRoomCommand) input).getPlayer());
                         out = new ObjectOutputStream(client.getOutputStream());
                         out.writeObject(input);
                     } else if (input instanceof StartGameCommand) {
@@ -125,17 +126,19 @@ public class Main {
                         out.writeObject(nextPlayerCommand);
 
                         //sendNextPlayerCommand(client);
-                    } else if (input instanceof PlayCommand){
+                    } else if (input instanceof PlayCommand) {
 
                         boolean result = manageGameRoomValue((PlayCommand) input);
+                        //System.out.println("PlayCommand card value: "+ Pl);
 
-                        if(result){
+                        System.out.println("出牌結果: " + result);
+
+                        if (result) {
                             sendLoseGameCommand(client);
-                            sendNextPlayerCommand(client,(PlayCommand) input);
+                            sendNextPlayerCommand(client, (PlayCommand) input);
                             deleteGameRoomPlayer((PlayCommand) input);
-                        }
-                        else{
-                            processPlayCommand((PlayCommand) input,client);
+                        } else {
+                            processPlayCommand((PlayCommand) input, client);
                         }
 
                         //Thread.sleep(1500);
@@ -143,11 +146,11 @@ public class Main {
                     }
 
                     int j = 0;
-                    for (Room w : waitRoomList){
+                    for (Room w : waitRoomList) {
                         j++;
                         System.out.println("waitRoom " + j + ".");
-                        for (int i=0;i<w.getPlayersName().length;i++){
-                            System.out.println(i +". "+ w.getPlayersName()[i]);
+                        for (int i = 0; i < w.getPlayersName().length; i++) {
+                            System.out.println(i + ". " + w.getPlayersName()[i]);
                         }
 
                     }
@@ -157,14 +160,20 @@ public class Main {
 
                 } catch (IOException | ClassNotFoundException | InterruptedException e) {
                     e.printStackTrace();
-                    if(e instanceof SocketException){
-                        Set<Map.Entry<String, Socket>> entrySet = clientMap.entrySet();
-
+                    if (e instanceof SocketException) {
 
                         System.out.println("Client disconnect!!");
                         break;
                     }
-                    if(e instanceof EOFException){
+                    if (e instanceof EOFException) {
+                        String disconnectClientName = getClientUsername(client);
+                        System.out.println("Client: " + disconnectClientName + " disconnect");
+
+                        try {
+                            processLeaveRoomCommand(disconnectClientName);
+                        } catch (IOException ioException) {
+                            ioException.printStackTrace();
+                        }
                         break;
                     }
                 }
@@ -173,12 +182,13 @@ public class Main {
         }
 
     }
+
     public static void main(String[] args) {
 
         try {
             ExecutorService executorService = Executors.newFixedThreadPool(100);
             ServerSocket server = new ServerSocket(8888);
-            for(int i = 0; i < 100; i ++) {
+            for (int i = 0; i < 100; i++) {
                 Socket socket = server.accept();
                 executorService.execute(new ExecuteClientThread(socket));
             }

@@ -79,8 +79,8 @@ public class RoomFunction {
 
     }
 
-    public static void processLeaveRoomCommand(LeaveRoomCommand input) throws IOException {
-        String leavePlayerName = input.getPlayer();
+    public static void processLeaveRoomCommand(String leavePlayerName) throws IOException {
+        //String leavePlayerName = input.getPlayer();
 
         Map<String, Socket> clientMap = Main.getClientMap();
         CopyOnWriteArrayList<Room> roomList = Main.getWaitRoomList();
