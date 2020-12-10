@@ -6,8 +6,7 @@ import Shared.Command.Game.DrawCommand;
 import Shared.Command.Game.NextPlayerCommand;
 import Shared.Command.Game.PlayCommand;
 import Shared.Command.Game.ReturnPlayCommand;
-import Shared.Command.Room.LoseGameCommand;
-import com.mysql.cj.xdevapi.Client;
+import Shared.Command.Game.LoseGameCommand;
 
 import java.io.IOException;
 import java.io.ObjectOutputStream;

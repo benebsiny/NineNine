@@ -1,4 +1,4 @@
-package Shared.Command.Room;
+package Shared.Command.Game;
 
 public class LoseGameCommand {
 

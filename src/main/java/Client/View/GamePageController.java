@@ -1,13 +1,11 @@
 package Client.View;
 
 import Client.Connection.GamePageConn;
+import Client.Main;
 import Client.Status.PlayerStatus;
 import Client.Status.UserStatus;
 import Shared.CardEnum.Card;
-import Shared.Command.Game.DrawCommand;
-import Shared.Command.Game.NextPlayerCommand;
-import Shared.Command.Game.PlayCommand;
-import Shared.Command.Game.ReturnPlayCommand;
+import Shared.Command.Game.*;
 import com.jfoenix.controls.JFXButton;
 import javafx.animation.*;
 import javafx.application.Platform;
@@ -385,6 +383,10 @@ public class GamePageController {
         time.play();
     }
 
+    public void loseAnimation() {
+        Main.switchScene("Home");
+    }
+
     /**
      * Show the animation that other is playing
      *
@@ -673,6 +675,25 @@ class GamePageConnection implements Runnable {
                     new Thread(new DrawHandler(GUI, (DrawCommand) receivedObject)).start();
                 }
 
+                else if (receivedObject instanceof LoseGameCommand) {
+                    LoseGameCommand command = (LoseGameCommand) receivedObject;
+
+                    System.out.println(command.getLosePlayer());
+
+                    // I lose
+                    if (command.getLosePlayer().equals(UserStatus.getSignInUser())) {
+
+                        // Show lose animation
+                        Platform.runLater(GUI::loseAnimation);
+                        break;
+                    }
+                    // Other lose
+                    else {
+
+                    }
+
+                }
+
             } catch (SocketException ex) {
                 System.out.println("Bye Bye!");
                 break;
@@ -680,6 +701,22 @@ class GamePageConnection implements Runnable {
                 e.printStackTrace();
             }
         }
+    }
+}
+
+class LoseHandler implements Runnable {
+
+    GamePageController GUI;
+    LoseGameCommand command;
+    public LoseHandler(GamePageController GUI, LoseGameCommand command) {
+        this.GUI = GUI;
+        this.command = command;
+    }
+
+    @Override
+    public void run() {
+        // Show lose animation
+
     }
 }
 
