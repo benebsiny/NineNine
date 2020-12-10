@@ -70,7 +70,6 @@ public class GameFunction {
                     sendReturnPlayCommand(clientMap,gameRoom.getPlayersName(),returnPlayCommand);
                 }
 
-                //TODO manage card value 5
                 sendNextPlayerCommand(client,playCommand);
                 Main.setGameRoomList(gameRoomList);
                 break;

@@ -4,6 +4,7 @@ import Server.Database.UserDB;
 import Server.Game.GameRoom;
 import Server.Game.ManageGameRoomValue;
 import Server.Room.Room;
+import Shared.CardEnum.Card;
 import Shared.Command.Game.NextPlayerCommand;
 import Shared.Command.Game.PlayCommand;
 import Shared.Command.Game.WinnerCommand;
@@ -186,7 +187,9 @@ public class Main {
                             if(inGameRoomResult){
                                 String judgeResult = judgeGameRoomWinner(disconnectClientName);
                                 if(judgeResult == null){
-                                    //sendNextPlayerCommand(client, (PlayCommand) input);
+                                    PlayCommand playCommand = new PlayCommand();
+                                    playCommand.setCard(Card.HA);
+                                    sendNextPlayerCommand(client, playCommand);
                                     deleteGameRoomPlayer(disconnectClientName);
                                 }
                                 else{                                                //如果房間出現贏家
