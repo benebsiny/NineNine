@@ -18,3 +18,13 @@
     -fx-background-repeat: no-repeat;
     -fx-background-position: center;
 }
+
+.plus-button:hover {
+    -fx-background-color: rgba(252, 51, 51, 0.2);
+    -fx-cursor: hand;
+}
+
+.minus-button:hover {
+    -fx-background-color: rgba(57, 54, 240, 0.2);
+    -fx-cursor: hand;
+}

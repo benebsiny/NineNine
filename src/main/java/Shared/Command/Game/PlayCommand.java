@@ -7,7 +7,8 @@ import java.io.Serializable;
 public class PlayCommand implements Serializable {
     private static final long serialVersionUID = 1L;
     private String player;
-    private String assignPlayer;
+    private String assignPlayer; // This is to determine who is the next player for card 5
+    private boolean plusValue; // This is to determine plus/minus 10/20 for card 10 and card Q
     private int remainCardCount;
     private Card card;
 
@@ -43,4 +44,11 @@ public class PlayCommand implements Serializable {
         this.card = card;
     }
 
+    public boolean isPlusValue() {
+        return plusValue;
+    }
+
+    public void setPlusValue(boolean plusValue) {
+        this.plusValue = plusValue;
+    }
 }

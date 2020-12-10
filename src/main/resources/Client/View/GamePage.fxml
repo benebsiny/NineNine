@@ -5,83 +5,94 @@
 <?import javafx.scene.effect.BoxBlur?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Client.View.GamePageController">
+
+<StackPane fx:id="stackPane" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Client.View.GamePageController">
    <children>
-      <Label fx:id="valueLabel" alignment="CENTER" layoutX="422.0" layoutY="191.0" text="00" textAlignment="JUSTIFY">
-         <font>
-            <Font size="48.0" />
-         </font></Label>
-      <JFXButton fx:id="first" layoutX="120.0" layoutY="394.0" mnemonicParsing="false" onAction="#pickCard" prefHeight="168.0" prefWidth="120.0" />
-      <JFXButton fx:id="second" layoutX="260.0" layoutY="394.0" mnemonicParsing="false" onAction="#pickCard" prefHeight="168.0" prefWidth="120.0" />
-      <JFXButton fx:id="third" layoutX="400.0" layoutY="394.0" mnemonicParsing="false" onAction="#pickCard" prefHeight="168.0" prefWidth="120.0" />
-      <JFXButton fx:id="fourth" layoutX="540.0" layoutY="394.0" mnemonicParsing="false" onAction="#pickCard" prefHeight="168.0" prefWidth="120.0" />
-      <JFXButton fx:id="fifth" layoutX="680.0" layoutY="394.0" mnemonicParsing="false" onAction="#pickCard" prefHeight="168.0" prefWidth="120.0" />
-      <Pane fx:id="card5Cover" opacity="0.8" prefHeight="600.0" prefWidth="900.0" style="-fx-background-color: gray;">
+      <AnchorPane fx:id="pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0">
          <children>
-            <Circle blendMode="OVERLAY" fill="WHITE" layoutX="149.0" layoutY="222.0" radius="132.0" stroke="BLACK" strokeType="INSIDE" />
-            <Circle blendMode="OVERLAY" fill="WHITE" layoutX="444.0" layoutY="82.0" radius="132.0" stroke="BLACK" strokeType="INSIDE" />
-            <Circle blendMode="OVERLAY" fill="WHITE" layoutX="769.0" layoutY="216.0" radius="132.0" stroke="BLACK" strokeType="INSIDE" />
+            <Label fx:id="valueLabel" alignment="CENTER" layoutX="422.0" layoutY="191.0" text="00" textAlignment="JUSTIFY">
+               <font>
+                  <Font size="48.0" />
+               </font>
+            </Label>
+            <JFXButton fx:id="first" layoutX="120.0" layoutY="394.0" mnemonicParsing="false" onAction="#pickCard" prefHeight="168.0" prefWidth="120.0" />
+            <JFXButton fx:id="second" layoutX="260.0" layoutY="394.0" mnemonicParsing="false" onAction="#pickCard" prefHeight="168.0" prefWidth="120.0" />
+            <JFXButton fx:id="third" layoutX="400.0" layoutY="394.0" mnemonicParsing="false" onAction="#pickCard" prefHeight="168.0" prefWidth="120.0" />
+            <JFXButton fx:id="fourth" layoutX="540.0" layoutY="394.0" mnemonicParsing="false" onAction="#pickCard" prefHeight="168.0" prefWidth="120.0" />
+            <JFXButton fx:id="fifth" layoutX="680.0" layoutY="394.0" mnemonicParsing="false" onAction="#pickCard" prefHeight="168.0" prefWidth="120.0" />
+            <Pane fx:id="card5Cover" opacity="0.8" prefHeight="600.0" prefWidth="900.0" style="-fx-background-color: gray;">
+               <children>
+                  <Circle blendMode="OVERLAY" fill="WHITE" layoutX="149.0" layoutY="222.0" radius="132.0" stroke="BLACK" strokeType="INSIDE" />
+                  <Circle blendMode="OVERLAY" fill="WHITE" layoutX="444.0" layoutY="82.0" radius="132.0" stroke="BLACK" strokeType="INSIDE" />
+                  <Circle blendMode="OVERLAY" fill="WHITE" layoutX="769.0" layoutY="216.0" radius="132.0" stroke="BLACK" strokeType="INSIDE" />
+               </children>
+            </Pane>
+            <ImageView fx:id="turn1Icon" fitHeight="150.0" fitWidth="200.0" layoutX="48.0" layoutY="146.0" onMouseClicked="#choosePlayer" pickOnBounds="true" preserveRatio="true" rotate="90.0">
+               <image>
+                  <Image url="@../Img/playing-user.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="turn2Icon" fitHeight="150.0" fitWidth="200.0" layoutX="353.0" layoutY="14.0" onMouseClicked="#choosePlayer" pickOnBounds="true" preserveRatio="true" rotate="180.0">
+               <image>
+                  <Image url="@../Img/playing-user.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="turn3Icon" fitHeight="150.0" fitWidth="200.0" layoutX="679.0" layoutY="146.0" onMouseClicked="#choosePlayer" pickOnBounds="true" preserveRatio="true" rotate="270.0">
+               <image>
+                  <Image url="@../Img/playing-user.png" />
+               </image>
+            </ImageView>
+            <Text fx:id="firstPlayerLabel" layoutX="14.0" strokeType="OUTSIDE" strokeWidth="0.0" text="1st player" textAlignment="CENTER" wrappingWidth="250.0" x="20.0" y="120.0">
+               <font>
+                  <Font size="22.0" />
+               </font>
+            </Text>
+            <Text fx:id="secondPlayerLabel" strokeType="OUTSIDE" strokeWidth="0.0" text="2nd player" textAlignment="CENTER" wrappingWidth="173.199951171875" x="360.0" y="190.0">
+               <font>
+                  <Font size="22.0" />
+               </font>
+            </Text>
+            <Text fx:id="thirdPlayerLabel" layoutX="-23.0" strokeType="OUTSIDE" strokeWidth="0.0" text="3rd player" textAlignment="CENTER" wrappingWidth="173.199951171875" x="680.0" y="120.0">
+               <font>
+                  <Font size="22.0" />
+               </font>
+            </Text>
+            <Circle fx:id="shineCircle" blendMode="ADD" fill="#ffcb21" radius="100.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0">
+               <effect>
+                  <BoxBlur height="50.0" iterations="3" width="50.0" />
+               </effect>
+            </Circle>
+            <Rectangle fx:id="countdownBar" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="900.0" />
+            <ImageView fx:id="deskCardImage" fitHeight="83.0" fitWidth="56.0" layoutX="820.0" layoutY="310.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../Img/card-back.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="otherPlayCardImage" fitHeight="168.0" fitWidth="120.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../Img/Card/C2.png" />
+               </image>
+            </ImageView>
+             <ImageView fx:id="mePlayCardImage" fitHeight="168.0" fitWidth="120.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../Img/Card/C2.png" />
+               </image>
+            </ImageView>
+             <ImageView fx:id="drawCardImage" fitHeight="168.0" fitWidth="120.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../Img/Card/C2.png" />
+               </image>
+            </ImageView>
+            <Pane fx:id="coverPane" layoutY="390.0" opacity="0.5" prefHeight="211.0" prefWidth="900.0" style="-fx-background-color: gray;" />
          </children>
-      </Pane>
-      <ImageView fx:id="turn1Icon" fitHeight="150.0" fitWidth="200.0" layoutX="48.0" layoutY="146.0" onMouseClicked="#choosePlayer" pickOnBounds="true" preserveRatio="true" rotate="90.0">
-         <image>
-            <Image url="@../Img/playing-user.png" />
-         </image>
-      </ImageView>
-      <ImageView fx:id="turn2Icon" fitHeight="150.0" fitWidth="200.0" layoutX="353.0" layoutY="14.0" onMouseClicked="#choosePlayer" pickOnBounds="true" preserveRatio="true" rotate="180.0">
-         <image>
-            <Image url="@../Img/playing-user.png" />
-         </image>
-      </ImageView>
-      <ImageView fx:id="turn3Icon" fitHeight="150.0" fitWidth="200.0" layoutX="679.0" layoutY="146.0" onMouseClicked="#choosePlayer" pickOnBounds="true" preserveRatio="true" rotate="270.0">
-         <image>
-            <Image url="@../Img/playing-user.png" />
-         </image>
-      </ImageView>
-      <Text fx:id="firstPlayerLabel" layoutX="14.0" strokeType="OUTSIDE" strokeWidth="0.0" text="1st player" textAlignment="CENTER" wrappingWidth="250.0" x="20.0" y="120.0">
-         <font>
-            <Font size="22.0" />
-         </font>
-      </Text>
-      <Text fx:id="secondPlayerLabel" strokeType="OUTSIDE" strokeWidth="0.0" text="2nd player" textAlignment="CENTER" wrappingWidth="173.199951171875" x="360.0" y="190.0">
-         <font>
-            <Font size="22.0" />
-         </font>
-      </Text>
-      <Text fx:id="thirdPlayerLabel" layoutX="-23.0" strokeType="OUTSIDE" strokeWidth="0.0" text="3rd player" textAlignment="CENTER" wrappingWidth="173.199951171875" x="680.0" y="120.0">
-         <font>
-            <Font size="22.0" />
-         </font>
-      </Text>
-      <Circle fx:id="shineCircle" blendMode="ADD" fill="#ffcb21" radius="100.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0">
-         <effect>
-            <BoxBlur height="50.0" iterations="3" width="50.0" />
-         </effect>
-      </Circle>
-      <Rectangle fx:id="countdownBar" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="900.0" />
-      <ImageView fx:id="deskCardImage" fitHeight="83.0" fitWidth="56.0" layoutX="820.0" layoutY="310.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../Img/card-back.png" />
-         </image>
-      </ImageView>
-      <ImageView fx:id="otherPlayCardImage" fitHeight="168.0" fitWidth="120.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../Img/Card/C2.png" />
-         </image></ImageView>
-       <ImageView fx:id="mePlayCardImage" fitHeight="168.0" fitWidth="120.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../Img/Card/C2.png" />
-         </image></ImageView>
-       <ImageView fx:id="drawCardImage" fitHeight="168.0" fitWidth="120.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../Img/Card/C2.png" />
-         </image></ImageView>
-      <Pane fx:id="coverPane" layoutY="390.0" opacity="0.5" prefHeight="211.0" prefWidth="900.0" style="-fx-background-color: gray;" />
+      </AnchorPane>
    </children>
-</Pane>
+</StackPane>

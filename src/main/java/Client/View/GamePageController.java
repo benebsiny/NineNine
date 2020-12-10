@@ -7,20 +7,27 @@ import Client.Status.UserStatus;
 import Shared.CardEnum.Card;
 import Shared.Command.Game.*;
 import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXDialog;
 import javafx.animation.*;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
 
@@ -87,6 +94,8 @@ public class GamePageController {
     public Text firstPlayerLabel;
     public Text secondPlayerLabel;
     public Text thirdPlayerLabel;
+    public AnchorPane pane;
+    public StackPane stackPane;
 
     Card[] myCards = new Card[5];
     int nextPositionToPlace = 0;
@@ -154,6 +163,22 @@ public class GamePageController {
 
             card5Cover.setVisible(true);
             return;
+
+        } else if (pickedCard.getRank() == 10 || pickedCard.getRank() == 12) {
+            playingStatus.setPickedCard(pickedCard);
+            playingStatus.setPickedButton(pickedButton);
+
+            switch (pickedCard.getRank()) {
+                case 10 -> {
+                    playingStatus.setStatus(PlayingStatus.Status.TEN);
+                    showPlusOrMinusDialog(10);
+                }
+                case 12 -> {
+                    playingStatus.setStatus(PlayingStatus.Status.QUEEN);
+                    showPlusOrMinusDialog(20);
+                }
+            }
+            return;
         }
 
         // Send command to server
@@ -168,6 +193,89 @@ public class GamePageController {
         }
 
         mePlayCardAnimation(pickedButton, pickedCard);
+    }
+
+    /**
+     * When play card of 10 or 20,
+     * show this dialog to let player choose which action they want to plus or minus
+     *
+     * @param number The number the player played
+     */
+    private void showPlusOrMinusDialog(int number) {
+        VBox chooseNumberBox = new VBox(20);
+        chooseNumberBox.setPrefHeight(350);
+        chooseNumberBox.setPrefWidth(150);
+        chooseNumberBox.setAlignment(Pos.CENTER);
+
+        // Add button
+        JFXButton plusButton = new JFXButton();
+        plusButton.setRipplerFill(Paint.valueOf("#FC3333"));
+        plusButton.getStyleClass().add("plus-button");
+        plusButton.getStylesheets().add("/Client/Style/General.css");
+
+        ImageView addImage = new ImageView(new Image("/Client/Img/plus.png"));
+        addImage.setFitWidth(72);
+        addImage.setFitHeight(72);
+        plusButton.setGraphic(addImage);
+
+        // Number
+        Text numberText = new Text(String.valueOf(number));
+        numberText.setFont(Font.font(60));
+
+        // Minus button
+        JFXButton minusButton = new JFXButton();
+        minusButton.setRipplerFill(Paint.valueOf("#3936F0"));
+        minusButton.getStyleClass().add("minus-button");
+        minusButton.getStylesheets().add("/Client/Style/General.css");
+
+        ImageView minusImage = new ImageView(new Image("/Client/Img/minus.png"));
+        minusImage.setFitWidth(72);
+        minusImage.setFitHeight(72);
+        minusButton.setGraphic(minusImage);
+
+        // Add all component
+        chooseNumberBox.getChildren().addAll(plusButton, numberText, minusButton);
+
+        // Dialog
+        JFXDialog dialog = new JFXDialog(stackPane, chooseNumberBox, JFXDialog.DialogTransition.CENTER);
+        dialog.setOverlayClose(false);
+        dialog.show();
+
+        // Button Actions
+        plusButton.setOnAction(event -> {
+
+            PlayCommand command = new PlayCommand();
+            command.setPlusValue(true);
+            command.setPlayer(UserStatus.getSignInUser());
+            command.setCard(playingStatus.getPickedCard());
+            command.setRemainCardCount(--cardCount);
+            try {
+                GamePageConn.send(command);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            dialog.close();
+
+            mePlayCardAnimation(playingStatus.getPickedButton(), playingStatus.getPickedCard());
+        });
+
+        minusButton.setOnAction(event -> {
+            PlayCommand command = new PlayCommand();
+            command.setPlusValue(false);
+            command.setPlayer(UserStatus.getSignInUser());
+            command.setCard(playingStatus.getPickedCard());
+            command.setRemainCardCount(--cardCount);
+            try {
+                GamePageConn.send(command);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            dialog.close();
+
+            mePlayCardAnimation(playingStatus.getPickedButton(), playingStatus.getPickedCard());
+        });
     }
 
     /**
@@ -383,6 +491,9 @@ public class GamePageController {
         time.play();
     }
 
+    /**
+     * When lose, do some animation, then go back to the home page
+     */
     public void loseAnimation() {
         Main.switchScene("Home");
     }
@@ -413,6 +524,12 @@ public class GamePageController {
         shineCircle.setVisible(true);
     }
 
+    /**
+     * Count up/down the value in the sea
+     *
+     * @param nextValue Next value in the sea
+     * @param time      Timeline
+     */
     public void countingValue(int nextValue, Timeline time) {
 
         System.out.println("Current Value: " + this.value);
@@ -673,9 +790,7 @@ class GamePageConnection implements Runnable {
                 // Draw cards
                 else if (receivedObject instanceof DrawCommand) {
                     new Thread(new DrawHandler(GUI, (DrawCommand) receivedObject)).start();
-                }
-
-                else if (receivedObject instanceof LoseGameCommand) {
+                } else if (receivedObject instanceof LoseGameCommand) {
                     LoseGameCommand command = (LoseGameCommand) receivedObject;
 
                     System.out.println(command.getLosePlayer());
@@ -689,7 +804,7 @@ class GamePageConnection implements Runnable {
                     }
                     // Other lose
                     else {
-
+                        // TODO show others lose information
                     }
 
                 }
@@ -701,22 +816,6 @@ class GamePageConnection implements Runnable {
                 e.printStackTrace();
             }
         }
-    }
-}
-
-class LoseHandler implements Runnable {
-
-    GamePageController GUI;
-    LoseGameCommand command;
-    public LoseHandler(GamePageController GUI, LoseGameCommand command) {
-        this.GUI = GUI;
-        this.command = command;
-    }
-
-    @Override
-    public void run() {
-        // Show lose animation
-
     }
 }
 
