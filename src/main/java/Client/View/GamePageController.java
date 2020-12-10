@@ -501,19 +501,58 @@ public class GamePageController {
 
     /**
      * Show cross on their icon
+     *
      * @param losePlayer Turn of the person who lose
      */
     public void otherLoseAnimation(String losePlayer) {
-        ImageView imageView = new ImageView(new Image("/Client/Img/cross.png"));
-        imageView.setFitHeight(150);
-        imageView.setFitWidth(150);
+        ImageView crossImage = new ImageView(new Image("/Client/Img/cross.png"));
+        crossImage.setFitHeight(150);
+        crossImage.setFitWidth(150);
+        crossImage.setOpacity(0); // For fade in animation
 
         int loserTurn = getTurnByName(losePlayer);
-        double x = (playerIcons[loserTurn].getFitWidth() - imageView.getFitWidth()) / 2 + playerIcons[loserTurn].getLayoutX() - 8;
-        double y = (playerIcons[loserTurn].getFitHeight() - imageView.getFitHeight()) / 2 + playerIcons[loserTurn].getLayoutY();
-        imageView.setX(x);
-        imageView.setY(y);
-        pane.getChildren().add(imageView);
+        double x = (playerIcons[loserTurn].getFitWidth() - crossImage.getFitWidth()) / 2 + playerIcons[loserTurn].getLayoutX() - 8;
+        double y = (playerIcons[loserTurn].getFitHeight() - crossImage.getFitHeight()) / 2 + playerIcons[loserTurn].getLayoutY();
+        crossImage.setX(x);
+        crossImage.setY(y);
+        pane.getChildren().add(crossImage);
+
+
+        // Animation
+        EventHandler<ActionEvent> fadeIn = __ -> {
+            FadeTransition fadeTransition = new FadeTransition();
+            fadeTransition.setDuration(Duration.millis(400));
+            fadeTransition.setNode(crossImage);
+            fadeTransition.setFromValue(0);
+            fadeTransition.setToValue(1);
+
+            ScaleTransition scaleTransition = new ScaleTransition();
+            scaleTransition.setDuration(Duration.millis(600));
+            scaleTransition.setNode(crossImage);
+            scaleTransition.setFromX(1);
+            scaleTransition.setFromY(1);
+            scaleTransition.setToX(1.3);
+            scaleTransition.setToY(1.3);
+
+            fadeTransition.play();
+            scaleTransition.play();
+        };
+
+        EventHandler<ActionEvent> zoomOut = __ -> {
+            ScaleTransition scaleTransition = new ScaleTransition();
+            scaleTransition.setDuration(Duration.millis(200));
+            scaleTransition.setNode(crossImage);
+            scaleTransition.setFromX(1.3);
+            scaleTransition.setFromY(1.3);
+            scaleTransition.setToX(1);
+            scaleTransition.setToY(1);
+            scaleTransition.play();
+        };
+
+        Timeline timeline = new Timeline();
+        timeline.getKeyFrames().add(new KeyFrame(Duration.millis(0), fadeIn));
+        timeline.getKeyFrames().add(new KeyFrame(Duration.millis(600), zoomOut));
+        timeline.play();
     }
 
     /**
