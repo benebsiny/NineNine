@@ -37,7 +37,7 @@ public class ExceptionFunction {
 
                 for (String roomPlayer : roomPlayers) {             //發出loseGameCommand給房間除了斷線玩家
 
-                    if(roomPlayer != disconnectPlayerName){
+                    if (roomPlayer != disconnectPlayerName) {
 
                         for (Map.Entry<String, Socket> stringSocketEntry : entrySet) {
                             if (stringSocketEntry.getKey().equals(roomPlayer)) {
@@ -60,5 +60,7 @@ public class ExceptionFunction {
         return inGameRoom;
 
 
-        }
+    }
+
+
 }

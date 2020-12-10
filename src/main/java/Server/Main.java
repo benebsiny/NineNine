@@ -127,20 +127,26 @@ public class Main {
                         out = new ObjectOutputStream(client.getOutputStream());
                         out.writeObject(nextPlayerCommand);
 
+                        for (GameRoom gameRoom : gameRoomList) {   //找到該玩家的gameRoom
+                            if(Arrays.asList(gameRoom.getPlayersName()).contains(getClientUsername(client))){
+                                gameRoom.setNowDrawCardPlayer(getClientUsername(client));
+                            }
+                        }
+
                         //sendNextPlayerCommand(client);
                     } else if (input instanceof PlayCommand) {
 
-                        boolean result = manageGameRoomValue((PlayCommand) input);
+                        boolean isLose = manageGameRoomValue((PlayCommand) input);
                         //System.out.println("PlayCommand card value: "+ Pl);
 
                         //System.out.println("出牌結果: " + result);
 
-                        if (result) {
+                        if (isLose) {
                             String losePlayer = ((PlayCommand) input).getPlayer();
                             sendLoseGameCommand(client);
                             String judgeResult = judgeGameRoomWinner(losePlayer);
                             if(judgeResult == null){
-                                sendNextPlayerCommand(client, (PlayCommand) input);
+                                sendNextPlayerCommand(client, (PlayCommand) input,true);
                                 deleteGameRoomPlayer(losePlayer);
                             }
                             else{                                                //如果房間出現贏家
@@ -149,7 +155,13 @@ public class Main {
                             }
 
                         } else {
-                            processPlayCommand((PlayCommand) input, client);
+                            if(isAllCardReceive((PlayCommand) input)){
+                                sendAllWinnerCommand(((PlayCommand) input).getPlayer());
+                            }
+                            else{
+                                processPlayCommand((PlayCommand) input, client);
+                            }
+
                         }
 
                         //Thread.sleep(1500);
@@ -187,12 +199,22 @@ public class Main {
                             if(inGameRoomResult){
                                 String judgeResult = judgeGameRoomWinner(disconnectClientName);
                                 if(judgeResult == null){
-                                    PlayCommand playCommand = new PlayCommand();
-                                    playCommand.setCard(Card.HA);
-                                    sendNextPlayerCommand(client, playCommand);
+                                    System.out.println("judgeResult: null");
+
+                                    for (GameRoom gameRoom : gameRoomList) {   //找到該玩家的gameRoom
+                                        if(Arrays.asList(gameRoom.getPlayersName()).contains(disconnectClientName)){
+                                            if(gameRoom.getNowDrawCardPlayer() == disconnectClientName){
+                                                PlayCommand playCommand = new PlayCommand();
+                                                playCommand.setCard(Card.HA);
+                                                sendNextPlayerCommand(client, playCommand,true);
+                                            }
+                                        }
+                                    }
+
                                     deleteGameRoomPlayer(disconnectClientName);
                                 }
                                 else{                                                //如果房間出現贏家
+                                    System.out.println("judgeResult: " + judgeResult);
                                     sendWinnerCommand(judgeResult);
                                     deleteGameRoom(judgeResult);
                                 }

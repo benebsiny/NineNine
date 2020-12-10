@@ -12,6 +12,24 @@ public class GameRoom {
     private int deskIndex = 0;
     private Order order = GameRoom.Order.Clockwise;
     private int value = 0;
+    private int receiveCardCount = 0;
+    private String nowDrawCardPlayer;
+
+    public String getNowDrawCardPlayer() {
+        return nowDrawCardPlayer;
+    }
+
+    public void setNowDrawCardPlayer(String nowDrawCardPlayer) {
+        this.nowDrawCardPlayer = nowDrawCardPlayer;
+    }
+
+    public int getReceiveCardCount() {
+        return receiveCardCount;
+    }
+
+    public void setReceiveCardCount(int receiveCardCount) {
+        this.receiveCardCount = receiveCardCount;
+    }
 
     public Order getOrder() {
         return order;

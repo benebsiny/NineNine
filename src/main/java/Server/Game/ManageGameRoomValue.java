@@ -13,6 +13,25 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 public class ManageGameRoomValue {
 
+    public static boolean isAllCardReceive(PlayCommand input){
+        boolean result = false;
+        String player = input.getPlayer();
+
+        CopyOnWriteArrayList<GameRoom> gameRoomList = Main.getGameRoomList();
+
+        for (GameRoom gameRoom : gameRoomList) {          //確定玩家的遊戲房間
+            if (Arrays.asList(gameRoom.getPlayersName()).contains(player)){
+                if(gameRoom.getReceiveCardCount() >= 52){
+                    result = true;
+                }
+                break;
+            }
+        }
+
+        return result;
+    }
+
+
     public static String judgeGameRoomWinner(String deletePlayer){
         CopyOnWriteArrayList<GameRoom> gameRoomList = Main.getGameRoomList();
         String winnerPlayer = null;

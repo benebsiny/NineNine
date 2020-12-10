@@ -70,7 +70,7 @@ public class GameFunction {
                     sendReturnPlayCommand(clientMap,gameRoom.getPlayersName(),returnPlayCommand);
                 }
 
-                sendNextPlayerCommand(client,playCommand);
+                sendNextPlayerCommand(client,playCommand,false);
                 Main.setGameRoomList(gameRoomList);
                 break;
             }
@@ -162,7 +162,7 @@ public class GameFunction {
         }
     }
 
-    public static void sendNextPlayerCommand(Socket client,PlayCommand playCommand) throws IOException {
+    public static void sendNextPlayerCommand(Socket client,PlayCommand playCommand,boolean isPlayerLose) throws IOException {
 
         CopyOnWriteArrayList<GameRoom> gameRoomList = Main.getGameRoomList();
         Map<String, Socket> clientMap = Main.getClientMap();
@@ -195,6 +195,9 @@ public class GameFunction {
                                     nextPlayer = playersName[i - 1];
                                 }
                             }
+
+                            gameRoom.setNowDrawCardPlayer(nextPlayer);
+                            Main.setGameRoomList(gameRoomList);
                             break;
                         }
                     }
@@ -202,14 +205,17 @@ public class GameFunction {
                 String[] roomPlayers = gameRoom.getPlayersName();
                 Set<Map.Entry<String, Socket>> entrySet = clientMap.entrySet();
 
-                for (String roomPlayer : roomPlayers) {                      //發送所有人NextPlayerCommand
-                    for (Map.Entry<String, Socket> stringSocketEntry : entrySet) {
-                        if (stringSocketEntry.getKey().equals(roomPlayer)) {
-                            Socket socket = stringSocketEntry.getValue();
-                            ObjectOutputStream allClientOut = new ObjectOutputStream(socket.getOutputStream());
+                for (String roomPlayer : roomPlayers) {                     //發送所有人NextPlayerCommand
+                    if((isPlayerLose == false && roomPlayer==nowPlayer) || roomPlayer!=nowPlayer) {
+                        for (Map.Entry<String, Socket> stringSocketEntry : entrySet) {
+                            if (stringSocketEntry.getKey().equals(roomPlayer)) {
+                                System.out.println(roomPlayer);
+                                Socket socket = stringSocketEntry.getValue();
+                                ObjectOutputStream allClientOut = new ObjectOutputStream(socket.getOutputStream());
 
-                            NextPlayerCommand nextPlayerCommand = new NextPlayerCommand(nextPlayer);
-                            allClientOut.writeObject(nextPlayerCommand);
+                                NextPlayerCommand nextPlayerCommand = new NextPlayerCommand(nextPlayer);
+                                allClientOut.writeObject(nextPlayerCommand);
+                            }
                         }
                     }
                 }
@@ -217,6 +223,8 @@ public class GameFunction {
             }
         }
     }
+
+
 
     public static void sendWinnerCommand(String winner) throws IOException {
         Map<String, Socket> clientMap = Main.getClientMap();
@@ -229,6 +237,34 @@ public class GameFunction {
 
                 WinnerCommand winnerCommand = new WinnerCommand();
                 out.writeObject(winnerCommand);
+
+                break;
+            }
+        }
+
+    }
+
+    public static void sendAllWinnerCommand(String winner) throws IOException {
+        Map<String, Socket> clientMap = Main.getClientMap();
+        Set<Map.Entry<String, Socket>> entrySet = clientMap.entrySet();
+
+        CopyOnWriteArrayList<GameRoom> gameRoomList = Main.getGameRoomList();
+        WinnerCommand winnerCommand =  new WinnerCommand();
+
+        for (GameRoom gameRoom : gameRoomList) {                    //找到該玩家的gameRoom
+            if (Arrays.asList(gameRoom.getPlayersName()).contains(winner)) {
+                String[] roomPlayers = gameRoom.getPlayersName();
+
+                for (String roomPlayer : roomPlayers) {             //發出WinnerCommand給房間所有玩家
+                    for (Map.Entry<String, Socket> stringSocketEntry : entrySet) {
+                        if (stringSocketEntry.getKey().equals(roomPlayer)) {
+                            Socket socket = stringSocketEntry.getValue();
+                            ObjectOutputStream allClientOut = new ObjectOutputStream(socket.getOutputStream());
+
+                            allClientOut.writeObject(winnerCommand);
+                        }
+                    }
+                }
 
                 break;
             }
