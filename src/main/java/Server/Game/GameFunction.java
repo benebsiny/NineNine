@@ -2,11 +2,7 @@ package Server.Game;
 
 import Server.Main;
 import Shared.CardEnum.Card;
-import Shared.Command.Game.DrawCommand;
-import Shared.Command.Game.NextPlayerCommand;
-import Shared.Command.Game.PlayCommand;
-import Shared.Command.Game.ReturnPlayCommand;
-import Shared.Command.Game.LoseGameCommand;
+import Shared.Command.Game.*;
 
 import java.io.IOException;
 import java.io.ObjectOutputStream;
@@ -221,6 +217,24 @@ public class GameFunction {
                 break;
             }
         }
+    }
+
+    public static void sendWinnerCommand(String winner) throws IOException {
+        Map<String, Socket> clientMap = Main.getClientMap();
+        Set<Map.Entry<String, Socket>> entrySet = clientMap.entrySet();
+
+        for (Map.Entry<String, Socket> stringSocketEntry : entrySet) {
+            if (stringSocketEntry.getKey().equals(winner)) {
+                Socket socket = stringSocketEntry.getValue();
+                ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
+
+                WinnerCommand winnerCommand = new WinnerCommand();
+                out.writeObject(winnerCommand);
+
+                break;
+            }
+        }
+
     }
 
     public static Card[] shuffle() {

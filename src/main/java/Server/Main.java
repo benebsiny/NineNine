@@ -6,6 +6,7 @@ import Server.Game.ManageGameRoomValue;
 import Server.Room.Room;
 import Shared.Command.Game.NextPlayerCommand;
 import Shared.Command.Game.PlayCommand;
+import Shared.Command.Game.WinnerCommand;
 import Shared.Command.Player.RegisterCommand;
 import Shared.Command.Player.SignInCommand;
 import Shared.Command.Room.*;
@@ -22,9 +23,9 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import static Server.ClientMap.ClientMapFunction.getClientUsername;
+import static Server.ExceptionFunction.EOFExceptionInGameRoom;
 import static Server.Game.GameFunction.*;
-import static Server.Game.ManageGameRoomValue.deleteGameRoomPlayer;
-import static Server.Game.ManageGameRoomValue.manageGameRoomValue;
+import static Server.Game.ManageGameRoomValue.*;
 import static Server.Room.RoomFunction.*;
 import static Server.Room.RoomFunction.processLeaveRoomCommand;
 
@@ -131,12 +132,21 @@ public class Main {
                         boolean result = manageGameRoomValue((PlayCommand) input);
                         //System.out.println("PlayCommand card value: "+ Pl);
 
-                        System.out.println("出牌結果: " + result);
+                        //System.out.println("出牌結果: " + result);
 
                         if (result) {
+                            String losePlayer = ((PlayCommand) input).getPlayer();
                             sendLoseGameCommand(client);
-                            sendNextPlayerCommand(client, (PlayCommand) input);
-                            deleteGameRoomPlayer((PlayCommand) input);
+                            String judgeResult = judgeGameRoomWinner(losePlayer);
+                            if(judgeResult == null){
+                                sendNextPlayerCommand(client, (PlayCommand) input);
+                                deleteGameRoomPlayer(losePlayer);
+                            }
+                            else{                                                //如果房間出現贏家
+                                sendWinnerCommand(judgeResult);
+                                deleteGameRoom(judgeResult);
+                            }
+
                         } else {
                             processPlayCommand((PlayCommand) input, client);
                         }
@@ -171,6 +181,20 @@ public class Main {
 
                         try {
                             processLeaveRoomCommand(disconnectClientName);
+                            boolean inGameRoomResult = EOFExceptionInGameRoom(disconnectClientName);
+
+                            if(inGameRoomResult){
+                                String judgeResult = judgeGameRoomWinner(disconnectClientName);
+                                if(judgeResult == null){
+                                    //sendNextPlayerCommand(client, (PlayCommand) input);
+                                    deleteGameRoomPlayer(disconnectClientName);
+                                }
+                                else{                                                //如果房間出現贏家
+                                    sendWinnerCommand(judgeResult);
+                                    deleteGameRoom(judgeResult);
+                                }
+                            }
+
                         } catch (IOException ioException) {
                             ioException.printStackTrace();
                         }

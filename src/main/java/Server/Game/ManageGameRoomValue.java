@@ -13,10 +13,47 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 public class ManageGameRoomValue {
 
-    public static void deleteGameRoomPlayer(PlayCommand playCommand){
+    public static String judgeGameRoomWinner(String deletePlayer){
+        CopyOnWriteArrayList<GameRoom> gameRoomList = Main.getGameRoomList();
+        String winnerPlayer = null;
+
+        for (GameRoom gameRoom : gameRoomList) {          //確定玩家的遊戲房間
+            if (Arrays.asList(gameRoom.getPlayersName()).contains(deletePlayer)){
+
+                String[] playersName = gameRoom.getPlayersName();
+
+                if(playersName.length==2){
+                    if(playersName[0] == deletePlayer){
+                        winnerPlayer = playersName[1];
+                    }
+                    else {
+                        winnerPlayer = playersName[0];
+                    }
+                }
+                break;
+            }
+        }
+
+        return winnerPlayer;
+    }
+
+    public static void deleteGameRoom(String player){
+        CopyOnWriteArrayList<GameRoom> gameRoomList = Main.getGameRoomList();
+
+        for (GameRoom gameRoom : gameRoomList) {          //確定玩家的遊戲房間
+            if (Arrays.asList(gameRoom.getPlayersName()).contains(player)) {
+
+                gameRoomList.remove(gameRoom);
+                Main.setGameRoomList(gameRoomList);
+                break;
+            }
+
+        }
+    }
+
+    public static void deleteGameRoomPlayer(String deletePlayer){
 
         CopyOnWriteArrayList<GameRoom> gameRoomList = Main.getGameRoomList();
-        String deletePlayer = playCommand.getPlayer();
 
         for (GameRoom gameRoom : gameRoomList) {          //確定玩家的遊戲房間
             if (Arrays.asList(gameRoom.getPlayersName()).contains(deletePlayer)) {
