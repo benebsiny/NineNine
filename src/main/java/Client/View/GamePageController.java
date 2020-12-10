@@ -494,8 +494,26 @@ public class GamePageController {
     /**
      * When lose, do some animation, then go back to the home page
      */
-    public void loseAnimation() {
+    public void meLoseAnimation() {
         Main.switchScene("Home");
+    }
+
+
+    /**
+     * Show cross on their icon
+     * @param losePlayer Turn of the person who lose
+     */
+    public void otherLoseAnimation(String losePlayer) {
+        ImageView imageView = new ImageView(new Image("/Client/Img/cross.png"));
+        imageView.setFitHeight(150);
+        imageView.setFitWidth(150);
+
+        int loserTurn = getTurnByName(losePlayer);
+        double x = (playerIcons[loserTurn].getFitWidth() - imageView.getFitWidth()) / 2 + playerIcons[loserTurn].getLayoutX() - 8;
+        double y = (playerIcons[loserTurn].getFitHeight() - imageView.getFitHeight()) / 2 + playerIcons[loserTurn].getLayoutY();
+        imageView.setX(x);
+        imageView.setY(y);
+        pane.getChildren().add(imageView);
     }
 
     /**
@@ -790,21 +808,23 @@ class GamePageConnection implements Runnable {
                 // Draw cards
                 else if (receivedObject instanceof DrawCommand) {
                     new Thread(new DrawHandler(GUI, (DrawCommand) receivedObject)).start();
-                } else if (receivedObject instanceof LoseGameCommand) {
-                    LoseGameCommand command = (LoseGameCommand) receivedObject;
+                }
 
-                    System.out.println(command.getLosePlayer());
+                // Lose game (me or other lose the game)
+                else if (receivedObject instanceof LoseGameCommand) {
+
+                    LoseGameCommand command = (LoseGameCommand) receivedObject;
 
                     // I lose
                     if (command.getLosePlayer().equals(UserStatus.getSignInUser())) {
 
                         // Show lose animation
-                        Platform.runLater(GUI::loseAnimation);
+                        Platform.runLater(GUI::meLoseAnimation);
                         break;
                     }
                     // Other lose
                     else {
-                        // TODO show others lose information
+                        Platform.runLater(() -> GUI.otherLoseAnimation(command.getLosePlayer()));
                     }
 
                 }
