@@ -209,7 +209,7 @@ public class GameFunction {
                     if((isPlayerLose == false && roomPlayer==nowPlayer) || roomPlayer!=nowPlayer) {
                         for (Map.Entry<String, Socket> stringSocketEntry : entrySet) {
                             if (stringSocketEntry.getKey().equals(roomPlayer)) {
-                                System.out.println(roomPlayer);
+                                System.out.println("Send NextPlayerCommand " + roomPlayer);
                                 Socket socket = stringSocketEntry.getValue();
                                 ObjectOutputStream allClientOut = new ObjectOutputStream(socket.getOutputStream());
 

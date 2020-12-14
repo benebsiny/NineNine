@@ -136,6 +136,7 @@ public class Main {
                         //sendNextPlayerCommand(client);
                     } else if (input instanceof PlayCommand) {
 
+                        addReceiveCardCount((PlayCommand) input);
                         boolean isLose = manageGameRoomValue((PlayCommand) input);
                         //System.out.println("PlayCommand card value: "+ Pl);
 
@@ -145,17 +146,29 @@ public class Main {
                             String losePlayer = ((PlayCommand) input).getPlayer();
                             sendLoseGameCommand(client);
                             String judgeResult = judgeGameRoomWinner(losePlayer);
-                            if(judgeResult == null){
-                                sendNextPlayerCommand(client, (PlayCommand) input,true);
-                                deleteGameRoomPlayer(losePlayer);
+
+                            if(judgeResult == null){            //判斷房間是否僅剩一人
+
+                                if(isAllCardReceive((PlayCommand) input)){
+                                    System.out.println("is All Card Receive");
+                                    deleteGameRoomPlayer(losePlayer);
+                                    sendAllWinnerCommand(((PlayCommand) input).getPlayer());
+                                }
+                                else{
+                                    sendNextPlayerCommand(client, (PlayCommand) input,true);
+                                    deleteGameRoomPlayer(losePlayer);
+                                }
+
                             }
-                            else{                                                //如果房間出現贏家
+                            else{                                //如果房間出現贏家
+                                System.out.println("winner " + judgeResult);
                                 sendWinnerCommand(judgeResult);
                                 deleteGameRoom(judgeResult);
                             }
 
                         } else {
                             if(isAllCardReceive((PlayCommand) input)){
+                                System.out.println("is All Card Receive");
                                 sendAllWinnerCommand(((PlayCommand) input).getPlayer());
                             }
                             else{
@@ -215,6 +228,7 @@ public class Main {
                                 }
                                 else{                                                //如果房間出現贏家
                                     System.out.println("judgeResult: " + judgeResult);
+                                    System.out.println("winner");
                                     sendWinnerCommand(judgeResult);
                                     deleteGameRoom(judgeResult);
                                 }

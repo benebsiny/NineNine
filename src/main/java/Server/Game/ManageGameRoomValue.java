@@ -13,6 +13,20 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 public class ManageGameRoomValue {
 
+    public static void addReceiveCardCount(PlayCommand input){
+        String player = input.getPlayer();
+        CopyOnWriteArrayList<GameRoom> gameRoomList = Main.getGameRoomList();
+
+        for (GameRoom gameRoom : gameRoomList) {          //確定玩家的遊戲房間
+            if (Arrays.asList(gameRoom.getPlayersName()).contains(player)){
+                int count = gameRoom.getReceiveCardCount();
+                count = count + 1;
+                gameRoom.setReceiveCardCount(count);
+                break;
+            }
+        }
+    }
+
     public static boolean isAllCardReceive(PlayCommand input){
         boolean result = false;
         String player = input.getPlayer();
@@ -141,7 +155,7 @@ public class ManageGameRoomValue {
                 }
                 else if(card.getRank() == 10){
 
-                    if(card.getSuit() == Suit.SPADE || card.getSuit() == Suit.CLUB){   //黑色+10
+                    if(playCommand.isPlusValue()){   //黑色+10
                         if(gameRoom.getValue() + 10 > 99){
                             loseFlag = true;
                         }
@@ -165,7 +179,7 @@ public class ManageGameRoomValue {
                 }
                 else if(card.getRank() == 12){
 
-                    if(card.getSuit() == Suit.SPADE || card.getSuit() == Suit.CLUB){   //黑色+20
+                    if(playCommand.isPlusValue()){   //黑色+20
                         if(gameRoom.getValue() + 20 > 99){
                             loseFlag = true;
                         }
