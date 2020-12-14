@@ -244,6 +244,35 @@ public class GameFunction {
 
     }
 
+    public static void sendAllNoRemainCardsWinnerCommand(String winner) throws IOException {
+        Map<String, Socket> clientMap = Main.getClientMap();
+        Set<Map.Entry<String, Socket>> entrySet = clientMap.entrySet();
+
+        CopyOnWriteArrayList<GameRoom> gameRoomList = Main.getGameRoomList();
+        NoRemainCardsWinnerCommand noRemainCardsWinnerCommand =  new NoRemainCardsWinnerCommand();
+        noRemainCardsWinnerCommand.setPlayerName(winner);
+
+        for (GameRoom gameRoom : gameRoomList) {                    //找到該玩家的gameRoom
+            if (Arrays.asList(gameRoom.getPlayersName()).contains(winner)) {
+                String[] roomPlayers = gameRoom.getPlayersName();
+
+                for (String roomPlayer : roomPlayers) {             //發出WinnerCommand給房間所有玩家
+                    for (Map.Entry<String, Socket> stringSocketEntry : entrySet) {
+                        if (stringSocketEntry.getKey().equals(roomPlayer)) {
+                            Socket socket = stringSocketEntry.getValue();
+                            ObjectOutputStream allClientOut = new ObjectOutputStream(socket.getOutputStream());
+
+                            allClientOut.writeObject(noRemainCardsWinnerCommand);
+                        }
+                    }
+                }
+
+                break;
+            }
+        }
+    }
+
+
     public static void sendAllWinnerCommand(String winner) throws IOException {
         Map<String, Socket> clientMap = Main.getClientMap();
         Set<Map.Entry<String, Socket>> entrySet = clientMap.entrySet();
@@ -269,7 +298,6 @@ public class GameFunction {
                 break;
             }
         }
-
     }
 
     public static Card[] shuffle() {

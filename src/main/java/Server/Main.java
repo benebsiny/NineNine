@@ -151,8 +151,8 @@ public class Main {
 
                                 if(isAllCardReceive((PlayCommand) input)){
                                     System.out.println("is All Card Receive");
-                                    deleteGameRoomPlayer(losePlayer);
                                     sendAllWinnerCommand(((PlayCommand) input).getPlayer());
+                                    deleteGameRoom(getClientUsername(client));
                                 }
                                 else{
                                     sendNextPlayerCommand(client, (PlayCommand) input,true);
@@ -170,6 +170,13 @@ public class Main {
                             if(isAllCardReceive((PlayCommand) input)){
                                 System.out.println("is All Card Receive");
                                 sendAllWinnerCommand(((PlayCommand) input).getPlayer());
+                            }
+                            else if(((PlayCommand) input).getRemainCardCount() == 0){
+
+                                sendAllNoRemainCardsWinnerCommand(((PlayCommand) input).getPlayer());
+
+                                sendNextPlayerCommand(client, (PlayCommand) input,true);
+                                deleteGameRoomPlayer(((PlayCommand) input).getPlayer());
                             }
                             else{
                                 processPlayCommand((PlayCommand) input, client);
