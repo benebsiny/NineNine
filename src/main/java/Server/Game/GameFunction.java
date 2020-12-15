@@ -237,6 +237,7 @@ public class GameFunction {
 
                 WinnerCommand winnerCommand = new WinnerCommand();
                 out.writeObject(winnerCommand);
+                System.out.println("send WinnerCommand success " + winner);
 
                 break;
             }

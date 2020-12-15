@@ -7,6 +7,7 @@ import Server.Room.Room;
 import Shared.CardEnum.Card;
 import Shared.Command.Game.NextPlayerCommand;
 import Shared.Command.Game.PlayCommand;
+import Shared.Command.Game.ReturnPlayCommand;
 import Shared.Command.Game.WinnerCommand;
 import Shared.Command.Player.RegisterCommand;
 import Shared.Command.Player.SignInCommand;
@@ -142,14 +143,16 @@ public class Main {
 
                         //System.out.println("出牌結果: " + result);
 
-                        if (isLose) {
-                            String losePlayer = ((PlayCommand) input).getPlayer();
+                        if (isLose) {                      //出牌的人輸了
+                            String losePlayer = getClientUsername(client);
+                            //System.out.println("loseplayer: "+losePlayer);
+                            //System.out.println(((PlayCommand) input).getPlayer());
                             sendLoseGameCommand(client);
                             String judgeResult = judgeGameRoomWinner(losePlayer);
 
-                            if(judgeResult == null){            //判斷房間是否僅剩一人
+                            if(judgeResult == null){            //若房間還有兩人以上
 
-                                if(isAllCardReceive((PlayCommand) input)){
+                                if(isAllCardReceive((PlayCommand) input)){          //如果全部卡都收到則大家贏
                                     System.out.println("is All Card Receive");
                                     sendAllWinnerCommand(((PlayCommand) input).getPlayer());
                                     deleteGameRoom(getClientUsername(client));
@@ -166,17 +169,47 @@ public class Main {
                                 deleteGameRoom(judgeResult);
                             }
 
-                        } else {
-                            if(isAllCardReceive((PlayCommand) input)){
+                        } else {                                 //出牌的人贏了
+                            if(isAllCardReceive((PlayCommand) input)){   //如果全部卡都收到則大家贏
                                 System.out.println("is All Card Receive");
                                 sendAllWinnerCommand(((PlayCommand) input).getPlayer());
+                                deleteGameRoom(getClientUsername(client));
                             }
-                            else if(((PlayCommand) input).getRemainCardCount() == 0){
+                            else if(((PlayCommand) input).getRemainCardCount() == 0){            //如果出牌的人沒牌了，他贏
+                                System.out.println("No card can use so win " + getClientUsername(client));
 
-                                sendAllNoRemainCardsWinnerCommand(((PlayCommand) input).getPlayer());
+                                String[] players = null;
+                                int value = 0;
+                                for (GameRoom gameRoom : gameRoomList) {          //確定client的遊戲房間
+                                    if (Arrays.asList(gameRoom.getPlayersName()).contains(getClientUsername(client))) {
+                                        players =  gameRoom.getPlayersName();
+                                        value = gameRoom.getValue();
+                                    }
+                                }
+                                ReturnPlayCommand returnPlayCommand = new ReturnPlayCommand();
+                                returnPlayCommand.setPlayer(getClientUsername(client));
+                                returnPlayCommand.setCard(((PlayCommand) input).getCard());
+                                returnPlayCommand.setValue(value);
+                                returnPlayCommand.setHasCardsInDesk(false);
+                                returnPlayCommand.setRemainCardCount(((PlayCommand) input).getRemainCardCount());
 
-                                sendNextPlayerCommand(client, (PlayCommand) input,true);
-                                deleteGameRoomPlayer(((PlayCommand) input).getPlayer());
+                                sendReturnPlayCommand(clientMap,players,returnPlayCommand);
+
+                                sendAllNoRemainCardsWinnerCommand(getClientUsername(client));
+
+                                String judgeResult = judgeGameRoomWinner(getClientUsername(client));
+
+                                if(judgeResult == null){                                    //若房間還有兩人以上，遊戲繼續
+                                    sendNextPlayerCommand(client, (PlayCommand) input,true);
+
+                                    deleteGameRoomPlayer(((PlayCommand) input).getPlayer());
+                                }
+                                else{                                //若房間僅剩一人，直接勝利
+                                    System.out.println("winner " + judgeResult);
+                                    sendWinnerCommand(judgeResult);
+                                    deleteGameRoom(judgeResult);
+                                }
+
                             }
                             else{
                                 processPlayCommand((PlayCommand) input, client);
