@@ -18,10 +18,7 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
@@ -492,7 +489,34 @@ public class GamePageController {
      * When lose, do some animation, then go back to the home page
      */
     public void meLoseAnimation() {
-        Main.switchScene("Home");
+        Pane losePane = new Pane();
+        losePane.setPrefWidth(900);
+        losePane.setPrefHeight(600);
+        losePane.setStyle("-fx-background-color: rgba(0, 0, 0, 0.7);");
+
+        // Lose label
+        Label loseLabel = new Label("YOU LOSE");
+        loseLabel.getStyleClass().add("eng-font");
+        loseLabel.getStylesheets().add("/Client/Style/General.css");
+        loseLabel.setFont(Font.font(100));
+        loseLabel.setTextFill(Paint.valueOf("white"));
+        loseLabel.setLayoutX(130);
+        loseLabel.setLayoutY(150);
+        losePane.getChildren().add(loseLabel);
+
+        // Back to home page
+        JFXButton backButton = new JFXButton("回到主畫面");
+        backButton.getStyleClass().add("ch-font");
+        backButton.getStylesheets().add("/Client/Style/General.css");
+        backButton.setButtonType(JFXButton.ButtonType.RAISED);
+        backButton.setRipplerFill(Paint.valueOf("#d9d9d9"));
+        backButton.setLayoutX(394);
+        backButton.setLayoutY(400);
+        backButton.setStyle("-fx-background-color: white; -fx-text-fill: black");
+
+        pane.getChildren().addAll(losePane, backButton);
+
+//        Main.switchScene("Home");
     }
 
 

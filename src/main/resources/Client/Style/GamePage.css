@@ -16,3 +16,7 @@
 .add-minus-number-label {
     -fx-font-family: 'GAME';
 }
+
+.background-pane {
+    -fx-background-image: url('../Img/background-color.png');
+}
