@@ -10,9 +10,9 @@
 
 <AnchorPane prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Client.View.ChooseRoomController">
    <children>
-      <Label fx:id="firstPicked" alignment="CENTER" layoutX="133.0" layoutY="15.0" onMouseClicked="#removeCard" prefHeight="210.0" prefWidth="150.0" textAlignment="CENTER" />
-      <Label fx:id="secondPicked" alignment="CENTER" layoutX="368.0" layoutY="15.0" onMouseClicked="#removeCard" prefHeight="210.0" prefWidth="150.0" textAlignment="CENTER" />
-      <Label fx:id="thirdPicked" alignment="CENTER" layoutX="594.0" layoutY="15.0" onMouseClicked="#removeCard" prefHeight="210.0" prefWidth="150.0" textAlignment="CENTER" />
+      <Label fx:id="firstPicked" alignment="CENTER" layoutX="133.0" layoutY="15.0" onMouseClicked="#removeCard" prefHeight="210.0" prefWidth="150.0" stylesheets="@../Style/ChooseRoom.css" textAlignment="CENTER" />
+      <Label fx:id="secondPicked" alignment="CENTER" layoutX="368.0" layoutY="15.0" onMouseClicked="#removeCard" prefHeight="210.0" prefWidth="150.0" stylesheets="@../Style/ChooseRoom.css" textAlignment="CENTER" />
+      <Label fx:id="thirdPicked" alignment="CENTER" layoutX="594.0" layoutY="15.0" onMouseClicked="#removeCard" prefHeight="210.0" prefWidth="150.0" stylesheets="@../Style/ChooseRoom.css" textAlignment="CENTER" />
       <JFXButton fx:id="HA" buttonType="RAISED" layoutX="242.0" layoutY="248.0" mnemonicParsing="false" onAction="#pickCard" prefHeight="50.0" prefWidth="82.0" styleClass="heart" stylesheets="@../Style/ChooseRoom.css" text="A">
          <padding>
             <Insets left="20.0" />
@@ -58,9 +58,9 @@
             <Insets left="20.0" />
          </padding>
       </JFXButton>
-      <JFXButton fx:id="enterRoomButton" buttonType="RAISED" layoutX="386.0" layoutY="505.0" mnemonicParsing="false" onAction="#enterRoom" prefHeight="53.0" prefWidth="114.0" style="-fx-background-color: #D32F2F; -fx-text-fill: white; -fx-font-size: 18px;" text="進入房間" />
+      <JFXButton fx:id="enterRoomButton" buttonType="RAISED" layoutX="386.0" layoutY="505.0" mnemonicParsing="false" onAction="#enterRoom" prefHeight="53.0" prefWidth="114.0" style="-fx-background-color: #D32F2F; -fx-text-fill: white; -fx-font-size: 18px;" styleClass="ch-font" stylesheets="@../Style/General.css" text="進入房間" />
       <JFXButton layoutX="38.0" layoutY="29.0" onAction="#goBack" prefHeight="40.0" prefWidth="40.0" styleClass="back-button" stylesheets="@../Style/General.css" />
-      <Label fx:id="errMsg" layoutX="522.0" layoutY="518.0" text="房間已存在" textFill="RED">
+      <Label fx:id="errMsg" layoutX="522.0" layoutY="518.0" styleClass="ch-font" stylesheets="@../Style/General.css" text="房間已存在" textFill="RED">
          <font>
             <Font size="18.0" />
          </font>

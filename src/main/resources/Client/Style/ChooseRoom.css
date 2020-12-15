@@ -1,3 +1,8 @@
+@font-face {
+    font-family: 'Taipei Sans TC Beta';
+    src: url('../Font/TaipeiSansTCBeta-Bold.ttf');
+}
+
 .heart {
     -fx-background-image: url("../Img/Suit/Heart.png");
     -fx-background-size: 20;
@@ -5,6 +10,7 @@
     -fx-background-position: 20px 14px;
     -fx-font-size: 20px;
     -fx-text-fill: red;
+    -fx-font-family: 'Taipei Sans TC Beta';
 }
 
 .diamond {
@@ -14,6 +20,7 @@
     -fx-background-position: 20px 14px;
     -fx-font-size: 20px;
     -fx-text-fill: red;
+    -fx-font-family: 'Taipei Sans TC Beta';
 }
 
 .spade {
@@ -22,6 +29,7 @@
     -fx-background-repeat: no-repeat;
     -fx-background-position: 20px 14px;
     -fx-font-size: 20px;
+    -fx-font-family: 'Taipei Sans TC Beta';
 }
 
 .club {
@@ -30,8 +38,9 @@
     -fx-background-repeat: no-repeat;
     -fx-background-position: 20px 14px;
     -fx-font-size: 20px;
+    -fx-font-family: 'Taipei Sans TC Beta';
 }
 
-.pointer:hover {
+.picked-card:hover {
     -fx-cursor: hand;
 }

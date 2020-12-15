@@ -27,7 +27,7 @@ public class ChooseRoomController {
     public Label errMsg;
     public ImageView loadingImg;
 
-    Label[] pickedArray;
+    Label[] labels;
     String[] pickedCard;
     int nextPosition = 0;
     boolean allPicked = false;
@@ -35,7 +35,7 @@ public class ChooseRoomController {
 
     @FXML
     void initialize() {
-        pickedArray = new Label[]{firstPicked, secondPicked, thirdPicked};
+        labels = new Label[]{firstPicked, secondPicked, thirdPicked};
         pickedCard = new String[3];
         enterRoomButton.setDisable(true);
         loadingImg.setVisible(false);
@@ -55,7 +55,8 @@ public class ChooseRoomController {
 
 
         pickedCard[nextPosition] = picked.getId();
-        pickedArray[nextPosition].setGraphic(imageView); // Set graphic on the label
+        labels[nextPosition].setGraphic(imageView); // Set graphic on the label
+        labels[nextPosition].getStyleClass().add("picked-card");
 
         findNextPosition();
     }
@@ -64,8 +65,8 @@ public class ChooseRoomController {
      * Find next position that picked card will locate at there.
      */
     void findNextPosition() {
-        for (int i = 0; i < pickedArray.length; i++) {
-            if (pickedArray[i].getGraphic() == null) {
+        for (int i = 0; i < labels.length; i++) {
+            if (labels[i].getGraphic() == null) {
                 nextPosition = i;
                 allPicked = false;
                 enterRoomButton.setDisable(true);
@@ -85,6 +86,8 @@ public class ChooseRoomController {
     public void removeCard(MouseEvent mouseEvent) {
         Label label = (Label) mouseEvent.getSource(); // Get the clicked label
         label.setGraphic(null); // Remove image
+        label.getStyleClass().remove("picked-card");
+
         findNextPosition();
     }
 

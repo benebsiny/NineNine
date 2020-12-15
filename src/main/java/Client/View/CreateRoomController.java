@@ -55,6 +55,7 @@ public class CreateRoomController {
 
         pickedCard[nextPosition] = picked.getId();
         labels[nextPosition].setGraphic(imageView); // Set graphic on the label
+        labels[nextPosition].getStyleClass().add("picked-card");
 
         findNextPosition();
     }
@@ -84,6 +85,8 @@ public class CreateRoomController {
     public void removeCard(MouseEvent mouseEvent) {
         Label label = (Label) mouseEvent.getSource(); // Get the clicked label
         label.setGraphic(null); // Remove image
+        label.getStyleClass().remove("picked-card");
+
         findNextPosition();
     }
 

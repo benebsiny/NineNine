@@ -1,3 +1,30 @@
+@font-face {
+    font-family: 'GAME';
+    src: url('../Font/GAME.ttf');
+}
+
+@font-face {
+    font-family: 'Taipei Sans TC Beta';
+    src: url('../Font/TaipeiSansTCBeta-Bold.ttf');
+}
+
+
+.eng-font {
+    -fx-font-family: 'GAME';
+}
+
+.ch-font {
+    -fx-font-family: 'Taipei Sans TC Beta';
+}
+
+.text-field:hover, .text-field:focused {
+    -fx-font-size: 18px;
+}
+
+.button, .button:hover, .button:focused {
+    -fx-font-size: 18px;
+}
+
 .back-button {
     -fx-background-image: url("../Img/back.png");
     -fx-background-size: 36 36;
@@ -17,14 +44,4 @@
     -fx-background-size: 36 36;
     -fx-background-repeat: no-repeat;
     -fx-background-position: center;
-}
-
-.plus-button:hover {
-    -fx-background-color: rgba(252, 51, 51, 0.2);
-    -fx-cursor: hand;
-}
-
-.minus-button:hover {
-    -fx-background-color: rgba(57, 54, 240, 0.2);
-    -fx-cursor: hand;
 }

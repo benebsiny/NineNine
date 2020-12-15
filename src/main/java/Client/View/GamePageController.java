@@ -211,7 +211,7 @@ public class GamePageController {
         JFXButton plusButton = new JFXButton();
         plusButton.setRipplerFill(Paint.valueOf("#FC3333"));
         plusButton.getStyleClass().add("plus-button");
-        plusButton.getStylesheets().add("/Client/Style/General.css");
+        plusButton.getStylesheets().add("/Client/Style/GamePage.css");
 
         ImageView addImage = new ImageView(new Image("/Client/Img/plus.png"));
         addImage.setFitWidth(72);
@@ -219,14 +219,20 @@ public class GamePageController {
         plusButton.setGraphic(addImage);
 
         // Number
-        Text numberText = new Text(String.valueOf(number));
-        numberText.setFont(Font.font(60));
+//        Text numberText = new Text(String.valueOf(number));
+//        numberText.getStyleClass().add("font-");
+//        numberText.setFont(Font.font("Taipei Sans TC Beta"));
+//        numberText.setFont(Font.font(60));
+        Label label = new Label(String.valueOf(number));
+        label.setFont(Font.font(72));
+        label.getStyleClass().add("add-minus-number-label");
+        label.getStylesheets().add("/Client/Style/GamePage.css");
 
         // Minus button
         JFXButton minusButton = new JFXButton();
         minusButton.setRipplerFill(Paint.valueOf("#3936F0"));
         minusButton.getStyleClass().add("minus-button");
-        minusButton.getStylesheets().add("/Client/Style/General.css");
+        minusButton.getStylesheets().add("/Client/Style/GamePage.css");
 
         ImageView minusImage = new ImageView(new Image("/Client/Img/minus.png"));
         minusImage.setFitWidth(72);
@@ -234,7 +240,7 @@ public class GamePageController {
         minusButton.setGraphic(minusImage);
 
         // Add all component
-        chooseNumberBox.getChildren().addAll(plusButton, numberText, minusButton);
+        chooseNumberBox.getChildren().addAll(plusButton, label, minusButton);
 
         // Dialog
         JFXDialog dialog = new JFXDialog(stackPane, chooseNumberBox, JFXDialog.DialogTransition.CENTER);

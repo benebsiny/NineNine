@@ -17,9 +17,9 @@
    <children>
       <AnchorPane fx:id="pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0">
          <children>
-            <Label fx:id="valueLabel" alignment="CENTER" layoutX="422.0" layoutY="191.0" text="00" textAlignment="JUSTIFY">
+            <Label fx:id="valueLabel" alignment="CENTER" layoutX="358.0" layoutY="203.0" prefHeight="106.0" prefWidth="173.0" styleClass="eng-font" stylesheets="@../Style/General.css" text="00" textAlignment="JUSTIFY">
                <font>
-                  <Font size="48.0" />
+                  <Font size="100.0" />
                </font>
             </Label>
             <JFXButton fx:id="first" layoutX="120.0" layoutY="394.0" mnemonicParsing="false" onAction="#pickCard" prefHeight="168.0" prefWidth="120.0" />
@@ -27,7 +27,7 @@
             <JFXButton fx:id="third" layoutX="400.0" layoutY="394.0" mnemonicParsing="false" onAction="#pickCard" prefHeight="168.0" prefWidth="120.0" />
             <JFXButton fx:id="fourth" layoutX="540.0" layoutY="394.0" mnemonicParsing="false" onAction="#pickCard" prefHeight="168.0" prefWidth="120.0" />
             <JFXButton fx:id="fifth" layoutX="680.0" layoutY="394.0" mnemonicParsing="false" onAction="#pickCard" prefHeight="168.0" prefWidth="120.0" />
-            <Pane fx:id="card5Cover" opacity="0.8" prefHeight="600.0" prefWidth="900.0" style="-fx-background-color: gray;">
+            <Pane fx:id="card5Cover" opacity="0.8" prefHeight="600.0" prefWidth="900.0" style="-fx-background-color: gray;" visible="false">
                <children>
                   <Circle blendMode="OVERLAY" fill="WHITE" layoutX="149.0" layoutY="222.0" radius="132.0" stroke="BLACK" strokeType="INSIDE" />
                   <Circle blendMode="OVERLAY" fill="WHITE" layoutX="444.0" layoutY="82.0" radius="132.0" stroke="BLACK" strokeType="INSIDE" />
