@@ -181,7 +181,7 @@ public class GameFunction {
                 else {
 
                     for (int i = 0; i < playersName.length; i++) {  //找出下個玩家
-                        if (playersName[i] == nowPlayer) {
+                        if (playersName[i].equals(nowPlayer)) {
                             if (gameRoom.getOrder() == GameRoom.Order.Clockwise) {   //如果為順序
                                 if (i == playersName.length - 1) {
                                     nextPlayer = playersName[0];
@@ -206,7 +206,7 @@ public class GameFunction {
                 Set<Map.Entry<String, Socket>> entrySet = clientMap.entrySet();
 
                 for (String roomPlayer : roomPlayers) {                     //發送所有人NextPlayerCommand
-                    if((isPlayerLose == false && roomPlayer==nowPlayer) || roomPlayer!=nowPlayer) {
+                    if(!isPlayerLose || !roomPlayer.equals(nowPlayer)) {
                         for (Map.Entry<String, Socket> stringSocketEntry : entrySet) {
                             if (stringSocketEntry.getKey().equals(roomPlayer)) {
                                 System.out.println("Send NextPlayerCommand " + roomPlayer);

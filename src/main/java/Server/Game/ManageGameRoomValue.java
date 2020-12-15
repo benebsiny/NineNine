@@ -56,7 +56,7 @@ public class ManageGameRoomValue {
                 String[] playersName = gameRoom.getPlayersName();
 
                 if(playersName.length==2){
-                    if(playersName[0] == deletePlayer){
+                    if(playersName[0].equals(deletePlayer)){
                         winnerPlayer = playersName[1];
                     }
                     else {

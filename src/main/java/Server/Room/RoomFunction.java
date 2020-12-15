@@ -171,7 +171,7 @@ public class RoomFunction {
         String[] roomPlayers = room.getPlayersName();
 
         for (String roomPlayer : roomPlayers) {       //找該房間其他人的socket,送roomPlayerCommand
-            if (roomPlayer != player) {
+            if (!roomPlayer.equals(player)) {
                 //System.out.println("Send other roomPlayerCommand: " + roomPlayer);
                 for (Map.Entry<String, Socket> stringSocketEntry : entrySet) {
                     if (stringSocketEntry.getKey().equals(roomPlayer)) {

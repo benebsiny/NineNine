@@ -116,7 +116,7 @@ public class Main {
                         processEnterRoomCommand((EnterRoomCommand) input, client, out);
                     } else if (input instanceof LeaveRoomCommand) {
 
-                        processLeaveRoomCommand(((LeaveRoomCommand) input).getPlayer());
+                        processLeaveRoomCommand(getClientUsername(client));
                         System.out.println("leave player: " + ((LeaveRoomCommand) input).getPlayer());
                         out = new ObjectOutputStream(client.getOutputStream());
                         out.writeObject(input);
@@ -154,7 +154,7 @@ public class Main {
 
                                 if(isAllCardReceive((PlayCommand) input)){          //如果全部卡都收到則大家贏
                                     System.out.println("is All Card Receive");
-                                    sendAllWinnerCommand(((PlayCommand) input).getPlayer());
+                                    sendAllWinnerCommand(getClientUsername(client));
                                     deleteGameRoom(getClientUsername(client));
                                 }
                                 else{
@@ -172,7 +172,7 @@ public class Main {
                         } else {                                 //出牌的人贏了
                             if(isAllCardReceive((PlayCommand) input)){   //如果全部卡都收到則大家贏
                                 System.out.println("is All Card Receive");
-                                sendAllWinnerCommand(((PlayCommand) input).getPlayer());
+                                sendAllWinnerCommand(getClientUsername(client));
                                 deleteGameRoom(getClientUsername(client));
                             }
                             else if(((PlayCommand) input).getRemainCardCount() == 0){            //如果出牌的人沒牌了，他贏
@@ -202,7 +202,7 @@ public class Main {
                                 if(judgeResult == null){                                    //若房間還有兩人以上，遊戲繼續
                                     sendNextPlayerCommand(client, (PlayCommand) input,true);
 
-                                    deleteGameRoomPlayer(((PlayCommand) input).getPlayer());
+                                    deleteGameRoomPlayer(getClientUsername(client));
                                 }
                                 else{                                //若房間僅剩一人，直接勝利
                                     System.out.println("winner " + judgeResult);
@@ -222,9 +222,9 @@ public class Main {
                     }
 
                     int j = 0;
-                    for (Room w : waitRoomList) {
+                    for (GameRoom w : gameRoomList) {
                         j++;
-                        System.out.println("waitRoom " + j + ".");
+                        System.out.println("gameRoom " + j + ".");
                         for (int i = 0; i < w.getPlayersName().length; i++) {
                             System.out.println(i + ". " + w.getPlayersName()[i]);
                         }
@@ -256,7 +256,7 @@ public class Main {
 
                                     for (GameRoom gameRoom : gameRoomList) {   //找到該玩家的gameRoom
                                         if(Arrays.asList(gameRoom.getPlayersName()).contains(disconnectClientName)){
-                                            if(gameRoom.getNowDrawCardPlayer() == disconnectClientName){
+                                            if(gameRoom.getNowDrawCardPlayer().equals(disconnectClientName)){
                                                 PlayCommand playCommand = new PlayCommand();
                                                 playCommand.setCard(Card.HA);
                                                 sendNextPlayerCommand(client, playCommand,true);
