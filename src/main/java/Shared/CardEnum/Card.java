@@ -1,5 +1,10 @@
 package Shared.CardEnum;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Random;
+
 public enum Card {
     HA(1, Suit.HEART), H2(2, Suit.HEART), H3(3, Suit.HEART), H4(4, Suit.HEART),
     H5(5, Suit.HEART), H6(6, Suit.HEART), H7(7, Suit.HEART), H8(8, Suit.HEART),
@@ -36,6 +41,11 @@ public enum Card {
 
     public Suit getSuit() {
         return suit;
+    }
+
+    public static Card randomLetter()  {
+        List<Card> cards = List.of(values());
+        return cards.get(new Random().nextInt(cards.size()));
     }
 
 }

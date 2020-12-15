@@ -3,27 +3,69 @@ package Client.View;
 import Client.Main;
 import Client.Status.UserStatus;
 import Client.Status.WindowStatus;
-import javafx.animation.Interpolator;
-import javafx.animation.KeyFrame;
-import javafx.animation.KeyValue;
-import javafx.animation.Timeline;
+import Shared.CardEnum.Card;
+import javafx.animation.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Label;
+import javafx.scene.effect.DropShadow;
+import javafx.scene.effect.Effect;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
+import javafx.scene.transform.Rotate;
 import javafx.util.Duration;
 
 public class HomeController {
     @FXML
     public Pane homePane;
-
-    final static int slidingDuration = 700;
     public Text signInUserLabel;
     public AnchorPane pane;
+    public Label pokerGameLabel;
+
+    final static int slidingDuration = 700;
+    public ImageView cardImage1;
+    public ImageView cardImage2;
 
     @FXML
     void initialize() {
+
+
+        // Label color change
+        Timeline timeline = new Timeline();
+        String[] colorList = new String[]{"red", "orangered", "yellow", "limegreen", "aqua", "purple", "red"};
+        for (int i=0; i<colorList.length; i++) {
+            timeline.getKeyFrames().add(
+                    new KeyFrame(Duration.millis(i*700),
+                            new KeyValue(pokerGameLabel.effectProperty(),
+                                    new DropShadow(20, Color.valueOf(colorList[i])))));
+        }
+        timeline.setCycleCount(Animation.INDEFINITE);
+        timeline.play();
+
+        // Card Image change
+        Timeline timeline1 = new Timeline();
+        timeline1.getKeyFrames().add(new KeyFrame(Duration.millis(0), __ -> {
+            cardImage1.setImage(new Image("/Client/Img/Card/" + Card.randomLetter().toString() + ".png"));
+            cardImage1.getTransforms().add(new Rotate(5));
+
+            cardImage2.setImage(new Image("/Client/Img/Card/" + Card.randomLetter().toString() + ".png"));
+            cardImage2.getTransforms().add(new Rotate(-5));
+
+        }));
+        timeline1.getKeyFrames().add(new KeyFrame(Duration.millis(100), __ -> {
+            cardImage1.setImage(new Image("/Client/Img/Card/" + Card.randomLetter().toString() + ".png"));
+            cardImage1.getTransforms().add(new Rotate(5));
+
+            cardImage2.setImage(new Image("/Client/Img/Card/" + Card.randomLetter().toString() + ".png"));
+            cardImage2.getTransforms().add(new Rotate(-5));
+        }));
+        timeline1.setCycleCount(Animation.INDEFINITE);
+        timeline1.play();
+
 
         Main.checkMessage(pane);
 

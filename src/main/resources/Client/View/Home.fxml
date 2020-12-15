@@ -2,6 +2,7 @@
 
 <?import com.jfoenix.controls.JFXButton?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
@@ -10,7 +11,6 @@
 
 <AnchorPane fx:id="pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" stylesheets="@../Style/General.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Client.View.HomeController">
    <children>
-      <ImageView fitHeight="173.0" fitWidth="387.0" layoutX="108.0" layoutY="94.0" pickOnBounds="true" preserveRatio="true" />
       <JFXButton layoutX="814.0" layoutY="32.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="50.0" styleClass="setting-button" stylesheets="@../Style/General.css" />
       <JFXButton layoutX="814.0" layoutY="82.0" mnemonicParsing="false" onAction="#goToLoginPage" prefHeight="50.0" prefWidth="50.0" styleClass="user-button" stylesheets="@../Style/General.css" />
       <Pane fx:id="homePane" layoutY="323.0" prefHeight="277.0" prefWidth="1800.0">
@@ -29,11 +29,16 @@
             </Pane>
          </children>
       </Pane>
+      <ImageView fx:id="cardImage1" fitHeight="140.0" fitWidth="100.0" layoutX="80.0" layoutY="37.0" pickOnBounds="true" preserveRatio="true" rotate="180.0" />
+      <ImageView fx:id="cardImage2" fitHeight="105.0" fitWidth="75.0" layoutX="802.0" layoutY="257.0" pickOnBounds="true" preserveRatio="true" />
       <Text fx:id="signInUserLabel" layoutX="782.0" layoutY="138.0" strokeType="OUTSIDE" strokeWidth="0.0" text="username" textAlignment="CENTER" wrappingWidth="114.0" />
-      <Label layoutX="102.0" layoutY="181.0" styleClass="eng-font" text="99 POKER GAME">
+      <Label fx:id="pokerGameLabel" layoutX="102.0" layoutY="181.0" styleClass="eng-font" text="99 POKER GAME">
          <font>
             <Font size="72.0" />
          </font>
+         <effect>
+            <DropShadow color="#f53333" spread="0.55" />
+         </effect>
       </Label>
    </children>
 </AnchorPane>
