@@ -22,7 +22,7 @@
                   <Font size="100.0" />
                </font>
             </Label>
-            <Pane fx:id="coverPane1" layoutY="390.0" prefHeight="210.0" prefWidth="900.0" style="-fx-background-color: #39A460;" styleClass="background-pane" stylesheets="@../Style/GamePage.css" />
+            <Pane layoutY="390.0" prefHeight="210.0" prefWidth="900.0" style="-fx-background-color: #39A460;" styleClass="background-pane" stylesheets="@../Style/GamePage.css" />
             <JFXButton fx:id="first" layoutX="120.0" layoutY="412.0" mnemonicParsing="false" onAction="#pickCard" prefHeight="168.0" prefWidth="120.0" />
             <JFXButton fx:id="second" layoutX="260.0" layoutY="412.0" mnemonicParsing="false" onAction="#pickCard" prefHeight="168.0" prefWidth="120.0" />
             <JFXButton fx:id="third" layoutX="400.0" layoutY="412.0" mnemonicParsing="false" onAction="#pickCard" prefHeight="168.0" prefWidth="120.0" />

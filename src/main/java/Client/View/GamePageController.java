@@ -111,11 +111,11 @@ public class GamePageController {
 
         cardButtons = new JFXButton[]{first, second, third, fourth, fifth};
         playerIcons = new ImageView[]{null, turn1Icon, turn2Icon, turn3Icon};
-        playerNames = new Text[]{firstPlayerLabel, secondPlayerLabel, thirdPlayerLabel};
+        playerNames = new Text[]{null, firstPlayerLabel, secondPlayerLabel, thirdPlayerLabel};
 
         System.out.println(Arrays.toString(PlayerStatus.getTurnPlayers()));
         for (int i = 1; i < PlayerStatus.getTurnPlayers().length; i++) {
-            playerNames[i - 1].setText(PlayerStatus.getTurnPlayers()[i]);
+            playerNames[i].setText(PlayerStatus.getTurnPlayers()[i]);
         }
 
         countdownBar.setVisible(false);
@@ -513,10 +513,10 @@ public class GamePageController {
         backButton.setLayoutX(394);
         backButton.setLayoutY(400);
         backButton.setStyle("-fx-background-color: white; -fx-text-fill: black");
+        backButton.setOnAction(__ -> Main.switchScene("Home"));
 
         pane.getChildren().addAll(losePane, backButton);
 
-//        Main.switchScene("Home");
     }
 
 
@@ -573,6 +573,50 @@ public class GamePageController {
         Timeline timeline = new Timeline();
         timeline.getKeyFrames().add(new KeyFrame(Duration.millis(0), fadeIn));
         timeline.getKeyFrames().add(new KeyFrame(Duration.millis(600), zoomOut));
+        timeline.play();
+    }
+
+    /**
+     * When I win, show win animation
+     */
+    public void meWinAnimation() {
+        Pane losePane = new Pane();
+        losePane.setPrefWidth(900);
+        losePane.setPrefHeight(600);
+        losePane.setStyle("-fx-background-color: rgba(0, 0, 0, 0.7);");
+
+        // Lose label
+        Label loseLabel = new Label("YOU WIN");
+        loseLabel.getStyleClass().add("eng-font");
+        loseLabel.getStylesheets().add("/Client/Style/General.css");
+        loseLabel.setFont(Font.font(100));
+        loseLabel.setTextFill(Paint.valueOf("white"));
+        loseLabel.setLayoutX(175);
+        loseLabel.setLayoutY(150);
+        losePane.getChildren().add(loseLabel);
+
+        // Back to home page
+        JFXButton backButton = new JFXButton("回到主畫面");
+        backButton.getStyleClass().add("ch-font");
+        backButton.getStylesheets().add("/Client/Style/General.css");
+        backButton.setButtonType(JFXButton.ButtonType.RAISED);
+        backButton.setRipplerFill(Paint.valueOf("#d9d9d9"));
+        backButton.setLayoutX(394);
+        backButton.setLayoutY(400);
+        backButton.setStyle("-fx-background-color: white; -fx-text-fill: black");
+        backButton.setOnAction(__ -> Main.switchScene("Home"));
+
+        pane.getChildren().addAll(losePane, backButton);
+
+        // Color transition
+        Timeline timeline = new Timeline();
+        String[] colorList = new String[]{"red", "orange", "yellow", "limegreen", "teal", "blue", "violet", "red"};
+        for (int i = 0; i < colorList.length; i++) {
+            timeline.getKeyFrames().add(
+                    new KeyFrame(Duration.millis(800 * i),
+                            new KeyValue(loseLabel.textFillProperty(), Paint.valueOf(colorList[i]))));
+        }
+        timeline.setCycleCount(Animation.INDEFINITE);
         timeline.play();
     }
 
@@ -887,6 +931,26 @@ class GamePageConnection implements Runnable {
                         Platform.runLater(() -> GUI.otherLoseAnimation(command.getLosePlayer()));
                     }
 
+                } else if (receivedObject instanceof WinnerCommand) {
+                    Platform.runLater(GUI::meWinAnimation);
+                    System.out.println("you win");
+                    break;
+
+                } else if (receivedObject instanceof NoRemainCardsWinnerCommand) {
+
+                    NoRemainCardsWinnerCommand command = (NoRemainCardsWinnerCommand) receivedObject;
+                    if (command.getPlayerName().equals(UserStatus.getSignInUser())) {
+                        Platform.runLater(GUI::meWinAnimation);
+                        break;
+                    }
+                    // Others win the game -> let him disappear in the game
+                    else {
+                        int winnerTurn = GUI.getTurnByName(command.getPlayerName());
+                        Platform.runLater(() -> {
+                            GUI.playerIcons[winnerTurn].setOpacity(0.1);
+                            GUI.playerNames[winnerTurn].setOpacity(0.1);
+                        });
+                    }
                 }
 
             } catch (SocketException ex) {
