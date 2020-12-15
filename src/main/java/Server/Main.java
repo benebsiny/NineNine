@@ -231,13 +231,19 @@ public class Main {
 
                     }
 
+                    j = 0;
+                    for (String key : clientMap.keySet()) {
+                        j++;
+                        System.out.println(j+" Key = " + key);
+
+                    }
                     //else if(input instanceof PlayCommand)
 
 
                 } catch (IOException | ClassNotFoundException | InterruptedException e) {
                     e.printStackTrace();
                     if (e instanceof SocketException) {
-
+                        clientMap.remove(getClientUsername(client));
                         System.out.println("Client disconnect!!");
                         break;
                     }
@@ -277,6 +283,7 @@ public class Main {
                         } catch (IOException ioException) {
                             ioException.printStackTrace();
                         }
+                        clientMap.remove(getClientUsername(client));
                         break;
                     }
                 }
