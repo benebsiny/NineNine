@@ -5,10 +5,7 @@ import Server.Game.GameRoom;
 import Server.Game.ManageGameRoomValue;
 import Server.Room.Room;
 import Shared.CardEnum.Card;
-import Shared.Command.Game.NextPlayerCommand;
-import Shared.Command.Game.PlayCommand;
-import Shared.Command.Game.ReturnPlayCommand;
-import Shared.Command.Game.WinnerCommand;
+import Shared.Command.Game.*;
 import Shared.Command.Player.RegisterCommand;
 import Shared.Command.Player.SignInCommand;
 import Shared.Command.Room.*;
@@ -135,7 +132,34 @@ public class Main {
                         }
 
                         //sendNextPlayerCommand(client);
-                    } else if (input instanceof PlayCommand) {
+                    }
+                    else if (input instanceof LeaveGameRoomCommand){
+                        String leaveGameRoomPlayer = getClientUsername(client);
+                        boolean inGameRoomResult = EOFExceptionInGameRoom(leaveGameRoomPlayer);    //送loseGameCommand給其他人
+
+                        String judgeResult = judgeGameRoomWinner(leaveGameRoomPlayer);
+                        if(judgeResult == null){
+                            System.out.println("judgeResult: null");
+
+                            for (GameRoom gameRoom : gameRoomList) {   //找到該玩家的gameRoom
+                                if(Arrays.asList(gameRoom.getPlayersName()).contains(leaveGameRoomPlayer)){
+                                    if(gameRoom.getNowDrawCardPlayer().equals(leaveGameRoomPlayer)){
+                                        PlayCommand playCommand = new PlayCommand();
+                                        playCommand.setCard(Card.HA);
+                                        sendNextPlayerCommand(client, playCommand,true);
+                                    }
+                                }
+                            }
+
+                            deleteGameRoomPlayer(leaveGameRoomPlayer);
+                        }
+                        else{                                                //如果房間出現贏家
+                            System.out.println("winner judgeResult: " + judgeResult);
+                            sendWinnerCommand(judgeResult);
+                            deleteGameRoom(judgeResult);
+                        }
+                    }
+                    else if (input instanceof PlayCommand) {
 
                         addReceiveCardCount((PlayCommand) input);
                         boolean isLose = manageGameRoomValue((PlayCommand) input);
