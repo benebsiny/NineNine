@@ -3,6 +3,7 @@
 <?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXListView?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
@@ -20,5 +21,8 @@
             <Font size="18.0" />
          </font>
       </JFXButton>
+      <ImageView fx:id="card1" fitHeight="168.0" fitWidth="120.0" layoutX="453.0" layoutY="33.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="card2" fitHeight="168.0" fitWidth="120.0" layoutX="599.0" layoutY="33.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="card3" fitHeight="168.0" fitWidth="120.0" layoutX="743.0" layoutY="33.0" pickOnBounds="true" preserveRatio="true" />
    </children>
 </AnchorPane>

@@ -3,6 +3,8 @@ package Client.View;
 import Client.Connection.WaitingUserConn;
 import Client.Main;
 import Client.Status.PlayerStatus;
+import Client.Status.RoomCardStatus;
+import Shared.CardEnum.Card;
 import Shared.Command.Room.LeaveRoomCommand;
 import Shared.Command.Room.RoomDisbandCommand;
 import Shared.Command.Room.RoomPlayerCommand;
@@ -13,6 +15,8 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 
 import java.io.IOException;
 import java.net.SocketException;
@@ -21,9 +25,17 @@ public class WaitingUserHostController {
     public JFXListView<String> userList;
     public Label hostRoomLabel;
     public JFXButton startGameButton;
+    public ImageView card1;
+    public ImageView card2;
+    public ImageView card3;
 
     @FXML
     void initialize() {
+
+        Card[] roomCards = RoomCardStatus.getCards();
+        card1.setImage(new Image("/Client/Img/" + roomCards[0] + ".png"));
+        card2.setImage(new Image("/Client/Img/" + roomCards[1] + ".png"));
+        card3.setImage(new Image("/Client/Img/" + roomCards[2] + ".png"));
 
         hostRoomLabel.setText(String.format("%s 的房間", PlayerStatus.getPlayers()[0]));
         userList.getItems().addAll(PlayerStatus.getPlayers());

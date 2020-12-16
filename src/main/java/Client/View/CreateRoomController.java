@@ -3,6 +3,7 @@ package Client.View;
 import Client.Connection.RoomConn;
 import Client.Main;
 import Client.Status.PlayerStatus;
+import Client.Status.RoomCardStatus;
 import Shared.CardEnum.Card;
 import Shared.Command.Room.EnterRoomCommand;
 import Shared.Command.Room.RoomStatusCommand;
@@ -126,6 +127,8 @@ class CreateRoomHandler implements Runnable {
             // Room created
             if (command.getRoomStatus() == RoomStatusCommand.RoomStatus.CREATED) {
                 PlayerStatus.setPlayers(command.getPlayers()); // Set status
+                RoomCardStatus.setCards(new Card[]{firstCard, secondCard, thirdCard});
+
                 Platform.runLater(() -> Main.switchScene("WaitingUserHost")); // Go to waiting user
 
             }
