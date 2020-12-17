@@ -33,9 +33,9 @@ public class WaitingUserHostController {
     void initialize() {
 
         Card[] roomCards = RoomCardStatus.getCards();
-        card1.setImage(new Image("/Client/Img/" + roomCards[0] + ".png"));
-        card2.setImage(new Image("/Client/Img/" + roomCards[1] + ".png"));
-        card3.setImage(new Image("/Client/Img/" + roomCards[2] + ".png"));
+        card1.setImage(new Image("/Client/Img/Card/" + roomCards[0].toString() + ".png"));
+        card2.setImage(new Image("/Client/Img/Card/" + roomCards[1].toString() + ".png"));
+        card3.setImage(new Image("/Client/Img/Card/" + roomCards[2].toString() + ".png"));
 
         hostRoomLabel.setText(String.format("%s 的房間", PlayerStatus.getPlayers()[0]));
         userList.getItems().addAll(PlayerStatus.getPlayers());

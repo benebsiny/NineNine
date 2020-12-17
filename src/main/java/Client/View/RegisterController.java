@@ -2,6 +2,7 @@ package Client.View;
 
 import Client.Connection.RegisterConn;
 import Client.Main;
+import Client.Status.WindowStatus;
 import Shared.Data.User;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
@@ -75,7 +76,7 @@ class RegisterHandler implements Runnable {
 
             if (registerSuccess) {
                 // TODO Show register successful tooltip
-                Platform.runLater(() -> Main.switchScene("Home"));
+                Platform.runLater(() -> Main.switchScene("Home", "註冊成功", WindowStatus.MessageSeverity.SUCCESS));
 
             } else {
                 Platform.runLater(() -> GUI.errMsg.setVisible(true));
