@@ -475,8 +475,8 @@ public class GamePageController {
         Timeline time = new Timeline();
         time.getKeyFrames().add(new KeyFrame(Duration.millis(0), init));
         time.getKeyFrames().add(new KeyFrame(Duration.millis(0), moving));
-        time.getKeyFrames().add(new KeyFrame(Duration.millis(700), zoomOut));
-        time.getKeyFrames().add(new KeyFrame(Duration.millis(1700), fadeOut));
+        time.getKeyFrames().add(new KeyFrame(Duration.millis(500), zoomOut));
+        time.getKeyFrames().add(new KeyFrame(Duration.millis(1080), fadeOut));
         time.getKeyFrames().add(new KeyFrame(Duration.millis(2000), event -> otherPlayCardImage.setVisible(false)));
 
         countingValue(nextValue, time);
@@ -729,7 +729,7 @@ public class GamePageController {
         line.setStartX(848);
         line.setStartY(351);
 
-        line.setEndY(478);
+        line.setEndY(496);
         switch (nextPositionToPlace) {
             case 0 -> line.setEndX(180);
             case 1 -> line.setEndX(320);
@@ -810,7 +810,7 @@ public class GamePageController {
                 line.setStartX(848);
                 line.setStartY(351);
                 line.setEndX(180 + finalI * 140);
-                line.setEndY(478);
+                line.setEndY(496);
 
                 // Path transition
                 PathTransition pathTransition = new PathTransition();
