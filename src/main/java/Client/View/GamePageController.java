@@ -628,16 +628,8 @@ public class GamePageController {
      */
     public void otherPlayerThinkingAnimation(int turnId) {
 
-        if (turnId == 1) {
-            shineCircle.setCenterX(150);
-            shineCircle.setCenterY(225);
-        } else if (turnId == 2) {
-            shineCircle.setCenterX(450);
-            shineCircle.setCenterY(100);
-        } else if (turnId == 3) {
-            shineCircle.setCenterX(750);
-            shineCircle.setCenterY(225);
-        }
+        shineCircle.setCenterX(playerIcons[turnId].getLayoutX() + playerIcons[turnId].getFitWidth() / 2);
+        shineCircle.setCenterY(playerIcons[turnId].getLayoutY() + playerIcons[turnId].getFitHeight() / 2);
 
         ft = new FillTransition(Duration.seconds(2), shineCircle, Color.BLACK, Color.valueOf("#ffcb21"));
         ft.setCycleCount(Animation.INDEFINITE);
@@ -696,6 +688,11 @@ public class GamePageController {
         System.out.println();
     }
 
+    /**
+     * Me play the card and count the value
+     *
+     * @param nextValue - The next value
+     */
     public void countingValue(int nextValue) {
         Timeline time = new Timeline();
         countingValue(nextValue, time);
