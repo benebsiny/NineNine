@@ -113,7 +113,7 @@ public class GamePageController {
         playerIcons = new ImageView[]{null, turn1Icon, turn2Icon, turn3Icon};
         playerNames = new Text[]{null, firstPlayerLabel, secondPlayerLabel, thirdPlayerLabel};
 
-        System.out.println(Arrays.toString(PlayerStatus.getTurnPlayers()));
+        // Get players
         for (int i = 1; i < PlayerStatus.getTurnPlayers().length; i++) {
             playerNames[i].setText(PlayerStatus.getTurnPlayers()[i]);
         }
@@ -338,6 +338,7 @@ public class GamePageController {
             mePlayCardImage.setOpacity(1);
             mePlayCardImage.setVisible(true);
             pickedButton.setGraphic(null);
+            pickedButton.setDisable(true);
         };
 
         EventHandler<ActionEvent> moving = event -> {
@@ -769,6 +770,8 @@ public class GamePageController {
             imageView.setFitHeight(168);
             imageView.setFitWidth(120);
             cardButtons[nextPositionToPlace].setGraphic(imageView);
+            cardButtons[nextPositionToPlace].setDisable(false);
+
             drawCardImage.setVisible(false);
 
             // Add card at server
@@ -838,6 +841,7 @@ public class GamePageController {
                 imageView.setFitHeight(168);
                 imageView.setFitWidth(120);
                 cardButtons[finalI].setGraphic(imageView);
+                cardButtons[finalI].setDisable(false);
             }));
         }
         timeline.play();
