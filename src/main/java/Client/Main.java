@@ -32,6 +32,7 @@ public class Main extends Application {
         Scene scene = new Scene(root, 900, 600);
         stage.setScene(scene);
         stage.setResizable(false);
+        stage.setTitle("99 Poker Game");
         stage.show();
     }
 
