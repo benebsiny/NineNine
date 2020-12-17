@@ -879,6 +879,15 @@ public class GamePageController {
         }
         nextPositionToPlace = -1; // There are full of cards
     }
+
+    public void goBack(ActionEvent actionEvent) {
+        try {
+            GamePageConn.leave();
+            Main.switchScene("Home");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }
 
 /**
@@ -933,7 +942,6 @@ class GamePageConnection implements Runnable {
 
                 } else if (receivedObject instanceof WinnerCommand) {
                     Platform.runLater(GUI::meWinAnimation);
-                    System.out.println("you win");
                     break;
 
                 } else if (receivedObject instanceof NoRemainCardsWinnerCommand) {
@@ -951,6 +959,10 @@ class GamePageConnection implements Runnable {
                             GUI.playerNames[winnerTurn].setOpacity(0.1);
                         });
                     }
+
+                } else if (receivedObject instanceof LeaveGameRoomCommand) {
+                    // I leave the room, stop this thread
+                    break;
                 }
 
             } catch (SocketException ex) {

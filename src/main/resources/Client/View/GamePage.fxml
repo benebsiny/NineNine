@@ -17,6 +17,7 @@
    <children>
       <AnchorPane fx:id="pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0">
          <children>
+            <JFXButton layoutX="45.0" layoutY="44.0" onAction="#goBack" prefHeight="40.0" prefWidth="40.0" styleClass="back-button" stylesheets="@../Style/General.css" />
             <Label fx:id="valueLabel" alignment="CENTER" layoutX="358.0" layoutY="203.0" prefHeight="106.0" prefWidth="173.0" styleClass="eng-font" stylesheets="@../Style/General.css" text="00" textAlignment="JUSTIFY">
                <font>
                   <Font size="100.0" />

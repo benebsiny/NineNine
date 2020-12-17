@@ -1,6 +1,7 @@
 package Client.Connection;
 
 import Client.Main;
+import Shared.Command.Game.LeaveGameRoomCommand;
 import Shared.Command.Game.PlayCommand;
 
 import java.io.IOException;
@@ -29,5 +30,16 @@ public class GamePageConn {
         Socket server = Main.getServer();
         ObjectOutputStream out = new ObjectOutputStream(server.getOutputStream());
         out.writeObject(command);
+    }
+
+    /**
+     * Leave the game room
+     */
+    public static void leave() throws IOException {
+        LeaveGameRoomCommand leaveGameRoomCommand = new LeaveGameRoomCommand();
+
+        Socket server = Main.getServer();
+        ObjectOutputStream out = new ObjectOutputStream(server.getOutputStream());
+        out.writeObject(leaveGameRoomCommand);
     }
 }
