@@ -36,7 +36,16 @@ import java.util.Arrays;
 class PlayingStatus {
     private Card pickedCard;
     private JFXButton pickedButton;
+    private int pickedNumber;
     private Status status = Status.NORMAL;
+
+    public int getPickedNumber() {
+        return pickedNumber;
+    }
+
+    public void setPickedNumber(int pickedNumber) {
+        this.pickedNumber = pickedNumber;
+    }
 
     enum Status {
         NORMAL, FIVE, TEN, QUEEN
@@ -148,8 +157,10 @@ public class GamePageController {
             case "fifth" -> pickedNumber = 4;
         }
         pickedCard = myCards[pickedNumber];
-        myCards[pickedNumber] = null;
-        findNextEmptyPlaceForCard();
+
+        System.out.println("Picked Card: " + pickedCard);
+        System.out.println("Picked Position: " + pickedNumber);
+
 
         if (pickedCard.getRank() == 5) {
 
@@ -157,6 +168,7 @@ public class GamePageController {
             playingStatus.setStatus(PlayingStatus.Status.FIVE);
             playingStatus.setPickedCard(pickedCard);
             playingStatus.setPickedButton(pickedButton);
+            playingStatus.setPickedNumber(pickedNumber);
 
             card5Cover.setVisible(true);
             return;
@@ -164,6 +176,7 @@ public class GamePageController {
         } else if (pickedCard.getRank() == 10 || pickedCard.getRank() == 12) {
             playingStatus.setPickedCard(pickedCard);
             playingStatus.setPickedButton(pickedButton);
+            playingStatus.setPickedNumber(pickedNumber);
 
             switch (pickedCard.getRank()) {
                 case 10 -> {
@@ -177,6 +190,10 @@ public class GamePageController {
             }
             return;
         }
+
+        myCards[pickedNumber] = null;
+        findNextEmptyPlaceForCard();
+        System.out.println("Next position to play: " + nextPositionToPlace);
 
         // Send command to server
         PlayCommand playCommand = new PlayCommand();
@@ -216,10 +233,6 @@ public class GamePageController {
         plusButton.setGraphic(addImage);
 
         // Number
-//        Text numberText = new Text(String.valueOf(number));
-//        numberText.getStyleClass().add("font-");
-//        numberText.setFont(Font.font("Taipei Sans TC Beta"));
-//        numberText.setFont(Font.font(60));
         Label label = new Label(String.valueOf(number));
         label.setFont(Font.font(72));
         label.getStyleClass().add("add-minus-number-label");
@@ -246,6 +259,14 @@ public class GamePageController {
         // Button Actions
         plusButton.setOnAction(event -> {
 
+            // Remove card from array and show animation
+            myCards[playingStatus.getPickedNumber()] = null;
+            mePlayCardAnimation(playingStatus.getPickedButton(), playingStatus.getPickedCard());
+            findNextEmptyPlaceForCard();
+            System.out.println("Next position to play: " + nextPositionToPlace);
+
+
+            // Send command to server
             PlayCommand command = new PlayCommand();
             command.setPlusValue(true);
             command.setPlayer(UserStatus.getSignInUser());
@@ -257,12 +278,19 @@ public class GamePageController {
                 e.printStackTrace();
             }
 
+            playingStatus = new PlayingStatus();
             dialog.close();
-
-            mePlayCardAnimation(playingStatus.getPickedButton(), playingStatus.getPickedCard());
         });
 
         minusButton.setOnAction(event -> {
+
+            // Remove card from array and show animation
+            myCards[playingStatus.getPickedNumber()] = null;
+            mePlayCardAnimation(playingStatus.getPickedButton(), playingStatus.getPickedCard());
+            findNextEmptyPlaceForCard();
+            System.out.println("Next position to play: " + nextPositionToPlace);
+
+            // Send command to server
             PlayCommand command = new PlayCommand();
             command.setPlusValue(false);
             command.setPlayer(UserStatus.getSignInUser());
@@ -274,9 +302,8 @@ public class GamePageController {
                 e.printStackTrace();
             }
 
+            playingStatus = new PlayingStatus();
             dialog.close();
-
-            mePlayCardAnimation(playingStatus.getPickedButton(), playingStatus.getPickedCard());
         });
     }
 
@@ -290,6 +317,7 @@ public class GamePageController {
         ImageView pickedPlayerIcon = (ImageView) mouseEvent.getSource();
         int pickedPlayerTurn = 0;
 
+        // Find who was selected
         for (int i = 1; i <= 3; i++) {
             if (playerIcons[i] == pickedPlayerIcon) {
                 pickedPlayerTurn = i;
@@ -298,6 +326,14 @@ public class GamePageController {
         }
         String assignPlayer = PlayerStatus.getTurnPlayers()[pickedPlayerTurn];
         System.out.println("Assign to " + assignPlayer);
+
+
+        // Remove card from array and show animation
+        mePlayCardAnimation(playingStatus.getPickedButton(), playingStatus.getPickedCard()); // Play the animation
+        myCards[playingStatus.getPickedNumber()] = null;
+        findNextEmptyPlaceForCard();
+        System.out.println("Next position to play: " + nextPositionToPlace);
+
 
         // Send play command to server
         PlayCommand playCommand = new PlayCommand();
@@ -312,9 +348,7 @@ public class GamePageController {
         }
         card5Cover.setVisible(false); // Hide the cover
 
-        mePlayCardAnimation(playingStatus.getPickedButton(), playingStatus.getPickedCard()); // Play the animation
-
-        playingStatus = new PlayingStatus(); // Revert the plating status
+        playingStatus = new PlayingStatus(); // Revert the playing status
     }
 
     /**
@@ -324,8 +358,6 @@ public class GamePageController {
      * @param pickedCard   The card I picked
      */
     private void mePlayCardAnimation(JFXButton pickedButton, Card pickedCard) {
-
-        System.out.println("X: " + pickedButton.getLayoutX() + ", Y: " + pickedButton.getLayoutY());
 
         EventHandler<ActionEvent> init = event -> {
             mePlayCardImage.setImage(new Image(String.format("/Client/Img/Card/%s.png", pickedCard.toString())));
@@ -647,8 +679,8 @@ public class GamePageController {
      */
     public void countingValue(int nextValue, Timeline time) {
 
-        System.out.println("Current Value: " + this.value);
-        System.out.println("Next Value: " + nextValue);
+//        System.out.println("Current Value: " + this.value);
+//        System.out.println("Next Value: " + nextValue);
 
         // The value calculating
         int diff = nextValue - this.value;
@@ -662,8 +694,8 @@ public class GamePageController {
         else allDuration = 100;
 
         int diffSecond = allDuration / diff;
-        System.out.println("diff: " + diff);
-        System.out.println("diff Second: " + diffSecond);
+//        System.out.println("diff: " + diff);
+//        System.out.println("diff Second: " + diffSecond);
 
         if (diff > 0) {
             for (int i = 1; i <= diff; i++) {
@@ -685,7 +717,7 @@ public class GamePageController {
                     __ -> this.value = nextValue));
         }
 
-        System.out.println();
+//        System.out.println();
     }
 
     /**
