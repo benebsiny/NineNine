@@ -22,8 +22,8 @@ public class GameFunction {
 
         String playPlayer = playCommand.getPlayer();   //出牌玩家
 
-        for (GameRoom gameRoom : gameRoomList){          //確定client的遊戲房間
-            if(Arrays.asList(gameRoom.getPlayersName()).contains(playPlayer)){
+        for (GameRoom gameRoom : gameRoomList) {          //確定client的遊戲房間
+            if (Arrays.asList(gameRoom.getPlayersName()).contains(playPlayer)) {
 
                 ReturnPlayCommand returnPlayCommand = new ReturnPlayCommand();
                 returnPlayCommand.setPlayer(playPlayer);
@@ -31,25 +31,24 @@ public class GameFunction {
                 int deskIndex = gameRoom.getDeskIndex();
 
 
-                if(deskIndex < 52){                       //如果牌堆還有牌 發出drawcommand給出牌client
+                if (deskIndex < 52) {                       //如果牌堆還有牌 發出drawcommand給出牌client
                     Card[] drawCard = new Card[1];
 
                     drawCard[0] = gameRoom.getDesk()[deskIndex];
-                    System.out.println("draw card: "+drawCard[0]);
+                    System.out.println("draw card: " + drawCard[0]);
                     DrawCommand drawCommand = new DrawCommand(drawCard);
 
 
-                    if(deskIndex == 51){
+                    if (deskIndex == 51) {
                         returnPlayCommand.setHasCardsInDesk(false);
-                    }
-                    else{
+                    } else {
                         returnPlayCommand.setHasCardsInDesk(true);
                     }
                     returnPlayCommand.setRemainCardCount(playCommand.getRemainCardCount() + 1);
                     returnPlayCommand.setCard(playCommand.getCard());
                     returnPlayCommand.setValue(gameRoom.getValue());
 
-                    sendReturnPlayCommand(clientMap,gameRoom.getPlayersName(),returnPlayCommand); //發送returnPlayCommand
+                    sendReturnPlayCommand(clientMap, gameRoom.getPlayersName(), returnPlayCommand); //發送returnPlayCommand
 
                     Thread.sleep(2500);
 
@@ -59,18 +58,17 @@ public class GameFunction {
 
                     deskIndex = deskIndex + 1;
                     gameRoom.setDeskIndex(deskIndex);
-                    System.out.println("desk index: "+ deskIndex);
-                }
-                else{
+                    System.out.println("desk index: " + deskIndex);
+                } else {
                     returnPlayCommand.setHasCardsInDesk(false);
                     returnPlayCommand.setRemainCardCount(playCommand.getRemainCardCount());
                     returnPlayCommand.setCard(playCommand.getCard());
                     returnPlayCommand.setValue(gameRoom.getValue());
 
-                    sendReturnPlayCommand(clientMap,gameRoom.getPlayersName(),returnPlayCommand);
+                    sendReturnPlayCommand(clientMap, gameRoom.getPlayersName(), returnPlayCommand);
                 }
 
-                sendNextPlayerCommand(client,playCommand,false);
+                sendNextPlayerCommand(client, playCommand, false);
                 Main.setGameRoomList(gameRoomList);
                 break;
             }
@@ -108,7 +106,7 @@ public class GameFunction {
 
     }
 
-    public static void sendReturnPlayCommand(Map<String, Socket> clientMap,String[] roomPlayers,ReturnPlayCommand returnPlayCommand) throws IOException {
+    public static void sendReturnPlayCommand(Map<String, Socket> clientMap, String[] roomPlayers, ReturnPlayCommand returnPlayCommand) throws IOException {
         Set<Map.Entry<String, Socket>> entrySet = clientMap.entrySet();
 
         for (String roomPlayer : roomPlayers) {             //發出returnPlayCommand給房間所有玩家
@@ -128,14 +126,14 @@ public class GameFunction {
         CopyOnWriteArrayList<GameRoom> gameRoomList = Main.getGameRoomList();
         Map<String, Socket> clientMap = Main.getClientMap();
 
-        for (GameRoom gameRoom : gameRoomList){   //找到該玩家的gameRoom
-            if(Arrays.asList(gameRoom.getPlayersName()).contains(getClientUsername(client))){
+        for (GameRoom gameRoom : gameRoomList) {   //找到該玩家的gameRoom
+            if (Arrays.asList(gameRoom.getPlayersName()).contains(getClientUsername(client))) {
 
                 Set<Map.Entry<String, Socket>> entrySet = clientMap.entrySet();
                 String[] roomPlayers = gameRoom.getPlayersName();
 
                 int deskIndex = gameRoom.getDeskIndex();
-                int nextDeskIndex = roomPlayers.length*5;
+                int nextDeskIndex = roomPlayers.length * 5;
 
                 for (String roomPlayer : roomPlayers) {    //為每個gameRoom玩家發出DrawCommand內含5張牌
                     for (Map.Entry<String, Socket> stringSocketEntry : entrySet) {
@@ -144,7 +142,7 @@ public class GameFunction {
                             ObjectOutputStream allClientOut = new ObjectOutputStream(socket.getOutputStream());
 
                             Card[] drawCard = new Card[5];
-                            for (int j = 0;j < 5;j++){
+                            for (int j = 0; j < 5; j++) {
                                 drawCard[j] = gameRoom.getDesk()[deskIndex];
                                 deskIndex++;
                             }
@@ -157,14 +155,14 @@ public class GameFunction {
                 gameRoom.setDeskIndex(nextDeskIndex);
                 Main.setGameRoomList(gameRoomList);
 
-                System.out.println("desk index: "+nextDeskIndex);
+                System.out.println("desk index: " + nextDeskIndex);
 
                 break;
             }
         }
     }
 
-    public static void sendNextPlayerCommand(Socket client,PlayCommand playCommand,boolean isPlayerLose) throws IOException {
+    public static void sendNextPlayerCommand(Socket client, PlayCommand playCommand, boolean isPlayerLose) throws IOException {
 
         CopyOnWriteArrayList<GameRoom> gameRoomList = Main.getGameRoomList();
         Map<String, Socket> clientMap = Main.getClientMap();
@@ -173,14 +171,13 @@ public class GameFunction {
         String nextPlayer = null;
 
 
-        for (GameRoom gameRoom : gameRoomList){   //找到該玩家的gameRoom
-            if(Arrays.asList(gameRoom.getPlayersName()).contains(nowPlayer)){
+        for (GameRoom gameRoom : gameRoomList) {   //找到該玩家的gameRoom
+            if (Arrays.asList(gameRoom.getPlayersName()).contains(nowPlayer)) {
                 String[] playersName = gameRoom.getPlayersName();
 
-                if(playCommand.getCard().getRank() == 5){
+                if (playCommand.getCard().getRank() == 5) {
                     nextPlayer = playCommand.getAssignPlayer();
-                }
-                else {
+                } else {
 
                     for (int i = 0; i < playersName.length; i++) {  //找出下個玩家
                         if (playersName[i].equals(nowPlayer)) {
@@ -208,7 +205,7 @@ public class GameFunction {
                 Set<Map.Entry<String, Socket>> entrySet = clientMap.entrySet();
 
                 for (String roomPlayer : roomPlayers) {                     //發送所有人NextPlayerCommand
-                    if(!isPlayerLose || !roomPlayer.equals(nowPlayer)) {
+                    if (!isPlayerLose || !roomPlayer.equals(nowPlayer)) {
                         for (Map.Entry<String, Socket> stringSocketEntry : entrySet) {
                             if (stringSocketEntry.getKey().equals(roomPlayer)) {
                                 //System.out.println("Send NextPlayerCommand " + roomPlayer);
@@ -225,7 +222,6 @@ public class GameFunction {
             }
         }
     }
-
 
 
     public static void sendWinnerCommand(String winner) throws IOException {
@@ -252,7 +248,7 @@ public class GameFunction {
         Set<Map.Entry<String, Socket>> entrySet = clientMap.entrySet();
 
         CopyOnWriteArrayList<GameRoom> gameRoomList = Main.getGameRoomList();
-        NoRemainCardsWinnerCommand noRemainCardsWinnerCommand =  new NoRemainCardsWinnerCommand();
+        NoRemainCardsWinnerCommand noRemainCardsWinnerCommand = new NoRemainCardsWinnerCommand();
         noRemainCardsWinnerCommand.setPlayerName(winner);
 
         for (GameRoom gameRoom : gameRoomList) {                    //找到該玩家的gameRoom
@@ -281,7 +277,7 @@ public class GameFunction {
         Set<Map.Entry<String, Socket>> entrySet = clientMap.entrySet();
 
         CopyOnWriteArrayList<GameRoom> gameRoomList = Main.getGameRoomList();
-        WinnerCommand winnerCommand =  new WinnerCommand();
+        WinnerCommand winnerCommand = new WinnerCommand();
 
         for (GameRoom gameRoom : gameRoomList) {                    //找到該玩家的gameRoom
             if (Arrays.asList(gameRoom.getPlayersName()).contains(winner)) {
@@ -308,7 +304,7 @@ public class GameFunction {
         Card[] deck = Card.values();
         int length = deck.length;
 
-        System.out.println("desk length :"+deck.length);
+        System.out.println("desk length :" + deck.length);
 
         int changes = 100;
         for (int i = 0; i < changes; i++) {
@@ -321,12 +317,11 @@ public class GameFunction {
 
 
         Set<Card> set = new HashSet<Card>();
-        for(Card str : deck){
-            set.add(str);
-        }
-        if(set.size() != deck.length){
+        Collections.addAll(set, deck);
+
+        if (set.size() != deck.length) {
             System.out.println("repeat!!!");
-        }else{
+        } else {
             System.out.println("non repeat!!!");
         }
         return deck;

@@ -248,15 +248,15 @@ public class Main {
 
                     }
 //
-//                    int j = 0;
-//                    for (GameRoom w : gameRoomList) {
+                    int j = 0;
+                    for (GameRoom w : gameRoomList) {
 //                        j++;
 //                        System.out.println("gameRoom " + j + ".");
 //                        for (int i = 0; i < w.getPlayersName().length; i++) {
 //                            System.out.println(i + ". " + w.getPlayersName()[i]);
 //                        }
-//
-//                    }
+                        System.out.println("value :"+w.getValue());
+                    }
 //
 //                    j = 0;
 //                    for (String key : clientMap.keySet()) {
