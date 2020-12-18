@@ -137,6 +137,9 @@ public class Main {
                         String leaveGameRoomPlayer = getClientUsername(client);
                         boolean inGameRoomResult = EOFExceptionInGameRoom(leaveGameRoomPlayer);    //送loseGameCommand給其他人
 
+                        out = new ObjectOutputStream(client.getOutputStream());                //送LeaveGameRoomCommand給送來的client
+                        out.writeObject(input);
+
                         String judgeResult = judgeGameRoomWinner(leaveGameRoomPlayer);
                         if(judgeResult == null){
                             System.out.println("judgeResult: null");
@@ -160,7 +163,7 @@ public class Main {
                         }
                     }
                     else if (input instanceof PlayCommand) {
-
+                        System.out.println("receive card: "+((PlayCommand) input).getCard());
                         addReceiveCardCount((PlayCommand) input);
                         boolean isLose = manageGameRoomValue((PlayCommand) input);
                         //System.out.println("PlayCommand card value: "+ Pl);
@@ -244,23 +247,23 @@ public class Main {
                         //Thread.sleep(1500);
 
                     }
-
-                    int j = 0;
-                    for (GameRoom w : gameRoomList) {
-                        j++;
-                        System.out.println("gameRoom " + j + ".");
-                        for (int i = 0; i < w.getPlayersName().length; i++) {
-                            System.out.println(i + ". " + w.getPlayersName()[i]);
-                        }
-
-                    }
-
-                    j = 0;
-                    for (String key : clientMap.keySet()) {
-                        j++;
-                        System.out.println(j+" Key = " + key);
-
-                    }
+//
+//                    int j = 0;
+//                    for (GameRoom w : gameRoomList) {
+//                        j++;
+//                        System.out.println("gameRoom " + j + ".");
+//                        for (int i = 0; i < w.getPlayersName().length; i++) {
+//                            System.out.println(i + ". " + w.getPlayersName()[i]);
+//                        }
+//
+//                    }
+//
+//                    j = 0;
+//                    for (String key : clientMap.keySet()) {
+//                        j++;
+//                        System.out.println(j+" Key = " + key);
+//
+//                    }
                     //else if(input instanceof PlayCommand)
 
 

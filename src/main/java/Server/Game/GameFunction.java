@@ -7,10 +7,7 @@ import Shared.Command.Game.*;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.util.Arrays;
-import java.util.Map;
-import java.util.Random;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import static Server.ClientMap.ClientMapFunction.getClientUsername;
@@ -33,10 +30,12 @@ public class GameFunction {
 
                 int deskIndex = gameRoom.getDeskIndex();
 
+
                 if(deskIndex < 52){                       //如果牌堆還有牌 發出drawcommand給出牌client
                     Card[] drawCard = new Card[1];
-                    drawCard[0] = gameRoom.getDesk()[deskIndex];
 
+                    drawCard[0] = gameRoom.getDesk()[deskIndex];
+                    System.out.println("draw card: "+drawCard[0]);
                     DrawCommand drawCommand = new DrawCommand(drawCard);
 
 
@@ -60,6 +59,7 @@ public class GameFunction {
 
                     deskIndex = deskIndex + 1;
                     gameRoom.setDeskIndex(deskIndex);
+                    System.out.println("desk index: "+ deskIndex);
                 }
                 else{
                     returnPlayCommand.setHasCardsInDesk(false);
@@ -157,6 +157,8 @@ public class GameFunction {
                 gameRoom.setDeskIndex(nextDeskIndex);
                 Main.setGameRoomList(gameRoomList);
 
+                System.out.println("desk index: "+nextDeskIndex);
+
                 break;
             }
         }
@@ -209,7 +211,7 @@ public class GameFunction {
                     if(!isPlayerLose || !roomPlayer.equals(nowPlayer)) {
                         for (Map.Entry<String, Socket> stringSocketEntry : entrySet) {
                             if (stringSocketEntry.getKey().equals(roomPlayer)) {
-                                System.out.println("Send NextPlayerCommand " + roomPlayer);
+                                //System.out.println("Send NextPlayerCommand " + roomPlayer);
                                 Socket socket = stringSocketEntry.getValue();
                                 ObjectOutputStream allClientOut = new ObjectOutputStream(socket.getOutputStream());
 
@@ -306,6 +308,8 @@ public class GameFunction {
         Card[] deck = Card.values();
         int length = deck.length;
 
+        System.out.println("desk length :"+deck.length);
+
         int changes = 100;
         for (int i = 0; i < changes; i++) {
             int randIndex1 = new Random().nextInt(length);
@@ -313,6 +317,17 @@ public class GameFunction {
             Card tmp = deck[randIndex1];
             deck[randIndex1] = deck[randIndex2];
             deck[randIndex2] = tmp;
+        }
+
+
+        Set<Card> set = new HashSet<Card>();
+        for(Card str : deck){
+            set.add(str);
+        }
+        if(set.size() != deck.length){
+            System.out.println("repeat!!!");
+        }else{
+            System.out.println("non repeat!!!");
         }
         return deck;
     }
