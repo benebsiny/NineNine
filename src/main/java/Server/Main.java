@@ -269,12 +269,12 @@ public class Main {
 
                 } catch (IOException | ClassNotFoundException | InterruptedException e) {
                     e.printStackTrace();
-                    if (e instanceof SocketException) {
-                        clientMap.remove(getClientUsername(client));
-                        System.out.println("Client disconnect!!");
-                        break;
-                    }
-                    if (e instanceof EOFException) {
+//                    if (e instanceof SocketException) {
+//                        clientMap.remove(getClientUsername(client));
+//                        System.out.println("Client disconnect!!");
+//                        break;
+//                    }
+                    if (e instanceof EOFException || e instanceof SocketException) {
                         String disconnectClientName = getClientUsername(client);
                         System.out.println("Client: " + disconnectClientName + " disconnect");
 
