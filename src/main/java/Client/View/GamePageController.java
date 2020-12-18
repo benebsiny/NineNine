@@ -723,7 +723,7 @@ public class GamePageController {
 
         if (diff > 0) {
             for (int i = 1; i <= diff; i++) {
-                System.out.print(i + " ");
+//                System.out.print(i + " ");
                 int finalI = i;
                 time.getKeyFrames().add(new KeyFrame(Duration.millis(2200 + diffSecond * i),
                         event -> valueLabel.setText(String.format("%02d", this.value + finalI))));
@@ -732,7 +732,7 @@ public class GamePageController {
                     __ -> this.value = nextValue));
         } else {
             for (int i = 1; i <= -diff; i++) {
-                System.out.print(i + " ");
+//                System.out.print(i + " ");
                 int finalI = i;
                 time.getKeyFrames().add(new KeyFrame(Duration.millis(2200 + (-diffSecond) * i),
                         event -> valueLabel.setText(String.format("%02d", this.value - finalI))));
@@ -753,20 +753,6 @@ public class GamePageController {
         Timeline time = new Timeline();
         countingValue(nextValue, time);
         time.play();
-    }
-
-
-    /**
-     * Show the countdown bar
-     */
-    public void countdownAnimation() {
-        countdownBar.setWidth(900);
-        countdownBar.setVisible(true);
-        Timeline timeline = new Timeline();
-        KeyValue kv = new KeyValue(countdownBar.widthProperty(), 0);
-        KeyFrame kf = new KeyFrame(Duration.seconds(20), kv);
-        timeline.getKeyFrames().add(kf);
-        timeline.play();
     }
 
 
@@ -1137,7 +1123,6 @@ class NextPlayerHandler implements Runnable {
 
         // It's my turn!! Count down the bar
         else {
-            Platform.runLater(() -> GUI.countdownAnimation());
             Platform.runLater(() -> GUI.coverPane.setVisible(false));
         }
     }

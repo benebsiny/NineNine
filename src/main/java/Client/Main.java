@@ -9,6 +9,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
@@ -33,6 +34,7 @@ public class Main extends Application {
         stage.setScene(scene);
         stage.setResizable(false);
         stage.setTitle("99 Poker Game");
+        stage.getIcons().add(new Image("/Client/Img/Suit/Heart.png"));
         stage.show();
     }
 
@@ -70,6 +72,15 @@ public class Main extends Application {
     public static void switchScene(String sceneName, String message, WindowStatus.MessageSeverity severity) {
         WindowStatus.setWindowMessage(message, severity);
         switchScene(sceneName);
+    }
+
+    /**
+     * Set stage name with login user
+     *
+     * @param stageName - Stage name
+     */
+    public static void setStageName(String stageName) {
+        stage.setTitle("99 Poker Game - [ " + stageName + " ]");
     }
 
     /**
@@ -114,9 +125,5 @@ public class Main extends Application {
      */
     public static Socket getServer() {
         return socket;
-    }
-
-    public static void setServer(Socket socket) {
-        Main.socket = socket;
     }
 }

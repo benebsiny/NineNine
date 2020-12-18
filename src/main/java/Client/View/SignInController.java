@@ -72,9 +72,14 @@ class SignInHandler implements Runnable {
 
             // Sign in success
             if (signInSuccess) {
-                UserStatus.setSignInUser(GUI.usernameField.getText());
-                Platform.runLater(() -> Main.switchScene("Home", "登入成功", WindowStatus.MessageSeverity.SUCCESS));
+                String username = GUI.usernameField.getText();
+                UserStatus.setSignInUser(username);
+                Platform.runLater(() -> {
+                    Main.setStageName(username);
+                    Main.switchScene("Home", "登入成功", WindowStatus.MessageSeverity.SUCCESS);
+                });
             }
+
             // Sign in fail
             else {
                 Platform.runLater(() -> GUI.errMsg.setVisible(true));

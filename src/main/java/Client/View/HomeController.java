@@ -4,13 +4,13 @@ import Client.Main;
 import Client.Status.UserStatus;
 import Client.Status.WindowStatus;
 import Shared.CardEnum.Card;
+import com.jfoenix.controls.JFXButton;
 import javafx.animation.*;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.effect.DropShadow;
-import javafx.scene.effect.Effect;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
@@ -32,16 +32,21 @@ public class HomeController {
     final static int slidingDuration = 700;
     public ImageView cardImage1;
     public ImageView cardImage2;
+    public JFXButton loginButton;
 
     @FXML
     void initialize() {
 
-        Random random = new Random();
+        // If login, disable the login button
+        if (UserStatus.getSignInUser() != null) {
+            loginButton.setDisable(true);
+        }
 
-
+        // Random character show up
         String title = "99 POKER GAME";
-
+        Random random = new Random();
         Timeline wordTimeline = new Timeline();
+
         for (int i = 0; i < title.length(); i++) {
             if (title.charAt(i) != ' ') {
                 for (int j = 0; j < 5; j++) {
