@@ -56,7 +56,7 @@
                   <Font size="22.0" />
                </font>
             </Text>
-            <Text fx:id="secondPlayerLabel" layoutY="-38.0" strokeType="OUTSIDE" strokeWidth="0.0" text="2nd player" textAlignment="CENTER" wrappingWidth="173.199951171875" x="360.0" y="190.0">
+            <Text fx:id="secondPlayerLabel" layoutX="106.0" layoutY="21.0" strokeType="OUTSIDE" strokeWidth="0.0" text="2nd player" textAlignment="CENTER" wrappingWidth="173.199951171875" x="360.0" y="190.0">
                <font>
                   <Font size="22.0" />
                </font>
@@ -93,6 +93,21 @@
                </image>
             </ImageView>
             <Pane fx:id="coverPane" layoutY="389.0" opacity="0.8" prefHeight="210.0" prefWidth="900.0" style="-fx-background-color: gray;" />
+            <Rectangle fx:id="firstPFirstC" arcHeight="5.0" arcWidth="5.0" fill="#455a64" height="18.0" layoutX="184.0" layoutY="164.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="25.0" />
+            <Rectangle fx:id="firstPSecondC" arcHeight="5.0" arcWidth="5.0" fill="#455a64" height="18.0" layoutX="184.0" layoutY="188.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="25.0" />
+            <Rectangle fx:id="firstPThirdC" arcHeight="5.0" arcWidth="5.0" fill="#455a64" height="18.0" layoutX="184.0" layoutY="212.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="25.0" />
+            <Rectangle fx:id="firstPForthC" arcHeight="5.0" arcWidth="5.0" fill="#455a64" height="18.0" layoutX="184.0" layoutY="236.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="25.0" />
+            <Rectangle fx:id="firstPFifthC" arcHeight="5.0" arcWidth="5.0" fill="#455a64" height="18.0" layoutX="184.0" layoutY="261.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="25.0" />
+            <Rectangle fx:id="secondPFirstC" arcHeight="5.0" arcWidth="5.0" fill="#455a64" height="18.0" layoutX="385.0" layoutY="135.0" rotate="90.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="25.0" />
+            <Rectangle fx:id="secondPSecondC" arcHeight="5.0" arcWidth="5.0" fill="#455a64" height="18.0" layoutX="410.0" layoutY="135.0" rotate="90.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="25.0" />
+            <Rectangle fx:id="secondPThirdC" arcHeight="5.0" arcWidth="5.0" fill="#455a64" height="18.0" layoutX="434.0" layoutY="135.0" rotate="90.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="25.0" />
+            <Rectangle fx:id="secondPForthC" arcHeight="5.0" arcWidth="5.0" fill="#455a64" height="18.0" layoutX="459.0" layoutY="135.0" rotate="90.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="25.0" />
+            <Rectangle fx:id="secondPFifthC" arcHeight="5.0" arcWidth="5.0" fill="#455a64" height="18.0" layoutX="483.0" layoutY="135.0" rotate="90.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="25.0" />
+            <Rectangle fx:id="thirdPFirstC" arcHeight="5.0" arcWidth="5.0" fill="#455a64" height="18.0" layoutX="701.0" layoutY="164.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="25.0" />
+            <Rectangle fx:id="thirdPSecondC" arcHeight="5.0" arcWidth="5.0" fill="#455a64" height="18.0" layoutX="701.0" layoutY="188.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="25.0" />
+            <Rectangle fx:id="thirdPThirdC" arcHeight="5.0" arcWidth="5.0" fill="#455a64" height="18.0" layoutX="701.0" layoutY="212.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="25.0" />
+            <Rectangle fx:id="thirdPForthC" arcHeight="5.0" arcWidth="5.0" fill="#455a64" height="18.0" layoutX="701.0" layoutY="236.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="25.0" />
+            <Rectangle fx:id="thirdPFifthC" arcHeight="5.0" arcWidth="5.0" fill="#455a64" height="18.0" layoutX="701.0" layoutY="261.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="25.0" />
          </children>
       </AnchorPane>
    </children>
