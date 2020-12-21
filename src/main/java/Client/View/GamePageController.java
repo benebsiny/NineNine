@@ -4,6 +4,7 @@ import Client.Connection.GamePageConn;
 import Client.Main;
 import Client.Status.PlayerStatus;
 import Client.Status.UserStatus;
+import Client.Status.WindowStatus;
 import Shared.CardEnum.Card;
 import Shared.Command.Game.*;
 import com.jfoenix.controls.JFXButton;
@@ -1009,7 +1010,10 @@ class GamePageConnection implements Runnable {
                 }
 
             } catch (SocketException ex) {
+                // I close the window or server stop
                 System.out.println("Bye Bye!");
+                Platform.runLater(() ->
+                        Main.switchScene("Home", "因偵測到連線中斷，故返回主畫面", WindowStatus.MessageSeverity.ERROR));
                 break;
             } catch (IOException | ClassNotFoundException e) {
                 e.printStackTrace();
