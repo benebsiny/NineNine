@@ -100,9 +100,18 @@ public class Main {
 //                        System.out.println(user.getPassword());
 
                         if (userDB.login()) {
-                            out.writeObject(input);
-                            clientMap.put(user.getUsername(), client);
-                            System.out.println("login success");
+
+                            if((clientMap.containsKey(((SignInCommand) input).getUser().getUsername()))){
+                                System.out.println("repeat login!!");
+                                String s = "repeatLogin";
+                                out.writeObject(s);
+                            }
+                            else {
+                                out.writeObject(input);
+                                clientMap.put(user.getUsername(), client);
+                                System.out.println("login success");
+                            }
+
                         } else {
                             out.writeObject(null);
                             System.out.println("login fail");
@@ -258,13 +267,13 @@ public class Main {
                         System.out.println("value :"+w.getValue());
                     }
 //
-//                    j = 0;
-//                    for (String key : clientMap.keySet()) {
-//                        j++;
-//                        System.out.println(j+" Key = " + key);
-//
-//                    }
-                    //else if(input instanceof PlayCommand)
+                    j = 0;
+                    for (String key : clientMap.keySet()) {
+                        j++;
+                        System.out.println(j+" Key = " + key);
+
+                    }
+
 
 
                 } catch (IOException | ClassNotFoundException | InterruptedException e) {
