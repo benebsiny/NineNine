@@ -89,7 +89,7 @@ class WaitingUserHandler implements Runnable {
                 }
                 // Game start
                 else if (receiveObject instanceof StartGameCommand) {
-                    Platform.runLater(() -> Main.switchScene("GamePage"));
+                    Platform.runLater(() -> Main.switchScene("GamePage4"));
                     break;
                 }
                 // Time to close this thread (leave room)

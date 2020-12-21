@@ -14,7 +14,6 @@ import javafx.animation.*;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -87,38 +86,20 @@ public class GamePageController {
     public Rectangle countdownBar;
     public Label valueLabel;
     public ImageView deskCardImage;
+
     public JFXButton first;
     public JFXButton second;
     public JFXButton third;
     public JFXButton fourth;
     public JFXButton fifth;
+
     public Pane coverPane;
-    public ImageView turn1Icon;
-    public ImageView turn2Icon;
-    public ImageView turn3Icon;
     public Pane card5Cover;
 
     static PlayingStatus playingStatus = new PlayingStatus();
-    public Text firstPlayerLabel;
-    public Text secondPlayerLabel;
-    public Text thirdPlayerLabel;
     public AnchorPane pane;
     public StackPane stackPane;
-    public Rectangle firstPFirstC;
-    public Rectangle firstPSecondC;
-    public Rectangle firstPThirdC;
-    public Rectangle firstPForthC;
-    public Rectangle firstPFifthC;
-    public Rectangle secondPFirstC;
-    public Rectangle secondPSecondC;
-    public Rectangle secondPThirdC;
-    public Rectangle secondPForthC;
-    public Rectangle secondPFifthC;
-    public Rectangle thirdPFirstC;
-    public Rectangle thirdPSecondC;
-    public Rectangle thirdPThirdC;
-    public Rectangle thirdPForthC;
-    public Rectangle thirdPFifthC;
+
 
     Card[] myCards = new Card[5];
     int nextPositionToPlace = 0;
@@ -127,31 +108,19 @@ public class GamePageController {
     JFXButton[] cardButtons;
     ImageView[] playerIcons;
     Text[] playerNames;
-
     Rectangle[][] otherCards;
 
     volatile int value = 0;
 
     FillTransition ft;
 
-    @FXML
-    void initialize() {
+    void init(ImageView[] playerIcons, Text[] playerNames, Rectangle[][] otherCards) {
 
-        cardButtons = new JFXButton[]{first, second, third, fourth, fifth};
-        playerIcons = new ImageView[]{null, turn1Icon, turn2Icon, turn3Icon};
-        playerNames = new Text[]{null, firstPlayerLabel, secondPlayerLabel, thirdPlayerLabel};
+        this.playerIcons = playerIcons;
+        this.playerNames = playerNames;
+        this.otherCards = otherCards;
 
-        otherCards = new Rectangle[][]{
-                null,
-                {firstPFirstC, firstPSecondC, firstPThirdC, firstPForthC, firstPFifthC},
-                {secondPFirstC, secondPSecondC, secondPThirdC, secondPForthC, secondPFifthC},
-                {thirdPFirstC, thirdPSecondC, thirdPThirdC, thirdPForthC, thirdPFifthC}
-        };
-
-        // Get players
-        for (int i = 1; i < PlayerStatus.getTurnPlayers().length; i++) {
-            playerNames[i].setText(PlayerStatus.getTurnPlayers()[i]);
-        }
+        this.cardButtons = new JFXButton[]{first, second, third, fourth, fifth};
 
         countdownBar.setVisible(false);
         shineCircle.setVisible(false);
@@ -1021,6 +990,8 @@ class GamePageConnection implements Runnable {
                     else {
                         int winnerTurn = GUI.getTurnByName(command.getPlayerName());
                         Platform.runLater(() -> {
+                            System.out.println(Arrays.toString(GUI.playerIcons));
+                            System.out.println(winnerTurn);
                             GUI.playerIcons[winnerTurn].setOpacity(0.1);
                             GUI.playerNames[winnerTurn].setOpacity(0.1);
                         });
