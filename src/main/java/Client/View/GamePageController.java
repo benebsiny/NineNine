@@ -9,6 +9,7 @@ import Shared.CardEnum.Card;
 import Shared.Command.Game.*;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXDialog;
+import com.jfoenix.controls.JFXDialogLayout;
 import javafx.animation.*;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -232,6 +233,36 @@ public class GamePageController {
         }
 
         mePlayCardAnimation(pickedButton, pickedCard);
+    }
+
+    public void goBack(ActionEvent actionEvent) {
+
+        JFXDialogLayout leaveDialog = new JFXDialogLayout();
+        leaveDialog.setHeading(new Text("確定是否離開"));
+        leaveDialog.setBody(new Text("您若離開房間的話，您將輸掉這場遊戲"));
+
+        JFXDialog dialog = new JFXDialog(stackPane, leaveDialog, JFXDialog.DialogTransition.CENTER);
+
+        // Leave button
+        JFXButton leaveButton = new JFXButton("離開");
+        leaveButton.setStyle("-fx-background-color: #D32F2F; -fx-text-fill: white");
+        leaveButton.setOnAction(__ -> {
+            try {
+                GamePageConn.leave();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            Main.switchScene("Home");
+        });
+
+        // Cancel button
+        JFXButton cancelButton = new JFXButton("取消");
+        cancelButton.setStyle("-fx-background-color: #00b6e3; -fx-text-fill: white");
+        cancelButton.setOnAction(__ -> dialog.close());
+
+        // Dialog add two buttons
+        leaveDialog.setActions(leaveButton, cancelButton);
+        dialog.show();
     }
 
     /**
@@ -922,15 +953,6 @@ public class GamePageController {
             }
         }
         nextPositionToPlace = -1; // There are full of cards
-    }
-
-    public void goBack(ActionEvent actionEvent) {
-        try {
-            GamePageConn.leave();
-            Main.switchScene("Home");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 }
 
