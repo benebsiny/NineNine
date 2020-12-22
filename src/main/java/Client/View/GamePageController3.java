@@ -3,21 +3,15 @@ package Client.View;
 import Client.Status.PlayerStatus;
 import javafx.fxml.FXML;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.*;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 
-public class GamePageController4 extends GamePageController {
+public class GamePageController3 extends GamePageController {
 
     public ImageView turn1Icon;
     public ImageView turn2Icon;
-    public ImageView turn3Icon;
-
     public Text firstPlayerLabel;
     public Text secondPlayerLabel;
-    public Text thirdPlayerLabel;
-    public AnchorPane pane;
-    public StackPane stackPane;
     public Rectangle firstPFirstC;
     public Rectangle firstPSecondC;
     public Rectangle firstPThirdC;
@@ -28,27 +22,17 @@ public class GamePageController4 extends GamePageController {
     public Rectangle secondPThirdC;
     public Rectangle secondPForthC;
     public Rectangle secondPFifthC;
-    public Rectangle thirdPFirstC;
-    public Rectangle thirdPSecondC;
-    public Rectangle thirdPThirdC;
-    public Rectangle thirdPForthC;
-    public Rectangle thirdPFifthC;
 
-    ImageView[] playerIcons;
-    Text[] playerNames;
-    Rectangle[][] otherCards;
 
     @FXML
     void initialize() {
-
-        playerIcons = new ImageView[]{null, turn1Icon, turn2Icon, turn3Icon};
-        playerNames = new Text[]{null, firstPlayerLabel, secondPlayerLabel, thirdPlayerLabel};
+        playerIcons = new ImageView[]{null, turn1Icon, turn2Icon};
+        playerNames = new Text[]{null, firstPlayerLabel, secondPlayerLabel};
 
         otherCards = new Rectangle[][]{
                 null,
                 {firstPFirstC, firstPSecondC, firstPThirdC, firstPForthC, firstPFifthC},
                 {secondPFirstC, secondPSecondC, secondPThirdC, secondPForthC, secondPFifthC},
-                {thirdPFirstC, thirdPSecondC, thirdPThirdC, thirdPForthC, thirdPFifthC}
         };
 
         // Get players
