@@ -107,7 +107,11 @@ class WaitingUserHostHandler implements Runnable {
                 }
                 // Game start
                 else if (receiveObject instanceof StartGameCommand) {
-                    Platform.runLater(() -> Main.switchScene("GamePage4"));
+                    switch (PlayerStatus.getPlayers().length) {
+                        case 2 -> Platform.runLater(() -> Main.switchScene("GamePage2"));
+                        case 3 -> Platform.runLater(() -> Main.switchScene("GamePage3"));
+                        case 4 -> Platform.runLater(() -> Main.switchScene("GamePage4"));
+                    }
                     break;
                 }
                 // Time to close this thread (leave room)
