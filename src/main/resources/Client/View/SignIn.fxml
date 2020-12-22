@@ -29,7 +29,7 @@
          </font>
       </JFXButton>
        <JFXButton layoutX="38.0" layoutY="29.0" onAction="#goBack" prefHeight="40.0" prefWidth="40.0" styleClass="back-button" stylesheets="@../Style/General.css" />
-      <Label fx:id="errMsg" layoutX="397.0" layoutY="347.0" styleClass="ch-font" text="帳號或密碼錯誤" textFill="RED">
+      <Label fx:id="errMsg" layoutX="419.0" layoutY="347.0" styleClass="ch-font" text="登入錯誤" textFill="RED">
          <font>
             <Font size="18.0" />
          </font>

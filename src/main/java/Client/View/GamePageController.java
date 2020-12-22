@@ -131,6 +131,8 @@ public class GamePageController {
 
         card5Cover.setVisible(false);
 
+        ft = new FillTransition(Duration.seconds(2), shineCircle, Color.BLACK, Color.valueOf("#ffcb21"));
+
         Thread connection = new Thread(new GamePageConnection(this));
         connection.start();
     }
@@ -688,7 +690,6 @@ public class GamePageController {
         shineCircle.setCenterX(playerIcons[turnId].getLayoutX() + playerIcons[turnId].getFitWidth() / 2);
         shineCircle.setCenterY(playerIcons[turnId].getLayoutY() + playerIcons[turnId].getFitHeight() / 2);
 
-        ft = new FillTransition(Duration.seconds(2), shineCircle, Color.BLACK, Color.valueOf("#ffcb21"));
         ft.setCycleCount(Animation.INDEFINITE);
         ft.setAutoReverse(true);
         ft.play();
@@ -990,8 +991,6 @@ class GamePageConnection implements Runnable {
                     else {
                         int winnerTurn = GUI.getTurnByName(command.getPlayerName());
                         Platform.runLater(() -> {
-                            System.out.println(Arrays.toString(GUI.playerIcons));
-                            System.out.println(winnerTurn);
                             GUI.playerIcons[winnerTurn].setOpacity(0.1);
                             GUI.playerNames[winnerTurn].setOpacity(0.1);
                         });
@@ -1062,8 +1061,8 @@ class ReturnPlayCommandHandler implements Runnable {
     @Override
     public void run() {
 
-        if (GUI.ft != null) GUI.ft.stop(); // Stop the shining effect
-        GUI.shineCircle.setVisible(false);
+//        GUI.ft.stop(); // Stop the shining effect
+//        GUI.shineCircle.setVisible(false);
 
         // Show playing card animation for others
         int turnId = GUI.getTurnByName(command.getPlayer());
@@ -1109,6 +1108,11 @@ class NextPlayerHandler implements Runnable {
 
     @Override
     public void run() {
+
+        Platform.runLater(() -> { // If the circle still shining, stop and hide it
+            GUI.ft.stop();
+            GUI.shineCircle.setVisible(false);
+        });
 
         int turnId = GUI.getTurnByName(command.getNextPlayer());
 

@@ -56,7 +56,7 @@
                   <Font size="22.0" />
                </font>
             </Text>
-            <Text fx:id="secondPlayerLabel" layoutX="106.0" layoutY="21.0" strokeType="OUTSIDE" strokeWidth="0.0" text="2nd player" textAlignment="CENTER" wrappingWidth="173.199951171875" x="360.0" y="190.0">
+            <Text fx:id="secondPlayerLabel" layoutY="-4.0" strokeType="OUTSIDE" strokeWidth="0.0" text="2nd player" textAlignment="CENTER" wrappingWidth="173.199951171875" x="360.0" y="190.0">
                <font>
                   <Font size="22.0" />
                </font>
