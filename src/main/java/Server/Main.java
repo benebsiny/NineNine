@@ -103,8 +103,8 @@ public class Main {
 
                             if((clientMap.containsKey(((SignInCommand) input).getUser().getUsername()))){
                                 System.out.println("repeat login!!");
-                                String s = "repeatLogin";
-                                out.writeObject(s);
+                                //String s = "repeatLogin";
+                                out.writeObject(null);
                             }
                             else {
                                 out.writeObject(input);
