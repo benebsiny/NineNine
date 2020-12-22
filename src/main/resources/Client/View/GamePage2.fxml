@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.effect.BoxBlur?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<StackPane fx:id="stackPane" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Client.View.GamePageController2">
+   <children>
+      <AnchorPane fx:id="pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0">
+         <children>
+            <JFXButton layoutX="45.0" layoutY="44.0" onAction="#goBack" prefHeight="40.0" prefWidth="40.0" styleClass="back-button" stylesheets="@../Style/General.css" />
+            <Label fx:id="valueLabel" alignment="CENTER" layoutX="358.0" layoutY="203.0" prefHeight="106.0" prefWidth="173.0" styleClass="eng-font" stylesheets="@../Style/General.css" text="00" textAlignment="JUSTIFY">
+               <font>
+                  <Font size="100.0" />
+               </font>
+            </Label>
+            <Pane layoutY="390.0" prefHeight="210.0" prefWidth="900.0" style="-fx-background-color: #39A460;" styleClass="background-pane" stylesheets="@../Style/GamePage.css" />
+            <JFXButton fx:id="first" disable="true" layoutX="120.0" layoutY="412.0" mnemonicParsing="false" onAction="#pickCard" prefHeight="168.0" prefWidth="120.0" />
+            <JFXButton fx:id="second" disable="true" layoutX="260.0" layoutY="412.0" mnemonicParsing="false" onAction="#pickCard" prefHeight="168.0" prefWidth="120.0" />
+            <JFXButton fx:id="third" disable="true" layoutX="400.0" layoutY="412.0" mnemonicParsing="false" onAction="#pickCard" prefHeight="168.0" prefWidth="120.0" />
+            <JFXButton fx:id="fourth" disable="true" layoutX="540.0" layoutY="412.0" mnemonicParsing="false" onAction="#pickCard" prefHeight="168.0" prefWidth="120.0" />
+            <JFXButton fx:id="fifth" disable="true" layoutX="680.0" layoutY="412.0" mnemonicParsing="false" onAction="#pickCard" prefHeight="168.0" prefWidth="120.0" />
+            <Pane fx:id="card5Cover" opacity="0.8" prefHeight="600.0" prefWidth="900.0" style="-fx-background-color: gray;">
+               <children>
+                  <Circle blendMode="OVERLAY" fill="WHITE" layoutX="450.0" layoutY="80.0" radius="132.0" stroke="BLACK" strokeType="INSIDE" />
+               </children>
+            </Pane>
+            <ImageView fx:id="turn1Icon" fitHeight="150.0" fitWidth="200.0" layoutX="359.0" layoutY="14.0" onMouseClicked="#choosePlayer" pickOnBounds="true" preserveRatio="true" rotate="180.0">
+               <image>
+                  <Image url="@../Img/playing-user.png" />
+               </image>
+            </ImageView>
+            <Text fx:id="firstPlayerLabel" layoutX="306.0" layoutY="68.0" strokeType="OUTSIDE" strokeWidth="0.0" text="1st player" textAlignment="CENTER" wrappingWidth="250.0" x="20.0" y="120.0">
+               <font>
+                  <Font size="22.0" />
+               </font>
+            </Text>
+            <Circle fx:id="shineCircle" blendMode="ADD" fill="#ffcb21" radius="100.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0">
+               <effect>
+                  <BoxBlur height="50.0" iterations="3" width="50.0" />
+               </effect>
+            </Circle>
+            <Rectangle fx:id="countdownBar" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="900.0" />
+            <ImageView fx:id="deskCardImage" fitHeight="83.0" fitWidth="56.0" layoutX="820.0" layoutY="310.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../Img/card-back.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="otherPlayCardImage" fitHeight="168.0" fitWidth="120.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../Img/Card/C2.png" />
+               </image>
+            </ImageView>
+             <ImageView fx:id="mePlayCardImage" fitHeight="168.0" fitWidth="120.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../Img/Card/C2.png" />
+               </image>
+            </ImageView>
+             <ImageView fx:id="drawCardImage" fitHeight="168.0" fitWidth="120.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../Img/Card/C2.png" />
+               </image>
+            </ImageView>
+            <Pane fx:id="coverPane" layoutY="389.0" opacity="0.8" prefHeight="210.0" prefWidth="900.0" style="-fx-background-color: gray;" />
+            <Rectangle fx:id="firstPFirstC" arcHeight="5.0" arcWidth="5.0" fill="#455a64" height="18.0" layoutX="484.0" layoutY="135.0" rotate="90.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="25.0" />
+            <Rectangle fx:id="firstPSecondC" arcHeight="5.0" arcWidth="5.0" fill="#455a64" height="18.0" layoutX="462.0" layoutY="135.0" rotate="90.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="25.0" />
+            <Rectangle fx:id="firstPThirdC" arcHeight="5.0" arcWidth="5.0" fill="#455a64" height="18.0" layoutX="439.0" layoutY="135.0" rotate="90.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="25.0" />
+            <Rectangle fx:id="firstPForthC" arcHeight="5.0" arcWidth="5.0" fill="#455a64" height="18.0" layoutX="416.0" layoutY="135.0" rotate="90.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="25.0" />
+            <Rectangle fx:id="firstPFifthC" arcHeight="5.0" arcWidth="5.0" fill="#455a64" height="18.0" layoutX="393.0" layoutY="135.0" rotate="90.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="25.0" />
+         </children>
+      </AnchorPane>
+   </children>
+</StackPane>
